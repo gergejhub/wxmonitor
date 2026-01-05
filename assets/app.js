@@ -39,11 +39,11 @@ function parseDdhhmmZ(raw){
   return { dd: Number(m[1]), hh: Number(m[2]), mm: Number(m[3]) };
 }
 
-function obsTimeUtcFromGroup(ddhhmm, generatedAtIso){
+function obsTimeUtcFromGroup(ddhhmm, baseIso){
   // METAR/TAF has day-of-month (DD) without month/year.
-  // Build a UTC Date close to generatedAt by trying month-1, month, month+1 and picking the closest.
-  if(!ddhhmm || !generatedAtIso) return null;
-  const base = new Date(generatedAtIso);
+  // Build a UTC Date close to base by trying month-1, month, month+1 and picking the closest.
+  if(!ddhhmm || !baseIso) return null;
+  const base = new Date(baseIso);
   if(Number.isNaN(base.getTime())) return null;
 
   const y = base.getUTCFullYear();
@@ -61,11 +61,12 @@ function obsTimeUtcFromGroup(ddhhmm, generatedAtIso){
   return best;
 }
 
-function ageMinutes(raw, generatedAtIso){
-  const g = new Date(generatedAtIso);
+function ageMinutes(raw, baseIso){
+  // “How many minutes ago was it issued/observed” (relative to *now* by default).
+  const g = new Date(baseIso);
   if(Number.isNaN(g.getTime())) return null;
   const group = parseDdhhmmZ(raw);
-  const t = obsTimeUtcFromGroup(group, generatedAtIso);
+  const t = obsTimeUtcFromGroup(group, baseIso);
   if(!t) return null;
   const mins = Math.round((g.getTime() - t.getTime()) / 60000);
   if(!Number.isFinite(mins)) return null;
@@ -134,7 +135,7 @@ function conditionMatch(item, cond){
   }
 }
 
-function renderRow(item, generatedAtIso){
+function renderRow(item, nowIso){
   const icao = escapeHtml(item.icao);
   const iata = item.iata ? escapeHtml(item.iata) : '';
   const name = item.name ? escapeHtml(item.name) : '';
@@ -142,8 +143,8 @@ function renderRow(item, generatedAtIso){
   const score = Math.round(item.severityScore ?? 0);
   const lvl = levelFromScore(score);
 
-  const metarAge = ageMinutes(item.metarRaw, generatedAtIso);
-  const tafAge = ageMinutes(item.tafRaw, generatedAtIso);
+  const metarAge = ageMinutes(item.metarRaw, nowIso);
+  const tafAge = ageMinutes(item.tafRaw, nowIso);
 
   // Table VIS shows METAR visibility in meters (as in your reference screenshot).
   const visM = visNumber(item.visibility_m ?? null);
@@ -225,6 +226,9 @@ function render(){
   const tbody = $('#tbody');
   const msg = $('#statusMsg');
 
+  // Recompute ages against current time even if the underlying JSON did not change.
+  const nowIso = new Date().toISOString();
+
   const rows = applyFilters();
 
   if(state.stations.length === 0){
@@ -234,7 +238,7 @@ function render(){
   }
 
   tbody.innerHTML = rows.length
-    ? rows.map(r => renderRow(r, state.generatedAt)).join('')
+    ? rows.map(r => renderRow(r, nowIso)).join('')
     : '<tr><td colspan="10" class="muted">No matching rows.</td></tr>';
 }
 
@@ -279,3 +283,8 @@ $('#autoRefresh').addEventListener('change', (e) => e.target.checked ? startTime
 
 load();
 startTimer();
+
+// Keep the “age” columns current even between 10‑minute data refreshes.
+setInterval(() => {
+  if(state && Array.isArray(state.stations) && state.stations.length) render();
+}, 60 * 1000);
