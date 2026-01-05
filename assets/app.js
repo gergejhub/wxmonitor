@@ -10,6 +10,8 @@
 */
 
 const DATA_URL = 'data/latest.json';
+const dataUrl = () => `${DATA_URL}?ts=${Date.now()}`;
+const STATUS_URL = 'data/status.json';
 const REFRESH_MS = 10 * 60 * 1000;
 
 const $ = (sel) => document.querySelector(sel);
@@ -19,6 +21,14 @@ function escapeHtml(s){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
+
+function formatGeneratedAt(s){
+  if(!s) return '—';
+  const t = Date.parse(s);
+  if(Number.isNaN(t)) return '—';
+  return new Date(t).toLocaleString();
+}
+
 
 function clamp(n, a, b){
   return Math.max(a, Math.min(b, n));
@@ -195,6 +205,8 @@ function renderRow(item, nowIso){
 let state = {
   generatedAt: null,
   stations: [],
+  stats: null,
+  errors: [],
 };
 
 function applyFilters(){
@@ -225,14 +237,38 @@ function applyFilters(){
 function render(){
   const tbody = $('#tbody');
   const msg = $('#statusMsg');
+  const diag = $('#diag');
 
   // Recompute ages against current time even if the underlying JSON did not change.
   const nowIso = new Date().toISOString();
 
   const rows = applyFilters();
 
+  // Status + diagnostics
+  const stats = state.stats || null;
+  const errList = Array.isArray(state.errors) ? state.errors : [];
+
+  if(stats && (Object.keys(stats).length || errList.length)){
+    const parts = [];
+    if(stats.icaoCount != null) parts.push(`<b>ICAO</b>: <span class="mono">${escapeHtml(String(stats.icaoCount))}</span>`);
+    if(stats.metarReturned != null) parts.push(`<b>METAR</b>: <span class="mono">${escapeHtml(String(stats.metarReturned))}</span>`);
+    if(stats.tafReturned != null) parts.push(`<b>TAF</b>: <span class="mono">${escapeHtml(String(stats.tafReturned))}</span>`);
+    if(stats.missingMetar != null) parts.push(`<b>Missing METAR</b>: <span class="mono">${escapeHtml(String(stats.missingMetar))}</span>`);
+    if(stats.missingTaf != null) parts.push(`<b>Missing TAF</b>: <span class="mono">${escapeHtml(String(stats.missingTaf))}</span>`);
+
+    let html = parts.join(' &nbsp; | &nbsp; ');
+    if(errList.length){
+      html += `<div style="margin-top:6px" class="err"><b>Errors</b>: ${escapeHtml(errList.join(' | '))}</div>`;
+    }
+    diag.hidden = false;
+    diag.innerHTML = html;
+  }else{
+    diag.hidden = true;
+    diag.innerHTML = '';
+  }
+
   if(state.stations.length === 0){
-    msg.textContent = 'If you see 0 monitored stations, the workflow did not write data/latest.json yet. Check Actions logs and ensure Actions has read/write permission for the repository.';
+    msg.textContent = '0 stations loaded. This usually means the GitHub Action did not generate data/latest.json yet (or could not push). Open data/status.json in the repo for the exact error, and ensure you have a workflow under .github/workflows and Actions has Read & write permissions.';
   }else{
     msg.textContent = '';
   }
@@ -245,14 +281,27 @@ function render(){
 async function load(){
   const tbody = $('#tbody');
   try{
+    // Load main data
     const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
     state.generatedAt = data.generatedAt || null;
     state.stations = Array.isArray(data.stations) ? data.stations : [];
+    state.stats = data.stats || null;
+    state.errors = Array.isArray(data.errors) ? data.errors : [];
 
-    $('#lastUpdate').textContent = state.generatedAt ? new Date(state.generatedAt).toLocaleString() : '—';
+    // Also try to load status.json (more reliable diagnostics if latest.json stayed as placeholder)
+    try{
+      const sres = await fetch(`${STATUS_URL}?t=${Date.now()}`, { cache: 'no-store' });
+      if(sres.ok){
+        const sdata = await sres.json();
+        if(!state.stats && sdata.stats) state.stats = sdata.stats;
+        if((!state.errors || !state.errors.length) && Array.isArray(sdata.errors)) state.errors = sdata.errors;
+      }
+    }catch{ /* ignore */ }
+
+    $('#lastUpdate').textContent = formatGeneratedAt(state.generatedAt);
 
     render();
   }catch(e){
