@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="hu">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wizz Air METAR/TAF Status Table</title>
-  <link rel="stylesheet" href="assets/styles.css?v=8" />
+  <title>Wizz Air Weather Status (METAR/TAF)</title>
+  <link rel="stylesheet" href="assets/styles.css?v=11" />
 </head>
 <body>
 
   <header class="header">
     <div class="header__left">
-      <div class="header__title">Status table</div>
-      <div class="header__subtitle">METAR + TAF monitor (aviationweather.gov via GitHub Actions)</div>
+      <div class="header__title">Wizz Air Weather Status</div>
+      <div class="header__subtitle">METAR + TAF monitor (AviationWeather.gov via GitHub Actions)</div>
     </div>
 
     <div class="header__right">
@@ -31,12 +31,7 @@
 
     <section class="toolbar" aria-label="Filters">
       <input id="filterText" class="input" type="search" placeholder="Filter (ICAO/IATA/name)…" autocomplete="off" />
-
-      <select id="scopeSel" class="select" aria-label="Scope">
-        <option value="all" selected>All</option>
-      </select>
-
-      <select id="condSel" class="select" aria-label="Conditions">
+<select id="condSel" class="select" aria-label="Conditions">
         <option value="all" selected>All conditions</option>
         <option value="alerts">Alerts (MED+)</option>
         <option value="vis800">Low VIS ≤ 800 m</option>
@@ -74,12 +69,14 @@
 
 
     <section class="legend" aria-label="Legend">
-      <div class="legend__item"><span class="pill pill--med">MED</span> severityScore 20–44 (example: low vis / RVR degradation / significant Wx triggers)</div>
-      <div class="legend__item"><span class="pill pill--high">HIGH</span> severityScore 45–69</div>
-      <div class="legend__item"><span class="pill pill--crit">CRIT</span> severityScore ≥70 (example: very low vis/RVR, TS/FZFG, very low ceiling)</div>
-      <div class="legend__item muted"><strong>CIG&lt;500</strong>: ceiling (felhőalap) &lt; 500 ft AGL — a METAR/TAF-ben a legalacsonyabb BKN/OVC (vagy VV) réteg alapján.</div>
-      <div class="legend__item muted">Note: Alert filter is exact — selecting MED will not show CRIT.</div>
-    </section>
+  <div class="legend__item"><span class="pill pill--ok">OK</span> severityScore &lt; 20</div>
+  <div class="legend__item"><span class="pill pill--med">MED</span> severityScore 20–44 (e.g., low VIS / RVR degradation / significant Wx triggers)</div>
+  <div class="legend__item"><span class="pill pill--high">HIGH</span> severityScore 45–69</div>
+  <div class="legend__item"><span class="pill pill--crit">CRIT</span> severityScore ≥ 70 (e.g., very low VIS/RVR, TS/FZFG, very low ceiling)</div>
+  <div class="legend__item muted"><strong>CIG&lt;500</strong> = ceiling &lt; 500 ft AGL (lowest <span class="mono">BKN/OVC</span> layer or <span class="mono">VV</span> in METAR/TAF).</div>
+  <div class="legend__item muted"><strong>Highlights</strong>: VIS/RVR/CIG/Wx are color-coded and categorised.</div>
+  <div class="legend__item muted">Note: Alert filter is exact — selecting MED will not show CRIT.</div>
+</section>
 
     <div id="statusMsg" class="statusMsg" role="status"></div>
     <div id="diag" class="diag" aria-label="Diagnostics" hidden></div>
@@ -107,6 +104,6 @@
 
   </main>
 
-  <script src="assets/app.js?v=8"></script>
+  <script src="assets/app.js?v=11"></script>
 </body>
 </html>
