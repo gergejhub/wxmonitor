@@ -133,13 +133,36 @@ function buildTriggers(item){
 
   // Low ceiling (METAR only from server calc)
   if(item.ceiling_ft != null){
-    if(item.ceiling_ft < 500) tags.push({ t: 'CIG<500', key: 'cig' });
-    else if(item.ceiling_ft < 1000) tags.push({ t: 'CIG<1000', key: 'cig' });
+    if(item.ceiling_ft < 500) tags.push({ t: 'CIG<500', key: 'cig500' });
+    else if(item.ceiling_ft < 1000) tags.push({ t: 'CIG<1000', key: 'cig1000' });
   }
 
   // Deduplicate by key
   const seen = new Set();
   return tags.filter(x => (seen.has(x.t) ? false : (seen.add(x.t), true)));
+}
+
+
+function tagClass(t){
+  const k = t && t.key ? String(t.key) : '';
+  const txt = t && t.t ? String(t.t) : '';
+
+  if(k === 'cig500' || txt === 'CIG<500') return 'tag--cig500';
+  if(k === 'cig1000' || txt === 'CIG<1000') return 'tag--cig1000';
+
+  if(k.startsWith('rvr')) return 'tag--rvr';
+  if(k.startsWith('vis')) return 'tag--vis';
+  if(['fzfg','fog','ts','snow','rain'].includes(k)) return `tag--${k}`;
+
+  return '';
+}
+
+function tagCat(t){
+  const k = t && t.key ? String(t.key) : '';
+  if(k.startsWith('rvr')) return 'rvr';
+  if(k.startsWith('vis')) return 'vis';
+  if(k.startsWith('cig')) return 'cig';
+  return 'wx';
 }
 
 function extractRvrValuesMeters(raw){
@@ -276,6 +299,23 @@ function highlightRaw(raw){
       return escapeHtml(p);
     }
 
+    // Ceiling tokens (BKN/OVC/VV)
+    const cig = p.match(/^(BKN|OVC|VV)(\d{3})$/i);
+    if(cig){
+      const hundreds = parseInt(cig[2], 10);
+      if(Number.isFinite(hundreds)){
+        const feet = hundreds * 100;
+        if(feet <= 500){
+          return `<span class="hl hl-cig-500" data-cat="cig">${escapeHtml(p)}</span>`;
+        }
+        if(feet <= 1000){
+          return `<span class="hl hl-cig-1000" data-cat="cig">${escapeHtml(p)}</span>`;
+        }
+      }
+      return escapeHtml(p);
+    }
+
+
     // Weather phenomena tokens
     const wxCls = wxClassFromToken(p);
     if(wxCls){
@@ -361,7 +401,7 @@ function renderRow(item, nowIso){
       <td>
         <div class="triggers">
           ${triggers.length
-            ? triggers.map(t => `<span class="tag">${escapeHtml(t.t)}</span>`).join('')
+            ? triggers.map(t => `<span class="tag ${tagClass(t)}" data-cat="${tagCat(t)}">${escapeHtml(t.t)}</span>`).join('')
             : `<span class="muted">—</span>`
           }
         </div>
@@ -505,7 +545,7 @@ function stopTimer(){
 $('#refreshBtn').addEventListener('click', () => load());
 $('#autoRefresh').addEventListener('change', (e) => e.target.checked ? startTimer() : stopTimer());
 
-['filterText','condSel','alertSel','scopeSel','sortPriority'].forEach(id => {
+['filterText','condSel','alertSel','sortPriority'].forEach(id => {
   const el = $('#' + id);
   if(!el) return;
   el.addEventListener('input', render);
