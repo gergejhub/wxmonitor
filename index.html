@@ -40,6 +40,11 @@
         <option value="all" selected>All conditions</option>
         <option value="alerts">Alerts (MED+)</option>
         <option value="vis800">Low VIS ≤ 800 m</option>
+        <option value="vis550">Low VIS ≤ 550 m</option>
+        <option value="vis500">Low VIS ≤ 500 m</option>
+        <option value="vis300">Low VIS ≤ 300 m</option>
+        <option value="vis250">Low VIS ≤ 250 m</option>
+        <option value="vis175">Low VIS ≤ 175 m</option>
         <option value="vis150">Low VIS ≤ 150 m</option>
         <option value="rvr500">RVR ≤ 500 m</option>
         <option value="rvr300">RVR ≤ 300 m</option>
@@ -51,12 +56,28 @@
         <option value="ts">Thunderstorm (TS*)</option>
       </select>
 
+      <select id="alertSel" class="select" aria-label="Alert level" title="Alert level filter is exact (MED does not include CRIT)">
+        <option value="all" selected>Alert: All</option>
+        <option value="ok">Alert: OK</option>
+        <option value="med">Alert: MED</option>
+        <option value="high">Alert: HIGH</option>
+        <option value="crit">Alert: CRIT</option>
+      </select>
+
       <label class="check check--right">
         <input id="sortPriority" type="checkbox" checked />
         <span>Sort by priority</span>
       </label>
 
       <input id="extraIcao" class="input input--ghost" type="text" placeholder="Extra ICAO (browser-only)" maxlength="4" disabled />
+    </section>
+
+
+    <section class="legend" aria-label="Legend">
+      <div class="legend__item"><span class="pill pill--med">MED</span> severityScore 20–44 (example: low vis / RVR degradation / significant Wx triggers)</div>
+      <div class="legend__item"><span class="pill pill--high">HIGH</span> severityScore 45–69</div>
+      <div class="legend__item"><span class="pill pill--crit">CRIT</span> severityScore ≥70 (example: very low vis/RVR, TS/FZFG, very low ceiling)</div>
+      <div class="legend__item muted">Note: Alert filter is exact — selecting MED will not show CRIT.</div>
     </section>
 
     <div id="statusMsg" class="statusMsg" role="status"></div>
@@ -69,7 +90,7 @@
             <th class="col-icao">ICAO</th>
             <th class="col-alert">Alert</th>
             <th class="col-vis">Vis (m)</th>
-            <th class="col-flag">Low VIS ≤150</th>
+            <th class="col-flag">Low VIS</th>
             <th class="col-trig">Triggers</th>
             <th class="col-age">METAR age</th>
             <th class="col-age">TAF age</th>
