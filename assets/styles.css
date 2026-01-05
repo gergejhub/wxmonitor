@@ -6,6 +6,10 @@
 */
 
 :root{
+  /* Fonts (system, no external fetch — GitHub Pages friendly) */
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
   --bg: #06080f;
   --bg2:#0b1020;
   --panel: rgba(14,18,34,.88);
@@ -18,6 +22,8 @@
   /* Wizz Air inspired accents (magenta/purple) */
   --accent: #c6007e;
   --accent2:#6b2cff;
+  --accent3:#ff2ea6;
+  --accent3:#ff2ea6;
 
   --good:#36d399;
   --med:#fbbf24;
@@ -25,7 +31,7 @@
   --crit:#ff2d55;
 
   --shadow: 0 14px 40px rgba(0,0,0,.55);
-  --glow: 0 0 22px rgba(198,0,126,.22);
+  --glow: 0 0 22px rgba(198,0,126,.28);
 }
 
 *{ box-sizing: border-box; }
@@ -34,6 +40,7 @@ html, body { height: 100%; }
 body{
   margin:0;
   font-family: var(--sans);
+  font-weight: 500;
   color: var(--text);
   background:
     radial-gradient(1000px 650px at 25% 0%, rgba(93, 88, 255, .18) 0%, rgba(0,0,0,0) 55%),
@@ -59,10 +66,26 @@ body{
   backdrop-filter: blur(10px);
 }
 
+/* Wizz-like neon top accent line (subtle; night-shift friendly) */
+.header::before{
+  content:"";
+  position:absolute;
+  left:0; top:0; right:0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  opacity: .85;
+  box-shadow: 0 0 18px rgba(198,0,126,.22), 0 0 22px rgba(107,44,255,.16);
+}
+
 .header__title{
   font-weight: 800;
   letter-spacing: .2px;
   font-size: 16px;
+  background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 18px rgba(198,0,126,.18), 0 0 22px rgba(107,44,255,.14);
 }
 
 .header__subtitle{

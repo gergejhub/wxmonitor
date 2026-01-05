@@ -259,7 +259,6 @@ function wxClassFromToken(token){
 
 function highlightRaw(raw, ctx = {}){
   // ctx: { engice: boolean }
-  const ctx = arguments.length > 1 ? (arguments[1] || {}) : {};
   if(!raw) return '<span class="muted">—</span>';
   const parts = String(raw).split(/(\s+)/);
   return parts.map((p) => {
@@ -278,14 +277,6 @@ function highlightRaw(raw, ctx = {}){
     }
 
 
-    // Ceiling tokens (METAR/TAF): highlight very low ceiling that drives CIG<500 (BKN/OVC/VV below 005 => <500 ft AGL)
-    if(/^(BKN|OVC|VV)\d{3}$/i.test(p)){
-      const n = parseInt(p.slice(-3), 10); // hundreds of feet
-      if(Number.isFinite(n) && n < 5){
-        return `<span class="hl hl-cig-500" data-cat="cig">${escapeHtml(p)}</span>`;
-      }
-    }
-
     // Visibility tokens in meters (4 digits)
     if(/^\d{4}$/.test(p)){
       const v = parseInt(p, 10);
@@ -297,7 +288,8 @@ function highlightRaw(raw, ctx = {}){
     }
 
 
-    // Ceiling tokens (METAR/TAF): highlight very low ceiling that drives CIG<500 (BKN/OVC/VV below 005 => <500 ft AGL)
+    // Ceiling tokens (METAR/TAF): highlight very low ceiling that drives CIG<500
+    // (BKN/OVC/VV below 005 => <500 ft AGL)
     if(/^(BKN|OVC|VV)\d{3}$/i.test(p)){
       const n = parseInt(p.slice(-3), 10); // hundreds of feet
       if(Number.isFinite(n) && n < 5){
