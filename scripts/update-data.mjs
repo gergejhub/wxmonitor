@@ -31,12 +31,31 @@ const HAZARDS = [
 ];
 
 function readIcaoList() {
-  const txt = fs.readFileSync(AIRPORTS_TXT, 'utf8');
-  return txt
-    .split(/\r?\n/)
-    .map(s => s.trim().toUpperCase())
-    .filter(Boolean)
-    .filter(s => /^[A-Z0-9]{4}$/.test(s));
+  // Be permissive: accept lines like
+  //   "LHBP"
+  //   "LHBP # Budapest"
+  //   "LHBP - Budapest"
+  //   "LHBP,BUD"
+  // and ignore any extra tokens/comments after the ICAO.
+  // This prevents silent drop of all rows if airports.txt contains annotations.
+  const txt = fs.readFileSync(AIRPORTS_TXT, 'utf8').replace(/^\uFEFF/, ''); // strip BOM
+
+  const out = [];
+  for (const line0 of txt.split(/\r?\n/)) {
+    const line = String(line0)
+      .replace(/\s*(#|\/\/).*$/, '')   // strip trailing comments
+      .trim()
+      .toUpperCase();
+    if (!line) continue;
+
+    // First standalone 4-char token wins
+    const m = line.match(/\b([A-Z0-9]{4})\b/);
+    if (m) out.push(m[1]);
+  }
+
+  // De-duplicate while preserving order
+  const seen = new Set();
+  return out.filter(x => (seen.has(x) ? false : (seen.add(x), true)));
 }
 
 function chunk(arr, n){
