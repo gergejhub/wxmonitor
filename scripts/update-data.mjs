@@ -16,6 +16,7 @@ const ROOT = process.cwd();
 const AIRPORTS_TXT = path.join(ROOT, 'airports.txt');
 const OUT_LATEST = path.join(ROOT, 'data', 'latest.json');
 const OUT_IATA_MAP = path.join(ROOT, 'data', 'iata_map.json');
+const OUT_STATUS = path.join(ROOT, 'data', 'status.json');
 
 const OURAIRPORTS_CSV_URL = 'https://ourairports.com/airports.csv';
 
@@ -31,6 +32,9 @@ const HAZARDS = [
 ];
 
 function readIcaoList() {
+  if(!fs.existsSync(AIRPORTS_TXT)){
+    throw new Error(`Missing airports.txt at ${AIRPORTS_TXT}`);
+  }
   // Be permissive: accept lines like
   //   "LHBP"
   //   "LHBP # Budapest"
@@ -56,6 +60,21 @@ function readIcaoList() {
   // De-duplicate while preserving order
   const seen = new Set();
   return out.filter(x => (seen.has(x) ? false : (seen.add(x), true)));
+}
+
+function ensureDataDir(){
+  const dir = path.dirname(OUT_LATEST);
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function writeStatus({generatedAt, stats, errors}){
+  ensureDataDir();
+  const payload = {
+    generatedAt,
+    stats: stats ?? {},
+    errors: errors ?? []
+  };
+  fs.writeFileSync(OUT_STATUS, JSON.stringify(payload, null, 2));
 }
 
 function chunk(arr, n){
@@ -350,21 +369,46 @@ async function buildIataMap(icaos){
 }
 
 async function main(){
-  const icaos = readIcaoList();
+  const generatedAt = new Date().toISOString();
+  const errors = [];
+
+  ensureDataDir();
+
+  let icaos = [];
+  try {
+    icaos = readIcaoList();
+  } catch (e) {
+    errors.push(String(e?.message ?? e));
+  }
+
   if(icaos.length === 0){
-    console.log('No ICAO codes found in airports.txt');
-    fs.writeFileSync(OUT_LATEST, JSON.stringify({ generatedAt: new Date().toISOString(), stations: [] }, null, 2));
+    console.log('No ICAO codes found (or airports.txt missing).');
+    fs.writeFileSync(OUT_LATEST, JSON.stringify({ generatedAt, stations: [], stats: { icaoCount: 0 } , errors }, null, 2));
+    writeStatus({ generatedAt, stats: { icaoCount: 0 }, errors });
     return;
   }
+
+  console.log(`ICAO list loaded: ${icaos.length} stations. Sample: ${icaos.slice(0,10).join(', ')}`);
 
   const iataMap = await buildIataMap(icaos);
   fs.writeFileSync(OUT_IATA_MAP, JSON.stringify(iataMap, null, 2));
 
-  console.log(`Fetching METAR for ${icaos.length} stations…`);
-  const metars = await fetchMetars(icaos);
+  let metars = new Map();
+  let tafs = new Map();
 
-  console.log(`Fetching TAF for ${icaos.length} stations…`);
-  const tafs = await fetchTafs(icaos);
+  try {
+    console.log(`Fetching METAR for ${icaos.length} stations…`);
+    metars = await fetchMetars(icaos);
+  } catch (e) {
+    errors.push(`METAR fetch failed: ${String(e?.message ?? e)}`);
+  }
+
+  try {
+    console.log(`Fetching TAF for ${icaos.length} stations…`);
+    tafs = await fetchTafs(icaos);
+  } catch (e) {
+    errors.push(`TAF fetch failed: ${String(e?.message ?? e)}`);
+  }
 
   const stations = icaos.map(icao => {
     const metar = metars.get(icao) || null;
@@ -413,9 +457,21 @@ async function main(){
 
   stations.sort((a,b) => (b.severityScore ?? 0) - (a.severityScore ?? 0));
 
-  const out = { generatedAt: new Date().toISOString(), stations };
+  const stats = {
+    icaoCount: icaos.length,
+    metarReturned: metars.size,
+    tafReturned: tafs.size,
+    stationsWritten: stations.length,
+    missingMetar: stations.filter(s => !s.metarRaw).length,
+    missingTaf: stations.filter(s => !s.tafRaw).length
+  };
+
+  const out = { generatedAt, stations, stats, errors };
   fs.writeFileSync(OUT_LATEST, JSON.stringify(out, null, 2));
+  writeStatus({ generatedAt, stats, errors });
   console.log(`Wrote ${OUT_LATEST} with ${stations.length} stations.`);
+  console.log(`Stats: ${JSON.stringify(stats)}`);
+  if(errors.length) console.log(`Errors: ${errors.join(' | ')}`);
 }
 
 main().catch((e) => {
