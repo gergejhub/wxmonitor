@@ -41,6 +41,20 @@ function levelFromScore(score){
   return { label: 'OK',   cls: 'pill pill--ok' };
 }
 
+function hasEngineIcingStopFlag(item){
+  // High-priority operational flag (user-defined): VIS ≤ 150 m AND FZFG present.
+  const hazards = Array.isArray(item.hazards) ? item.hazards : [];
+  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  return (worstVis != null && worstVis <= 150) && hazards.includes('FZFG');
+}
+
+function displayScore(item){
+  // Keep the server-provided score, but allow a local UI override for special stop-flags.
+  const base = Math.round(item.severityScore ?? 0);
+  if(hasEngineIcingStopFlag(item)) return Math.max(base, 95);
+  return base;
+}
+
 function parseDdhhmmZ(raw){
   // Finds the first DDHHMMZ group.
   if (!raw) return null;
@@ -119,6 +133,9 @@ function buildTriggers(item){
 
   if(has('FZFG')) tags.push({ t: 'FZFG', key: 'fzfg' });
 
+  // Engine operations stop-flag (highest priority)
+  if(hasEngineIcingStopFlag(item)) tags.unshift({ t: 'ENG ICE OPS', key: 'eng' });
+
   // Fog / mist
   if(has('FG') || has('BR')) tags.push({ t: has('FG') ? 'FG' : 'BR', key: 'fog' });
 
@@ -133,36 +150,13 @@ function buildTriggers(item){
 
   // Low ceiling (METAR only from server calc)
   if(item.ceiling_ft != null){
-    if(item.ceiling_ft < 500) tags.push({ t: 'CIG<500', key: 'cig500' });
-    else if(item.ceiling_ft < 1000) tags.push({ t: 'CIG<1000', key: 'cig1000' });
+    if(item.ceiling_ft < 500) tags.push({ t: 'CIG<500', key: 'cig' });
+    else if(item.ceiling_ft < 1000) tags.push({ t: 'CIG<1000', key: 'cig' });
   }
 
   // Deduplicate by key
   const seen = new Set();
   return tags.filter(x => (seen.has(x.t) ? false : (seen.add(x.t), true)));
-}
-
-
-function tagClass(t){
-  const k = t && t.key ? String(t.key) : '';
-  const txt = t && t.t ? String(t.t) : '';
-
-  if(k === 'cig500' || txt === 'CIG<500') return 'tag--cig500';
-  if(k === 'cig1000' || txt === 'CIG<1000') return 'tag--cig1000';
-
-  if(k.startsWith('rvr')) return 'tag--rvr';
-  if(k.startsWith('vis')) return 'tag--vis';
-  if(['fzfg','fog','ts','snow','rain'].includes(k)) return `tag--${k}`;
-
-  return '';
-}
-
-function tagCat(t){
-  const k = t && t.key ? String(t.key) : '';
-  if(k.startsWith('rvr')) return 'rvr';
-  if(k.startsWith('vis')) return 'vis';
-  if(k.startsWith('cig')) return 'cig';
-  return 'wx';
 }
 
 function extractRvrValuesMeters(raw){
@@ -263,7 +257,9 @@ function wxClassFromToken(token){
   return null;
 }
 
-function highlightRaw(raw){
+function highlightRaw(raw, ctx = {}){
+  // ctx: { engice: boolean }
+  const ctx = arguments.length > 1 ? (arguments[1] || {}) : {};
   if(!raw) return '<span class="muted">—</span>';
   const parts = String(raw).split(/(\s+)/);
   return parts.map((p) => {
@@ -281,6 +277,15 @@ function highlightRaw(raw){
       return escapeHtml(p);
     }
 
+
+    // Ceiling tokens (METAR/TAF): highlight very low ceiling that drives CIG<500 (BKN/OVC/VV below 005 => <500 ft AGL)
+    if(/^(BKN|OVC|VV)\d{3}$/i.test(p)){
+      const n = parseInt(p.slice(-3), 10); // hundreds of feet
+      if(Number.isFinite(n) && n < 5){
+        return `<span class="hl hl-cig-500" data-cat="cig">${escapeHtml(p)}</span>`;
+      }
+    }
+
     // Visibility tokens in meters (4 digits)
     if(/^\d{4}$/.test(p)){
       const v = parseInt(p, 10);
@@ -291,6 +296,15 @@ function highlightRaw(raw){
       return escapeHtml(p);
     }
 
+
+    // Ceiling tokens (METAR/TAF): highlight very low ceiling that drives CIG<500 (BKN/OVC/VV below 005 => <500 ft AGL)
+    if(/^(BKN|OVC|VV)\d{3}$/i.test(p)){
+      const n = parseInt(p.slice(-3), 10); // hundreds of feet
+      if(Number.isFinite(n) && n < 5){
+        return `<span class="hl hl-cig-500" data-cat="cig">${escapeHtml(p)}</span>`;
+      }
+    }
+
     // Visibility tokens in statute miles
     const sm = parseSmToMeters(p);
     if(sm != null){
@@ -299,24 +313,11 @@ function highlightRaw(raw){
       return escapeHtml(p);
     }
 
-    // Ceiling tokens (BKN/OVC/VV)
-    const cig = p.match(/^(BKN|OVC|VV)(\d{3})$/i);
-    if(cig){
-      const hundreds = parseInt(cig[2], 10);
-      if(Number.isFinite(hundreds)){
-        const feet = hundreds * 100;
-        if(feet <= 500){
-          return `<span class="hl hl-cig-500" data-cat="cig">${escapeHtml(p)}</span>`;
-        }
-        if(feet <= 1000){
-          return `<span class="hl hl-cig-1000" data-cat="cig">${escapeHtml(p)}</span>`;
-        }
-      }
-      return escapeHtml(p);
+    // Weather phenomena tokens
+    if(ctx.engice && /FZFG/i.test(p)){
+      return `<span class="hl hl-engice" data-cat="eng">${escapeHtml(p)}</span>`;
     }
 
-
-    // Weather phenomena tokens
     const wxCls = wxClassFromToken(p);
     if(wxCls){
       return `<span class="hl ${wxCls}" data-cat="wx">${escapeHtml(p)}</span>`;
@@ -328,7 +329,7 @@ function highlightRaw(raw){
 
 function alertMatch(item, desired){
   if(!desired || desired === 'all') return true;
-  const score = Math.round(item.severityScore ?? 0);
+  const score = displayScore(item);
   const lbl = levelFromScore(score).label.toLowerCase();
   return lbl === desired;
 }
@@ -337,11 +338,12 @@ function conditionMatch(item, cond){
   if(cond === 'all') return true;
   const hazards = Array.isArray(item.hazards) ? item.hazards : [];
   const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
-  const score = item.severityScore ?? 0;
+  const score = displayScore(item);
   const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
 
   switch(cond){
     case 'alerts': return score >= 20;
+    case 'engice': return hasEngineIcingStopFlag(item);
     case 'vis800': return worstVis != null && worstVis <= 800;
     case 'vis550': return worstVis != null && worstVis <= 550;
     case 'vis500': return worstVis != null && worstVis <= 500;
@@ -366,7 +368,7 @@ function renderRow(item, nowIso){
   const iata = item.iata ? escapeHtml(item.iata) : '';
   const name = item.name ? escapeHtml(item.name) : '';
 
-  const score = Math.round(item.severityScore ?? 0);
+  const score = displayScore(item);
   const lvl = levelFromScore(score);
 
   const metarAge = ageMinutes(item.metarRaw, nowIso);
@@ -379,6 +381,7 @@ function renderRow(item, nowIso){
   const lowVisCls = visClassFromMeters(worstVis);
 
   const triggers = buildTriggers(item);
+  const engice = hasEngineIcingStopFlag(item);
 
   return `
     <tr>
@@ -401,7 +404,11 @@ function renderRow(item, nowIso){
       <td>
         <div class="triggers">
           ${triggers.length
-            ? triggers.map(t => `<span class="tag ${tagClass(t)}" data-cat="${tagCat(t)}">${escapeHtml(t.t)}</span>`).join('')
+            ? triggers.map(t => {
+              const k = (t.key || 'wx');
+              const cat = k.startsWith('vis') ? 'vis' : (k.startsWith('rvr') ? 'rvr' : (k === 'cig' ? 'cig' : k));
+              return `<span class="tag tag--${cat}">${escapeHtml(t.t)}</span>`;
+            }).join('')
             : `<span class="muted">—</span>`
           }
         </div>
@@ -410,8 +417,8 @@ function renderRow(item, nowIso){
       <td>${metarAge == null ? '<span class="muted">—</span>' : `<span class="age">${metarAge}m</span>`}</td>
       <td>${tafAge == null ? '<span class="muted">—</span>' : `<span class="age">${tafAge}m</span>`}</td>
 
-      <td><div class="raw">${item.metarRaw ? highlightRaw(item.metarRaw) : '<span class="muted">No METAR</span>'}</div></td>
-      <td><div class="raw">${item.tafRaw ? highlightRaw(item.tafRaw) : '<span class="muted">No TAF</span>'}</div></td>
+      <td><div class="raw">${item.metarRaw ? highlightRaw(item.metarRaw, { engice }) : '<span class="muted">No METAR</span>'}</div></td>
+      <td><div class="raw">${item.tafRaw ? highlightRaw(item.tafRaw, { engice }) : '<span class="muted">No TAF</span>'}</div></td>
     </tr>
   `;
 }
@@ -442,7 +449,7 @@ function applyFilters(){
   rows = rows.filter(s => alertMatch(s, alertSel));
 
   if(sortPriority){
-    rows.sort((a,b) => (b.severityScore ?? 0) - (a.severityScore ?? 0) || String(a.icao).localeCompare(String(b.icao)));
+    rows.sort((a,b) => displayScore(b) - displayScore(a) || String(a.icao).localeCompare(String(b.icao)));
   }else{
     rows.sort((a,b) => String(a.icao).localeCompare(String(b.icao)));
   }

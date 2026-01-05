@@ -6,26 +6,26 @@
 */
 
 :root{
-  --wizz-pink: #C6007E;
-  --wizz-purple:#6F2C91;
-  --wizz-blue: #00A3E0;
-
-  --bg: #070A10;
-  --panel: rgba(14,18,28,.78);
-  --panel2: rgba(9,12,20,.70);
-
-  --text: #EAF0FF;
-  --muted:#A8B3D4;
+  --bg: #06080f;
+  --bg2:#0b1020;
+  --panel: rgba(14,18,34,.88);
+  --panel2: rgba(10,14,28,.86);
+  --text: #eef2ff;
+  --muted:#a9b2d6;
   --line: rgba(255,255,255,.10);
-  --line2: rgba(255,255,255,.06);
+  --line2: rgba(255,255,255,.08);
 
-  --ok: rgba(90, 220, 170, 1);
-  --med: rgba(255, 215, 120, 1);
-  --high: rgba(255, 150, 120, 1);
-  --crit: rgba(255, 80, 110, 1);
+  /* Wizz Air inspired accents (magenta/purple) */
+  --accent: #c6007e;
+  --accent2:#6b2cff;
 
-  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --good:#36d399;
+  --med:#fbbf24;
+  --high:#fb7185;
+  --crit:#ff2d55;
+
+  --shadow: 0 14px 40px rgba(0,0,0,.55);
+  --glow: 0 0 22px rgba(198,0,126,.22);
 }
 
 *{ box-sizing: border-box; }
@@ -36,23 +36,9 @@ body{
   font-family: var(--sans);
   color: var(--text);
   background:
-    radial-gradient(1200px 700px at 10% -10%, rgba(198,0,126,.20) 0%, rgba(0,0,0,0) 60%),
-    radial-gradient(1000px 650px at 95% 0%, rgba(111,44,145,.18) 0%, rgba(0,0,0,0) 58%),
-    radial-gradient(900px 600px at 70% 90%, rgba(0,163,224,.10) 0%, rgba(0,0,0,0) 55%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0)),
+    radial-gradient(1000px 650px at 25% 0%, rgba(93, 88, 255, .18) 0%, rgba(0,0,0,0) 55%),
+    radial-gradient(900px 600px at 90% 15%, rgba(255, 46, 166, .12) 0%, rgba(0,0,0,0) 55%),
     var(--bg);
-}
-body::before{
-  content:"";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(255,255,255,.035) 1px, rgba(0,0,0,0) 1px),
-    linear-gradient(to bottom, rgba(255,255,255,.028) 1px, rgba(0,0,0,0) 1px);
-  background-size: 64px 64px;
-  opacity: .12;
-  mix-blend-mode: screen;
 }
 
 .mono{ font-family: var(--mono); }
@@ -105,7 +91,7 @@ body::before{
 
 .btn{
   appearance:none;
-  border: 1px solid var(--line2);
+  border: 1px solid rgba(198,0,126,.35);
   background: rgba(255,255,255,.04);
   color: var(--text);
   padding: 9px 12px;
@@ -143,7 +129,6 @@ body::before{
   flex-wrap: wrap;
   padding: 10px;
   border: 1px solid var(--line);
-  box-shadow: 0 10px 35px rgba(0,0,0,.55), 0 0 0 1px rgba(198,0,126,.10) inset;
   border-radius: 16px;
   background: rgba(255,255,255,.02);
 }
@@ -195,7 +180,6 @@ body::before{
 .tableShell{
   margin-top: 10px;
   border: 1px solid var(--line);
-  box-shadow: 0 10px 35px rgba(0,0,0,.55), 0 0 0 1px rgba(198,0,126,.10) inset;
   border-radius: 16px;
   overflow: auto;
   background: rgba(255,255,255,.015);
@@ -318,18 +302,6 @@ body::before{
   color: var(--muted);
 }
 
-.tag--rvr{ background: rgba(0,163,224,.12); border: 1px solid rgba(0,163,224,.22); }
-.tag--vis{ background: rgba(255,215,120,.10); border: 1px solid rgba(255,215,120,.22); }
-
-.tag--cig500{ background: rgba(198,0,126,.14); border: 1px solid rgba(198,0,126,.28); }
-.tag--cig1000{ background: rgba(111,44,145,.12); border: 1px solid rgba(111,44,145,.24); }
-
-.tag--fzfg{ background: rgba(255,80,110,.12); border: 1px solid rgba(255,80,110,.26); }
-.tag--fog{ background: rgba(160,185,255,.10); border: 1px solid rgba(160,185,255,.20); }
-.tag--ts{ background: rgba(255,120,70,.12); border: 1px solid rgba(255,120,70,.26); }
-.tag--snow{ background: rgba(185,220,255,.12); border: 1px solid rgba(185,220,255,.25); }
-.tag--rain{ background: rgba(120,200,255,.10); border: 1px solid rgba(120,200,255,.22); }
-
 .raw{
   font-family: var(--mono);
   font-size: 12px;
@@ -353,11 +325,6 @@ body::before{
 .hl[data-cat="wx"]{
   box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset;
 }
-
-
-/* Ceiling (CIG) highlights */
-.hl-cig-500{ background: rgba(198, 0, 126, .22); border-color: rgba(198, 0, 126, .45); }
-.hl-cig-1000{ background: rgba(0, 163, 224, .14); border-color: rgba(0, 163, 224, .30); }
 
 /* Visibility (meters/SM -> converted) */
 .hl-vis-800{ background: rgba(255, 227, 110, .16); border-color: rgba(255, 227, 110, .34); }
@@ -392,7 +359,6 @@ body::before{
   margin: 10px 0 12px;
   padding: 10px 12px;
   border: 1px solid var(--line);
-  box-shadow: 0 10px 35px rgba(0,0,0,.55), 0 0 0 1px rgba(198,0,126,.10) inset;
   border-radius: 12px;
   background: rgba(0,0,0,.10);
   display: flex;
@@ -407,3 +373,29 @@ body::before{
   align-items: center;
   gap: 8px;
 }
+
+/* Subtle futuristic grid */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: .20;
+  mask-image: radial-gradient(900px 600px at 50% 20%, rgba(0,0,0,1), transparent 75%);
+}
+
+/* Trigger tags */
+.tag--vis{ border-color: rgba(255, 227, 110, .40); box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+.tag--rvr{ border-color: rgba(130, 100, 255, .45); box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+.tag--cig{ border-color: rgba(54, 211, 153, .45); box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+.tag--eng{ border-color: rgba(255, 45, 85, .55); background: rgba(255, 45, 85, .10); color: rgba(255,255,255,.92); box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset; }
+
+/* Ceiling highlight (drives CIG<500) */
+.hl-cig-500{ background: rgba(54, 211, 153, .18); border-color: rgba(54, 211, 153, .45); }
+
+/* Engine-ops stop-flag: VIS≤150 & FZFG */
+.hl-engice{ background: rgba(255, 45, 85, .22); border-color: rgba(255, 45, 85, .55); }
