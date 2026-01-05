@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wizz Air METAR/TAF Operations Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=14" />
+  <link rel="stylesheet" href="assets/styles.css?v=15" />
 </head>
 <body>
 
@@ -28,6 +28,34 @@
   </header>
 
   <main class="wrap">
+
+    <section class="criticalBar" aria-label="Critical overview">
+      <button id="cbEng" class="critCard critCard--eng" type="button">
+        <div class="critCard__k">ENG ICE OPS</div>
+        <div id="cbEngCount" class="critCard__v mono">0</div>
+        <div class="critCard__d">VIS ≤150 m &amp; FZFG</div>
+      </button>
+      <button id="cbCrit" class="critCard critCard--crit" type="button">
+        <div class="critCard__k">CRIT</div>
+        <div id="cbCritCount" class="critCard__v mono">0</div>
+        <div class="critCard__d">severityScore ≥ 70</div>
+      </button>
+      <button id="cbVis175" class="critCard critCard--vis" type="button">
+        <div class="critCard__k">VIS ≤175</div>
+        <div id="cbVis175Count" class="critCard__v mono">0</div>
+        <div class="critCard__d">rapid operational impact</div>
+      </button>
+      <button id="cbTs" class="critCard critCard--ts" type="button">
+        <div class="critCard__k">TS</div>
+        <div id="cbTsCount" class="critCard__v mono">0</div>
+        <div class="critCard__d">thunderstorm present</div>
+      </button>
+      <button id="cbReset" class="critCard critCard--reset" type="button">
+        <div class="critCard__k">Reset</div>
+        <div class="critCard__v mono">⟲</div>
+        <div class="critCard__d">clear filters</div>
+      </button>
+    </section>
 
     <section class="toolbar" aria-label="Filters">
       <input id="filterText" class="input" type="search" placeholder="Filter (ICAO/IATA/name)…" autocomplete="off" />
@@ -110,6 +138,37 @@
 
   </main>
 
-  <script src="assets/app.js?v=14"></script>
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div id="drawerBackdrop" class="drawer__backdrop" tabindex="-1"></div>
+    <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Airport details">
+      <div class="drawer__head">
+        <div>
+          <div id="dTitle" class="drawer__title mono">—</div>
+          <div id="dSub" class="drawer__sub">—</div>
+        </div>
+        <button id="drawerClose" class="iconBtn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <div class="drawer__body">
+        <div id="dSummary" class="drawer__summary"></div>
+
+        <div class="drawer__actions">
+          <button id="copyBrief" class="btn btn--primary" type="button">Copy briefing line</button>
+        </div>
+
+        <div class="drawer__section">
+          <div class="drawer__sectionTitle">METAR</div>
+          <div id="dMetar" class="raw"></div>
+        </div>
+
+        <div class="drawer__section">
+          <div class="drawer__sectionTitle">TAF</div>
+          <div id="dTaf" class="raw"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <script src="assets/app.js?v=15"></script>
 </body>
 </html>
