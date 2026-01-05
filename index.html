@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wizz Air METAR/TAF Watch</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">W6</div>
+      <div>
+        <div class="title">METAR / TAF Watch</div>
+        <div class="subtitle">GitHub Pages + GitHub Actions (aviationweather.gov)</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="refreshBtn" class="btn">Refresh now</button>
+      <label class="toggle">
+        <input id="autoRefresh" type="checkbox" checked />
+        <span>Auto refresh (10 min)</span>
+      </label>
+      <div class="stamp">
+        <div class="small">Last update:</div>
+        <div id="lastUpdate" class="mono">—</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Stations (worst first)</h2>
+        <div class="legend">
+          <span class="pill p-critical">CRITICAL</span>
+          <span class="pill p-high">HIGH</span>
+          <span class="pill p-med">MED</span>
+          <span class="pill p-ok">OK</span>
+          <span class="pill p-info">Highlighted: FG / FZFG / SN / RA / TS + VIS ≤ 800 m</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="tbl">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Airport</th>
+              <th>Severity</th>
+              <th>Visibility</th>
+              <th>Key hazards</th>
+              <th>METAR (raw)</th>
+              <th>TAF (raw)</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="7" class="muted">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footnote">
+        Data source: Aviation Weather Center Data API. This dashboard is for situational awareness only.
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Input list</h2>
+        <div class="muted">This site reads <span class="mono">airports.txt</span> in your repo (ICAO codes, one per line). The GitHub Action rebuilds <span class="mono">data/latest.json</span> every 10 minutes.</div>
+      </div>
+      <pre class="code" id="airportList">Loading…</pre>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Status</h2>
+        <div class="muted">If the table is stale, check the Actions run log and your repo’s workflow permissions.</div>
+      </div>
+      <ul class="status">
+        <li><span class="mono">data/latest.json</span> is served from your GitHub Pages domain (no browser CORS issues).</li>
+        <li>GitHub Actions pulls METAR/TAF from <span class="mono">aviationweather.gov</span> server-side and commits results back.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
