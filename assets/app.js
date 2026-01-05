@@ -107,8 +107,15 @@ function buildTriggers(item){
   const worstVis = item.worst_visibility_m ?? item.visibility_m ?? null;
   const vis = visNumber(worstVis);
 
-  if(vis != null && vis <= 150) tags.push({ t: 'VIS≤150', key: 'vis150' });
-  else if(vis != null && vis <= 800) tags.push({ t: 'VIS≤800', key: 'vis800' });
+  if(vis != null){
+    if(vis <= 150) tags.push({ t: 'VIS≤150', key: 'vis150' });
+    else if(vis <= 175) tags.push({ t: 'VIS≤175', key: 'vis175' });
+    else if(vis <= 250) tags.push({ t: 'VIS≤250', key: 'vis250' });
+    else if(vis <= 300) tags.push({ t: 'VIS≤300', key: 'vis300' });
+    else if(vis <= 500) tags.push({ t: 'VIS≤500', key: 'vis500' });
+    else if(vis <= 550) tags.push({ t: 'VIS≤550', key: 'vis550' });
+    else if(vis <= 800) tags.push({ t: 'VIS≤800', key: 'vis800' });
+  }
 
   if(has('FZFG')) tags.push({ t: 'FZFG', key: 'fzfg' });
 
@@ -192,7 +199,24 @@ function parseSmToMeters(token){
 function visClassFromMeters(m){
   if(m == null) return null;
   if(m <= 150) return 'hl-vis-150';
+  if(m <= 175) return 'hl-vis-175';
+  if(m <= 250) return 'hl-vis-250';
+  if(m <= 300) return 'hl-vis-300';
+  if(m <= 500) return 'hl-vis-500';
+  if(m <= 550) return 'hl-vis-550';
   if(m <= 800) return 'hl-vis-800';
+  return null;
+}
+
+function lowVisLabelFromMeters(m){
+  if(m == null) return null;
+  if(m <= 150) return '≤150';
+  if(m <= 175) return '≤175';
+  if(m <= 250) return '≤250';
+  if(m <= 300) return '≤300';
+  if(m <= 500) return '≤500';
+  if(m <= 550) return '≤550';
+  if(m <= 800) return '≤800';
   return null;
 }
 
@@ -262,6 +286,13 @@ function highlightRaw(raw){
   }).join('');
 }
 
+function alertMatch(item, desired){
+  if(!desired || desired === 'all') return true;
+  const score = Math.round(item.severityScore ?? 0);
+  const lbl = levelFromScore(score).label.toLowerCase();
+  return lbl === desired;
+}
+
 function conditionMatch(item, cond){
   if(cond === 'all') return true;
   const hazards = Array.isArray(item.hazards) ? item.hazards : [];
@@ -272,6 +303,11 @@ function conditionMatch(item, cond){
   switch(cond){
     case 'alerts': return score >= 20;
     case 'vis800': return worstVis != null && worstVis <= 800;
+    case 'vis550': return worstVis != null && worstVis <= 550;
+    case 'vis500': return worstVis != null && worstVis <= 500;
+    case 'vis300': return worstVis != null && worstVis <= 300;
+    case 'vis250': return worstVis != null && worstVis <= 250;
+    case 'vis175': return worstVis != null && worstVis <= 175;
     case 'vis150': return worstVis != null && worstVis <= 150;
     case 'rvr500': return rvrMin != null && rvrMin <= 500;
     case 'rvr300': return rvrMin != null && rvrMin <= 300;
@@ -298,7 +334,9 @@ function renderRow(item, nowIso){
 
   // Table VIS shows METAR visibility in meters (as in your reference screenshot).
   const visM = visNumber(item.visibility_m ?? null);
-  const lowVis150 = (visNumber(item.worst_visibility_m ?? item.visibility_m ?? null) ?? 99999) <= 150;
+  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  const lowVisLabel = lowVisLabelFromMeters(worstVis);
+  const lowVisCls = visClassFromMeters(worstVis);
 
   const triggers = buildTriggers(item);
 
@@ -318,7 +356,7 @@ function renderRow(item, nowIso){
 
       <td class="mono"><span class="num">${visM == null ? '—' : visM}</span></td>
 
-      <td><span class="yn ${lowVis150 ? 'yn--yes' : 'yn--no'}">${lowVis150 ? 'YES' : '—'}</span></td>
+      <td>${lowVisLabel ? `<span class="hl ${lowVisCls}" data-cat="vis">VIS${lowVisLabel}</span>` : '<span class="muted">—</span>'}</td>
 
       <td>
         <div class="triggers">
@@ -348,6 +386,7 @@ let state = {
 function applyFilters(){
   const text = ($('#filterText').value || '').trim().toUpperCase();
   const cond = $('#condSel').value;
+  const alertSel = ($('#alertSel') ? $('#alertSel').value : 'all');
   const sortPriority = $('#sortPriority').checked;
 
   let rows = state.stations.slice();
@@ -360,6 +399,7 @@ function applyFilters(){
   }
 
   rows = rows.filter(s => conditionMatch(s, cond));
+  rows = rows.filter(s => alertMatch(s, alertSel));
 
   if(sortPriority){
     rows.sort((a,b) => (b.severityScore ?? 0) - (a.severityScore ?? 0) || String(a.icao).localeCompare(String(b.icao)));
@@ -465,7 +505,7 @@ function stopTimer(){
 $('#refreshBtn').addEventListener('click', () => load());
 $('#autoRefresh').addEventListener('change', (e) => e.target.checked ? startTimer() : stopTimer());
 
-['filterText','condSel','scopeSel','sortPriority'].forEach(id => {
+['filterText','condSel','alertSel','scopeSel','sortPriority'].forEach(id => {
   const el = $('#' + id);
   if(!el) return;
   el.addEventListener('input', render);
