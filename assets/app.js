@@ -441,7 +441,14 @@ function applyFilters(){
   rows = rows.filter(s => alertMatch(s, alertSel));
 
   if(sortPriority){
-    rows.sort((a,b) => displayScore(b) - displayScore(a) || String(a.icao).localeCompare(String(b.icao)));
+    rows.sort((a,b) => {
+      const ae = hasEngineIcingStopFlag(a);
+      const be = hasEngineIcingStopFlag(b);
+      // Engine icing stop-flag is always pinned to the very top.
+      if(ae && !be) return -1;
+      if(!ae && be) return 1;
+      return (displayScore(b) - displayScore(a)) || String(a.icao).localeCompare(String(b.icao));
+    });
   }else{
     rows.sort((a,b) => String(a.icao).localeCompare(String(b.icao)));
   }
