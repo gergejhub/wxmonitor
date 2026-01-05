@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wizz Air METAR/TAF Status Table</title>
-  <link rel="stylesheet" href="assets/styles.css?v=7" />
+  <link rel="stylesheet" href="assets/styles.css?v=8" />
 </head>
 <body>
 
@@ -41,8 +41,11 @@
         <option value="alerts">Alerts (MED+)</option>
         <option value="vis800">Low VIS ≤ 800 m</option>
         <option value="vis150">Low VIS ≤ 150 m</option>
-        <option value="fzfg">FZFG</option>
-        <option value="fog">Fog (FG/BR)</option>
+        <option value="rvr500">RVR ≤ 500 m</option>
+        <option value="rvr300">RVR ≤ 300 m</option>
+        <option value="rvr200">RVR ≤ 200 m</option>
+        <option value="rvr75">RVR ≤ 75 m</option>
+        <option value="fog">Fog (FG/BR/FZFG)</option>
         <option value="snow">Snow (SN/SHSN/BLSN)</option>
         <option value="rain">Rain (RA/SHRA/+RA)</option>
         <option value="ts">Thunderstorm (TS*)</option>
@@ -66,7 +69,6 @@
             <th class="col-icao">ICAO</th>
             <th class="col-alert">Alert</th>
             <th class="col-vis">Vis (m)</th>
-            <th class="col-flag">FZFG</th>
             <th class="col-flag">Low VIS ≤150</th>
             <th class="col-trig">Triggers</th>
             <th class="col-age">METAR age</th>
@@ -76,13 +78,13 @@
           </tr>
         </thead>
         <tbody id="tbody">
-          <tr><td colspan="10" class="muted">Loading…</td></tr>
+          <tr><td colspan="9" class="muted">Loading…</td></tr>
         </tbody>
       </table>
     </section>
 
   </main>
 
-  <script src="assets/app.js?v=7"></script>
+  <script src="assets/app.js?v=8"></script>
 </body>
 </html>
