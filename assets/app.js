@@ -95,6 +95,15 @@ function buildTriggers(item){
   const hazards = Array.isArray(item.hazards) ? item.hazards : [];
   const has = (x) => hazards.includes(x);
 
+  // RVR (minimum across METAR + TAF if available)
+  const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
+  if(rvrMin != null){
+    if(rvrMin <= 75) tags.push({ t: 'RVR≤75', key: 'rvr75' });
+    else if(rvrMin <= 200) tags.push({ t: 'RVR≤200', key: 'rvr200' });
+    else if(rvrMin <= 300) tags.push({ t: 'RVR≤300', key: 'rvr300' });
+    else if(rvrMin <= 500) tags.push({ t: 'RVR≤500', key: 'rvr500' });
+  }
+
   const worstVis = item.worst_visibility_m ?? item.visibility_m ?? null;
   const vis = visNumber(worstVis);
 
@@ -126,17 +135,148 @@ function buildTriggers(item){
   return tags.filter(x => (seen.has(x.t) ? false : (seen.add(x.t), true)));
 }
 
+function extractRvrValuesMeters(raw){
+  if(!raw) return [];
+  // Examples: R17/0600, R17L/0600U, R09/0400V0800, R27/P1500
+  const re = /\bR\d{2}[LRC]?\/[PM]?\d{4}(?:V[PM]?\d{4})?[UDN]?\b/g;
+  const tokens = raw.match(re) || [];
+  const values = [];
+  for(const tok of tokens){
+    // Pull all 4-digit chunks after the slash and optional V
+    const nums = tok.match(/\d{4}/g) || [];
+    for(const n of nums){
+      const v = parseInt(n, 10);
+      if(Number.isFinite(v)) values.push(v);
+    }
+  }
+  return values;
+}
+
+function computeRvrMin(item){
+  const vals = [...extractRvrValuesMeters(item.metarRaw), ...extractRvrValuesMeters(item.tafRaw)];
+  if(!vals.length) return null;
+  return Math.min(...vals);
+}
+
+function rvrClassFromMin(v){
+  if(v == null) return null;
+  if(v <= 75) return 'hl-rvr-75';
+  if(v <= 200) return 'hl-rvr-200';
+  if(v <= 300) return 'hl-rvr-300';
+  if(v <= 500) return 'hl-rvr-500';
+  return null;
+}
+
+function parseSmToMeters(token){
+  // Handles: 1/2SM, 2SM, 1 1/2SM (as two tokens typically), P6SM
+  const t = token.toUpperCase();
+  if(!t.endsWith('SM')) return null;
+  if(t.startsWith('P')) return null; // greater than
+  const core = t.slice(0, -2);
+  // fraction a/b
+  if(/^\d+\/\d+$/.test(core)){
+    const [a,b] = core.split('/').map(x => parseInt(x,10));
+    if(!b) return null;
+    const miles = a / b;
+    return miles * 1609.344;
+  }
+  // decimal / integer
+  if(/^\d+(?:\.\d+)?$/.test(core)){
+    const miles = parseFloat(core);
+    if(!Number.isFinite(miles)) return null;
+    return miles * 1609.344;
+  }
+  return null;
+}
+
+function visClassFromMeters(m){
+  if(m == null) return null;
+  if(m <= 150) return 'hl-vis-150';
+  if(m <= 800) return 'hl-vis-800';
+  return null;
+}
+
+function wxClassFromToken(token){
+  const t0 = token.toUpperCase();
+  const t = t0.replace(/^[-+]/, '');
+  const t2 = t.startsWith('VC') ? t.slice(2) : t;
+
+  // Thunderstorm first (e.g., -TSRA)
+  if(/TS/.test(t2)) return 'hl-ts';
+
+  // Fog / mist group
+  if(/FZFG/.test(t2) || /\bFG\b/.test(t2) || t2 === 'BR' || /BR/.test(t2) || /MIFG|BCFG|PRFG|VCFG/.test(t2)) return 'hl-fog';
+
+  // Snow / ice pellets
+  if(/SN|SHSN|BLSN|DRSN|SG|PL/.test(t2)) return 'hl-snow';
+
+  // Rain / drizzle / freezing
+  if(/RA|SHRA|DZ|FZRA|FZDZ/.test(t2)) return 'hl-rain';
+
+  return null;
+}
+
+function highlightRaw(raw){
+  if(!raw) return '<span class="muted">—</span>';
+  const parts = String(raw).split(/(\s+)/);
+  return parts.map((p) => {
+    if(!p) return '';
+    if(/^\s+$/.test(p)) return p;
+
+    // RVR tokens
+    if(/^R\d{2}[LRC]?\/[PM]?\d{4}(?:V[PM]?\d{4})?[UDN]?$/i.test(p)){
+      const nums = (p.match(/\d{4}/g) || []).map(x => parseInt(x,10)).filter(n => Number.isFinite(n));
+      const minv = nums.length ? Math.min(...nums) : null;
+      const cls = rvrClassFromMin(minv);
+      if(cls){
+        return `<span class="hl ${cls}" data-cat="rvr">${escapeHtml(p)}</span>`;
+      }
+      return escapeHtml(p);
+    }
+
+    // Visibility tokens in meters (4 digits)
+    if(/^\d{4}$/.test(p)){
+      const v = parseInt(p, 10);
+      if(Number.isFinite(v)){
+        const cls = visClassFromMeters(v);
+        if(cls) return `<span class="hl ${cls}" data-cat="vis">${escapeHtml(p)}</span>`;
+      }
+      return escapeHtml(p);
+    }
+
+    // Visibility tokens in statute miles
+    const sm = parseSmToMeters(p);
+    if(sm != null){
+      const cls = visClassFromMeters(sm);
+      if(cls) return `<span class="hl ${cls}" data-cat="vis">${escapeHtml(p)}</span>`;
+      return escapeHtml(p);
+    }
+
+    // Weather phenomena tokens
+    const wxCls = wxClassFromToken(p);
+    if(wxCls){
+      return `<span class="hl ${wxCls}" data-cat="wx">${escapeHtml(p)}</span>`;
+    }
+
+    return escapeHtml(p);
+  }).join('');
+}
+
 function conditionMatch(item, cond){
   if(cond === 'all') return true;
   const hazards = Array.isArray(item.hazards) ? item.hazards : [];
   const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
   const score = item.severityScore ?? 0;
+  const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
 
   switch(cond){
     case 'alerts': return score >= 20;
     case 'vis800': return worstVis != null && worstVis <= 800;
     case 'vis150': return worstVis != null && worstVis <= 150;
-    case 'fzfg': return hazards.includes('FZFG');
+    case 'rvr500': return rvrMin != null && rvrMin <= 500;
+    case 'rvr300': return rvrMin != null && rvrMin <= 300;
+    case 'rvr200': return rvrMin != null && rvrMin <= 200;
+    case 'rvr75':  return rvrMin != null && rvrMin <= 75;
     case 'fog': return hazards.includes('FG') || hazards.includes('BR') || hazards.includes('FZFG');
     case 'snow': return hazards.some(h => ['SN','SHSN','BLSN','PL','SG'].includes(h));
     case 'rain': return hazards.some(h => ['RA','+RA','SHRA','DZ','FZDZ','FZRA'].includes(h));
@@ -158,8 +298,6 @@ function renderRow(item, nowIso){
 
   // Table VIS shows METAR visibility in meters (as in your reference screenshot).
   const visM = visNumber(item.visibility_m ?? null);
-
-  const hasFzfg = (item.hazards || []).includes('FZFG');
   const lowVis150 = (visNumber(item.worst_visibility_m ?? item.visibility_m ?? null) ?? 99999) <= 150;
 
   const triggers = buildTriggers(item);
@@ -180,8 +318,6 @@ function renderRow(item, nowIso){
 
       <td class="mono"><span class="num">${visM == null ? '—' : visM}</span></td>
 
-      <td><span class="yn ${hasFzfg ? 'yn--yes' : 'yn--no'}">${hasFzfg ? 'YES' : '—'}</span></td>
-
       <td><span class="yn ${lowVis150 ? 'yn--yes' : 'yn--no'}">${lowVis150 ? 'YES' : '—'}</span></td>
 
       <td>
@@ -196,8 +332,8 @@ function renderRow(item, nowIso){
       <td>${metarAge == null ? '<span class="muted">—</span>' : `<span class="age">${metarAge}m</span>`}</td>
       <td>${tafAge == null ? '<span class="muted">—</span>' : `<span class="age">${tafAge}m</span>`}</td>
 
-      <td><div class="raw">${item.metarHtml ?? '<span class="muted">No METAR</span>'}</div></td>
-      <td><div class="raw">${item.tafHtml ?? '<span class="muted">No TAF</span>'}</div></td>
+      <td><div class="raw">${item.metarRaw ? highlightRaw(item.metarRaw) : '<span class="muted">No METAR</span>'}</div></td>
+      <td><div class="raw">${item.tafRaw ? highlightRaw(item.tafRaw) : '<span class="muted">No TAF</span>'}</div></td>
     </tr>
   `;
 }
@@ -275,7 +411,7 @@ function render(){
 
   tbody.innerHTML = rows.length
     ? rows.map(r => renderRow(r, nowIso)).join('')
-    : '<tr><td colspan="10" class="muted">No matching rows.</td></tr>';
+    : '<tr><td colspan="9" class="muted">No matching rows.</td></tr>';
 }
 
 async function load(){
@@ -287,7 +423,13 @@ async function load(){
     const data = await res.json();
 
     state.generatedAt = data.generatedAt || null;
-    state.stations = Array.isArray(data.stations) ? data.stations : [];
+    state.stations = Array.isArray(data.stations) ? data.stations.map((s) => {
+      const rvrMin = computeRvrMin(s);
+      return {
+        ...s,
+        rvrMin,
+      };
+    }) : [];
     state.stats = data.stats || null;
     state.errors = Array.isArray(data.errors) ? data.errors : [];
 
@@ -305,7 +447,7 @@ async function load(){
 
     render();
   }catch(e){
-    tbody.innerHTML = `<tr><td colspan="10" class="muted">Data load error: ${escapeHtml(String(e))}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="muted">Data load error: ${escapeHtml(String(e))}</td></tr>`;
   }
 }
 
