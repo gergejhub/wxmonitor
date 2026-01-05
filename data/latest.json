@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-05T11:44:25.242Z",
+  "generatedAt": "2026-01-05T11:46:26.577Z",
   "stations": [
     {
       "icao": "EBCI",
@@ -1101,19 +1101,19 @@
       "icao": "LATI",
       "iata": "TIA",
       "name": "Tirana International Airport Mother Teresa",
-      "updatedAt": "051120Z",
-      "visibility_m": 10000,
+      "updatedAt": null,
+      "visibility_m": null,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
-      "ceiling_ft": 13000,
+      "ceiling_ft": null,
       "hazards": [
         "RA",
         "SHRA"
       ],
       "severityScore": 26,
-      "metarRaw": "METAR LATI 051120Z 18015KT 9999 BKN130 18/07 Q1009 NOSIG",
+      "metarRaw": null,
       "tafRaw": "TAF LATI 051100Z 0512/0612 16012KT 9999 SCT035 BKN080 TX18/0512Z TN11/0604Z \n  TEMPO 0513/0517 16012G25KT \n  TEMPO 0523/0606 RA BKN025 OVC050 \n  PROB40 \n  TEMPO 0601/0604 VRB10G25KT 5000 SHRA FEW025CB",
-      "metarHtml": "METAR LATI 051120Z 18015KT 9999 BKN130 18/07 Q1009 NOSIG",
+      "metarHtml": null,
       "tafHtml": "TAF LATI 051100Z 0512/0612 16012KT 9999 SCT035 BKN080 TX18/0512Z TN11/0604Z \n  TEMPO 0513/0517 16012G25KT \n  TEMPO 0523/0606 <span class=\"hl\">RA</span> BKN025 OVC050 \n  PROB40 \n  TEMPO 0601/0604 VRB10G25KT 5000 <span class=\"hl\">SHRA</span> FEW025CB"
     },
     {
@@ -1789,18 +1789,18 @@
       "icao": "LWSK",
       "iata": "SKP",
       "name": "Skopje International Airport",
-      "updatedAt": "051120Z",
-      "visibility_m": 10000,
+      "updatedAt": null,
+      "visibility_m": null,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
-      "ceiling_ft": 10000,
+      "ceiling_ft": null,
       "hazards": [
         "RA"
       ],
       "severityScore": 12,
-      "metarRaw": "METAR LWSK 051120Z 13017KT 9999 FEW050 BKN100 14/07 Q1011 NOSIG",
+      "metarRaw": null,
       "tafRaw": "TAF LWSK 051115Z 0512/0612 14012KT 9999 FEW050 BKN090 \n  TEMPO 0512/0520 16020KT \n  TEMPO 0515/0603 RA SCT020 OVC045",
-      "metarHtml": "METAR LWSK 051120Z 13017KT 9999 FEW050 BKN100 14/07 Q1011 NOSIG",
+      "metarHtml": null,
       "tafHtml": "TAF LWSK 051115Z 0512/0612 14012KT 9999 FEW050 BKN090 \n  TEMPO 0512/0520 16020KT \n  TEMPO 0515/0603 <span class=\"hl\">RA</span> SCT020 OVC045"
     },
     {
@@ -2639,16 +2639,16 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "051115Z",
+      "updatedAt": "051145Z",
       "visibility_m": 8000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR LMML 051115Z 21012KT 170V230 8000 NSC 19/14 Q1006 NOSIG",
+      "metarRaw": "METAR LMML 051145Z 20012KT 160V220 8000 NSC 19/14 Q1005 NOSIG",
       "tafRaw": "TAF LMML 051100Z 0512/0612 21015KT 8000 NSC \n  PROB40 \n  TEMPO 0518/0612 5000 DU",
-      "metarHtml": "METAR LMML 051115Z 21012KT 170V230 8000 NSC 19/14 Q1006 NOSIG",
+      "metarHtml": "METAR LMML 051145Z 20012KT 160V220 8000 NSC 19/14 Q1005 NOSIG",
       "tafHtml": "TAF LMML 051100Z 0512/0612 21015KT 8000 NSC \n  PROB40 \n  TEMPO 0518/0612 5000 DU"
     },
     {
@@ -2830,10 +2830,10 @@
   ],
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 159,
+    "metarReturned": 157,
     "tafReturned": 156,
     "stationsWritten": 159,
-    "missingMetar": 0,
+    "missingMetar": 2,
     "missingTaf": 3
   },
   "errors": []
