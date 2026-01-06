@@ -148,6 +148,10 @@ function computeScores(raw){
 }
 
 function deriveStation(st){
+
+  // Age fallback: compute from raw time group if not provided in data
+  if (st.metarAgeMin === null || st.metarAgeMin === undefined) st.metarAgeMin = computeAgeMinutesFromRawZ(st.metarRaw || "");
+  if (st.tafAgeMin === null || st.tafAgeMin === undefined) st.tafAgeMin = computeAgeMinutesFromRawZ(st.tafRaw || "");
   const met = computeScores(st.metarRaw || "");
   const taf = computeScores(st.tafRaw || "");
 
@@ -267,6 +271,43 @@ function formatAge(mins){
   return `${Math.round(mins)}m`;
 }
 
+
+function computeAgeMinutesFromRawZ(raw, nowUtc=new Date()){
+  if (!raw) return null;
+  // Match DDHHMMZ
+  const m = raw.match(/\b(\d{2})(\d{2})(\d{2})Z\b/);
+  if (!m) return null;
+  const dd = parseInt(m[1],10), hh = parseInt(m[2],10), mm = parseInt(m[3],10);
+  if ([dd,hh,mm].some(x=>Number.isNaN(x))) return null;
+
+  // Build a UTC timestamp with today's month/year, then adjust day roll if needed.
+  const y = nowUtc.getUTCFullYear();
+  const mo = nowUtc.getUTCMonth();
+  let obs = Date.UTC(y, mo, dd, hh, mm, 0);
+  const now = Date.UTC(y, mo, nowUtc.getUTCDate(), nowUtc.getUTCHours(), nowUtc.getUTCMinutes(), 0);
+
+  // If obs is in the future by > 6h, assume it belongs to previous month/day cycle.
+  if (obs - now > 6*3600*1000){
+    // previous month
+    const prev = new Date(Date.UTC(y, mo, 1, 0, 0, 0));
+    prev.setUTCDate(0); // last day of previous month
+    const prevMo = prev.getUTCMonth();
+    const prevY = prev.getUTCFullYear();
+    obs = Date.UTC(prevY, prevMo, dd, hh, mm, 0);
+  } else if (now - obs > 25*3600*1000 && dd > nowUtc.getUTCDate()){
+    // If day looks ahead but would create >25h age, use previous month
+    const prev = new Date(Date.UTC(y, mo, 1, 0, 0, 0));
+    prev.setUTCDate(0);
+    obs = Date.UTC(prev.getUTCFullYear(), prev.getUTCMonth(), dd, hh, mm, 0);
+  }
+
+  const diffMin = (now - obs) / 60000;
+  if (!Number.isFinite(diffMin)) return null;
+  // clamp to [0, 24h] for sanity
+  return Math.max(0, Math.min(diffMin, 24*60));
+}
+
+
 function highlightRaw(raw){
   // escape
   let s = escapeHtml(raw || "");
@@ -308,7 +349,7 @@ function highlightRaw(raw){
 
   // Visibility numeric tokens — only highlight when low
   // Find 4-digit vis values (exclude RVR already handled by (?!\/))
-  s = s.replace(/\b(\d{4})\b(?!\/)/g, (m, d) => {
+  s = s.replace(/(?<!\/)\b(\d{4})\b(?!\/)/g, (m, d) => {
     const v = parseInt(d,10);
     if (Number.isNaN(v)) return m;
     let cls = null;
