@@ -150,11 +150,15 @@ Rationale: METAR is “now”, so operationally it outranks “TAF-only” probl
 ## Trend indicator (VIS)
 The VIS column includes a small trend pill:
 - `NEW` on first load (no previous value stored)
-- `▼` when VIS decreased vs last load
-- `▲` when VIS increased
+- `▼` when **METAR VIS** decreased vs the **previous METAR**
+- `▲` when **METAR VIS** increased vs the **previous METAR**
 - `•0` when unchanged
 
-Values are stored per station in `localStorage`.
+Important behaviour:
+- The trend indicator updates **only when a NEW METAR arrives** (the `DDHHMMZ` group changes).
+- If the dashboard refreshes or the data file is updated but the METAR timestamp is unchanged, the last trend symbol is retained.
+
+Values are stored per station in `localStorage` (`prev METAR DDHHMMZ`, `prev METAR VIS`, `last trend`).
 
 ---
 
@@ -170,7 +174,7 @@ Values are stored per station in `localStorage`.
 ### Old UI after update
 GitHub Pages can cache aggressively.
 - Use a private window or hard refresh.
-- This patch uses cache-busting query strings `?v=19`.
+- This patch uses cache-busting query strings (e.g. `?v=23`).
 
 ---
 
@@ -197,3 +201,8 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 - **WOW tiles**: larger, equal-width tiles with a Wizz-inspired neon gradient border and improved number contrast for night shifts.
 - **Sticky header restored**: tiles remain pinned at the top while scrolling.
 - **Quick View drawer offset**: the right-side Quick View now starts **below** the sticky header (`--top-h`) so the header never covers drawer content.
+
+
+## UX v23 adjustments (January 2026)
+- **Trend correctness**: VIS trend pill is based on **METAR** visibility and updates **only when a NEW METAR arrives** (timestamp `DDHHMMZ` changes). It no longer flips on mere UI refreshes or data republishing.
+- **Age ticking without manual reload**: METAR/TAF age values are recomputed on every render, and the minute timer also refreshes age fields inside the Quick View drawer if it is open.
