@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-01-06T10:56:35.558Z",
+  "generatedAt": "2026-01-06T11:13:44.358Z",
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 158,
-    "tafReturned": 120,
+    "metarReturned": 159,
+    "tafReturned": 123,
     "stationsWritten": 159,
-    "missingMetar": 1,
-    "missingTaf": 39
+    "missingMetar": 0,
+    "missingTaf": 36
   },
   "errors": []
 }
