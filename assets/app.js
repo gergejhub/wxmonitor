@@ -7,6 +7,13 @@
 
 const $ = (id) => document.getElementById(id);
 
+
+function syncTopH(){
+  const top = document.querySelector("header.top");
+  if (!top) return;
+  const h = Math.round(top.getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--topH", h + "px");
+}
 const VIS_THRESHOLDS = [800, 550, 500, 300, 250, 175, 150];
 const RVR_THRESHOLDS = [500, 300, 200, 75];
 
@@ -610,6 +617,7 @@ function updateTiles(currentList){
 }
 
 function render(){
+  syncTopH();
   const tbody = $("rows");
   const filtered = applyFilters(stations);
   const sorted = sortList(filtered);
@@ -688,7 +696,9 @@ function openDrawer(icao){
   };
 
   // open
-  $("drawer").classList.add("is-open");
+  const dr = $("drawer");
+  dr.classList.add("is-open");
+  dr.scrollTop = 0;
   $("drawer").setAttribute("aria-hidden","false");
   $("scrim").hidden = false;
 }
@@ -779,6 +789,10 @@ function bind(){
   $("drawerClose").addEventListener("click", closeDrawer);
   $("scrim").addEventListener("click", closeDrawer);
   document.addEventListener("keydown",(e)=>{ if (e.key==="Escape") closeDrawer(); });
+
+  // keep drawer/scrim aligned under sticky header
+  window.addEventListener("resize", syncTopH);
+  setTimeout(syncTopH, 0);
 
   // refresh "age" every minute without refetch
   setInterval(()=>{ render(); }, 60_000);
