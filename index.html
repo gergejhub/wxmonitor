@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wizz Air METAR/TAF Operations Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=15" />
+  <link rel="stylesheet" href="assets/styles.css?v=16" />
 </head>
 <body>
 
@@ -18,6 +18,10 @@
       <div class="stamp">
         <div class="stamp__label">Last update</div>
         <div id="lastUpdate" class="stamp__value mono">—</div>
+      </div>
+      <div class="stamp stamp--small">
+        <div class="stamp__label">Stations</div>
+        <div id="stationsCount" class="stamp__value mono">—</div>
       </div>
       <button id="refreshBtn" class="btn" type="button">Refresh</button>
       <label class="check">
@@ -96,6 +100,7 @@
       <input id="extraIcao" class="input input--ghost" type="text" placeholder="Extra ICAO (browser-only)" maxlength="4" disabled />
     </section>
 
+    <div class="hint">Tip: click any row (or a trigger tag) to open <b>Quick View</b> on the right. Press <span class="mono">Esc</span> to close.</div>
 
     <section class="legend" aria-label="Legend">
       <div class="legend__item"><span class="pill pill--ok">OK</span> severityScore &lt; 20</div>
@@ -169,6 +174,6 @@
     </div>
   </aside>
 
-  <script src="assets/app.js?v=15"></script>
+  <script src="assets/app.js?v=16"></script>
 </body>
 </html>
