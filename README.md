@@ -188,11 +188,12 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 - **Tiles layout**: centered, equal-width responsive grid; improved contrast for tile numbers.
 - **Sticky tiles**: tile bar stays pinned at the top while scrolling.
 - **Controls readability**: search field has a sane max width; dropdowns use a dark theme with readable option colors (where supported by the browser).
+- **Age auto-update**: METAR/TAF ages are recalculated **on every render** and the page triggers a lightweight refresh **every minute** (no refetch) so the minute counters keep moving while you watch the dashboard.
 - **Age robustness**: if `metarAgeMin` / `tafAgeMin` are missing from `data/latest.json`, the UI computes them from the raw `DDHHMMZ` timestamp.
 - **TAF highlight correctness**: visibility highlight no longer tags **TAF time groups** such as `0700/0708` (only standalone 4-digit vis values are highlighted).
 
 
-## v21 UI refinements
-- Quick View drawer now sits below the sticky status header (no overlap).
-- Status tiles enlarged and upgraded with stronger Wizz-style glow, while keeping night-shift friendly contrast.
-- Improved dropdown readability via dark color-scheme hints.
+## UX v21 adjustments (January 2026)
+- **WOW tiles**: larger, equal-width tiles with a Wizz-inspired neon gradient border and improved number contrast for night shifts.
+- **Sticky header restored**: tiles remain pinned at the top while scrolling.
+- **Quick View drawer offset**: the right-side Quick View now starts **below** the sticky header (`--top-h`) so the header never covers drawer content.
