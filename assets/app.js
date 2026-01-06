@@ -8,12 +8,15 @@
 const $ = (id) => document.getElementById(id);
 
 
-function syncTopH(){
-  const top = document.querySelector("header.top");
+
+function updateTopHeight(){
+  const top = document.querySelector('header.top');
   if (!top) return;
-  const h = Math.round(top.getBoundingClientRect().height);
-  document.documentElement.style.setProperty("--topH", h + "px");
+  const h = Math.ceil(top.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--top-h', `${h}px`);
 }
+window.addEventListener('resize', ()=>requestAnimationFrame(updateTopHeight));
+
 const VIS_THRESHOLDS = [800, 550, 500, 300, 250, 175, 150];
 const RVR_THRESHOLDS = [500, 300, 200, 75];
 
@@ -156,9 +159,12 @@ function computeScores(raw){
 
 function deriveStation(st){
 
-  // Age fallback: compute from raw time group if not provided in data
-  if (st.metarAgeMin === null || st.metarAgeMin === undefined) st.metarAgeMin = computeAgeMinutesFromRawZ(st.metarRaw || "");
-  if (st.tafAgeMin === null || st.tafAgeMin === undefined) st.tafAgeMin = computeAgeMinutesFromRawZ(st.tafRaw || "");
+  // Age: compute from raw time group on every render so the UI updates each minute.
+  // If raw is missing or unparseable, fall back to the value coming from latest.json.
+  const metAgeComputed = computeAgeMinutesFromRawZ(st.metarRaw || "");
+  const tafAgeComputed = computeAgeMinutesFromRawZ(st.tafRaw || "");
+  st.metarAgeMin = (metAgeComputed !== null) ? metAgeComputed : (st.metarAgeMin ?? st.metarAge ?? null);
+  st.tafAgeMin   = (tafAgeComputed !== null) ? tafAgeComputed : (st.tafAgeMin ?? st.tafAge ?? null);
   const met = computeScores(st.metarRaw || "");
   const taf = computeScores(st.tafRaw || "");
 
@@ -617,7 +623,6 @@ function updateTiles(currentList){
 }
 
 function render(){
-  syncTopH();
   const tbody = $("rows");
   const filtered = applyFilters(stations);
   const sorted = sortList(filtered);
@@ -649,6 +654,7 @@ function render(){
 }
 
 function openDrawer(icao){
+  updateTopHeight();
   const st = stations.find(s=>s.icao === icao);
   if (!st) return;
 
@@ -696,9 +702,7 @@ function openDrawer(icao){
   };
 
   // open
-  const dr = $("drawer");
-  dr.classList.add("is-open");
-  dr.scrollTop = 0;
+  $("drawer").classList.add("is-open");
   $("drawer").setAttribute("aria-hidden","false");
   $("scrim").hidden = false;
 }
@@ -790,13 +794,11 @@ function bind(){
   $("scrim").addEventListener("click", closeDrawer);
   document.addEventListener("keydown",(e)=>{ if (e.key==="Escape") closeDrawer(); });
 
-  // keep drawer/scrim aligned under sticky header
-  window.addEventListener("resize", syncTopH);
-  setTimeout(syncTopH, 0);
-
   // refresh "age" every minute without refetch
   setInterval(()=>{ render(); }, 60_000);
 }
 
 bind();
 load();
+
+updateTopHeight();
