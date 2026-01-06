@@ -190,3 +190,9 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 - **Controls readability**: search field has a sane max width; dropdowns use a dark theme with readable option colors (where supported by the browser).
 - **Age robustness**: if `metarAgeMin` / `tafAgeMin` are missing from `data/latest.json`, the UI computes them from the raw `DDHHMMZ` timestamp.
 - **TAF highlight correctness**: visibility highlight no longer tags **TAF time groups** such as `0700/0708` (only standalone 4-digit vis values are highlighted).
+
+
+## v21 UI refinements
+- Quick View drawer now sits below the sticky status header (no overlap).
+- Status tiles enlarged and upgraded with stronger Wizz-style glow, while keeping night-shift friendly contrast.
+- Improved dropdown readability via dark color-scheme hints.
