@@ -1,184 +1,202 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wizz Air METAR/TAF Operations Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=18" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Wizz Air METAR/TAF Monitor</title>
+  <link rel="stylesheet" href="assets/styles.css?v=19"/>
 </head>
 <body>
-
-  <header class="header">
-    <div class="header__left">
-      <div class="header__title">Operations Monitor</div>
-      <div class="header__subtitle">Live METAR + TAF watchlist (AviationWeather.gov via GitHub Actions)</div>
+  <header class="top">
+    <div class="brand">
+      <div class="brand__title">Status table</div>
+      <div class="brand__sub">METAR + TAF monitor (aviationweather.gov via GitHub Actions)</div>
     </div>
 
-    <div class="header__right">
-      <div class="stamp">
-        <div class="stamp__label">Last update</div>
-        <div id="lastUpdate" class="stamp__value mono">—</div>
-      </div>
-      <div class="stamp stamp--small">
-        <div class="stamp__label">Stations</div>
-        <div id="stationsCount" class="stamp__value mono">—</div>
-      </div>
-      <button id="refreshBtn" class="btn" type="button">Refresh</button>
-      <label class="check">
-        <input id="autoRefresh" type="checkbox" checked />
-        <span>Auto refresh (10 min)</span>
-      </label>
+    <div class="tiles" id="tiles">
+      <button class="tile tile--eng" id="tileEng" data-filter="eng">
+        <div class="tile__k">ENG ICE OPS</div>
+        <div class="tile__v" id="tileEngCount">0</div>
+        <div class="tile__s">VIS ≤150 m &amp; FZFG</div>
+        <div class="tile__iata" id="tileEngIata"></div>
+      </button>
+
+      <button class="tile" id="tileCrit" data-filter="crit">
+        <div class="tile__k">CRIT</div>
+        <div class="tile__v" id="tileCritCount">0</div>
+        <div class="tile__s">severityScore ≥ 70</div>
+      </button>
+
+      <button class="tile" id="tileVis175" data-filter="vis175">
+        <div class="tile__k">VIS ≤175</div>
+        <div class="tile__v" id="tileVis175Count">0</div>
+        <div class="tile__s">rapid operational impact</div>
+      </button>
+
+      <button class="tile" id="tileTs" data-filter="ts">
+        <div class="tile__k">TS</div>
+        <div class="tile__v" id="tileTsCount">0</div>
+        <div class="tile__s">thunderstorm present</div>
+      </button>
+
+      <button class="tile tile--ghost" id="tileReset">
+        <div class="tile__k">Reset</div>
+        <div class="tile__v" id="tileResetCount">↺</div>
+        <div class="tile__s">clear filters</div>
+      </button>
     </div>
   </header>
 
-  <main class="wrap">
+  <section class="toolbar">
+    <input id="q" class="search" placeholder="Filter (ICAO/IATA/name)..." autocomplete="off"/>
+    <select id="cond" class="select">
+      <option value="all">All conditions</option>
 
-    <section class="criticalBar" aria-label="Critical overview">
-      <button id="cbEng" class="critCard critCard--eng" type="button">
-        <div class="critCard__k">ENG ICE OPS</div>
-        <div id="cbEngCount" class="critCard__v mono">0</div>
-        <div class="critCard__d">VIS ≤150 m &amp; FZFG</div>
-        <div id="cbEngIatas" class="critCard__iatas mono" aria-label="Affected IATA codes"></div>
-      </button>
-      <button id="cbCrit" class="critCard critCard--crit" type="button">
-        <div class="critCard__k">CRIT</div>
-        <div id="cbCritCount" class="critCard__v mono">0</div>
-        <div class="critCard__d">severityScore ≥ 70</div>
-      </button>
-      <button id="cbVis175" class="critCard critCard--vis" type="button">
-        <div class="critCard__k">VIS ≤175</div>
-        <div id="cbVis175Count" class="critCard__v mono">0</div>
-        <div class="critCard__d">rapid operational impact</div>
-      </button>
-      <button id="cbTs" class="critCard critCard--ts" type="button">
-        <div class="critCard__k">TS</div>
-        <div id="cbTsCount" class="critCard__v mono">0</div>
-        <div class="critCard__d">thunderstorm present</div>
-      </button>
-      <button id="cbReset" class="critCard critCard--reset" type="button">
-        <div class="critCard__k">Reset</div>
-        <div class="critCard__v mono">⟲</div>
-        <div class="critCard__d">clear filters</div>
-      </button>
-    </section>
+      <optgroup label="Alert">
+        <option value="eng">ENG ICE OPS</option>
+        <option value="crit">CRIT (≥70)</option>
+        <option value="high">HIGH (45–69)</option>
+        <option value="med">MED (20–44)</option>
+      </optgroup>
 
-    <section class="toolbar" aria-label="Filters">
-      <input id="filterText" class="input" type="search" placeholder="Filter (ICAO/IATA/name)…" autocomplete="off" />
-      <select id="condSel" class="select" aria-label="Conditions">
-        <option value="all" selected>All conditions</option>
-        <option value="alerts">Alerts (MED+)</option>
-        <option value="engice">ENG ICE OPS (VIS≤150 &amp; FZFG)</option>
-        <option value="vis800">Low VIS ≤ 800 m</option>
-        <option value="vis550">Low VIS ≤ 550 m</option>
-        <option value="vis500">Low VIS ≤ 500 m</option>
-        <option value="vis300">Low VIS ≤ 300 m</option>
-        <option value="vis250">Low VIS ≤ 250 m</option>
-        <option value="vis175">Low VIS ≤ 175 m</option>
-        <option value="vis150">Low VIS ≤ 150 m</option>
-        <option value="rvr500">RVR ≤ 500 m</option>
-        <option value="rvr300">RVR ≤ 300 m</option>
-        <option value="rvr200">RVR ≤ 200 m</option>
-        <option value="rvr75">RVR ≤ 75 m</option>
-        <option value="fog">Fog (FG/BR/FZFG)</option>
-        <option value="snow">Snow (SN/SHSN/BLSN)</option>
-        <option value="rain">Rain (RA/SHRA/+RA)</option>
-        <option value="ts">Thunderstorm (TS*)</option>
-      </select>
+      <optgroup label="Visibility (METAR/TAF worst)">
+        <option value="vis800">VIS ≤800</option>
+        <option value="vis550">VIS ≤550</option>
+        <option value="vis500">VIS ≤500</option>
+        <option value="vis300">VIS ≤300</option>
+        <option value="vis250">VIS ≤250</option>
+        <option value="vis175">VIS ≤175</option>
+        <option value="vis150">VIS ≤150</option>
+      </optgroup>
 
-      <select id="alertSel" class="select" aria-label="Alert level" title="Alert level filter is exact (MED does not include CRIT)">
-        <option value="all" selected>Alert: All</option>
-        <option value="ok">Alert: OK</option>
-        <option value="med">Alert: MED</option>
-        <option value="high">Alert: HIGH</option>
-        <option value="crit">Alert: CRIT</option>
-      </select>
+      <optgroup label="RVR (min)">
+        <option value="rvr500">RVR ≤500</option>
+        <option value="rvr300">RVR ≤300</option>
+        <option value="rvr200">RVR ≤200</option>
+        <option value="rvr75">RVR ≤75</option>
+      </optgroup>
 
-      <label class="check check--right">
-        <input id="sortPriority" type="checkbox" checked />
-        <span>Sort by priority</span>
-      </label>
+      <optgroup label="Wx">
+        <option value="fog">FG / BR / FZFG</option>
+        <option value="snow">SN</option>
+        <option value="rain">RA / DZ</option>
+        <option value="ts">TS</option>
+        <option value="cig500">CIG&lt;500</option>
+      </optgroup>
+    </select>
 
-      <input id="extraIcao" class="input input--ghost" type="text" placeholder="Extra ICAO (browser-only)" maxlength="4" disabled />
-    </section>
+    <select id="alert" class="select">
+      <option value="all">Alert: All</option>
+      <option value="OK">Alert: OK</option>
+      <option value="MED">Alert: MED</option>
+      <option value="HIGH">Alert: HIGH</option>
+      <option value="CRIT">Alert: CRIT</option>
+    </select>
 
-    <div class="hint">Tip: click any row (or a trigger tag) to open <b>Quick View</b> on the right. Press <span class="mono">Esc</span> to close.</div>
+    <label class="toggle">
+      <input id="sortPri" type="checkbox" checked/>
+      <span>Sort by priority</span>
+    </label>
+  </section>
 
-    <section class="legend" aria-label="Legend">
-      <div class="legend__item"><span class="pill pill--ok">OK</span> severityScore &lt; 20</div>
-      <div class="legend__item"><span class="pill pill--med">MED</span> severityScore 20–44 (example: low VIS / RVR degradation / significant Wx triggers)</div>
-      <div class="legend__item"><span class="pill pill--high">HIGH</span> severityScore 45–69</div>
-      <div class="legend__item"><span class="pill pill--crit">CRIT</span> severityScore ≥ 70 (example: very low VIS/RVR, TS/FZFG, very low ceiling)</div>
+  <section class="legend">
+    <div class="legend__tip">
+      Tip: click any row (or a trigger tag) to open Quick View on the right. Press Esc to close.
+    </div>
 
-      <div class="legend__item"><span class="tag tag--cig">CIG&lt;500</span> ceiling below 500 ft AGL (lowest BKN/OVC layer or VV in METAR/TAF; derived as ceiling_ft &lt; 500).</div>
-      <div class="legend__item"><span class="tag tag--eng">ENG ICE OPS</span> operational stop-flag when <b>VIS ≤ 150 m</b> AND <b>FZFG</b> are present (high priority). Verify against your OEM / company procedures.</div>
+    <div class="legend__row">
+      <span class="pill pill--ok">OK</span> <span class="legend__txt">severityScore &lt; 20</span>
+      <span class="pill pill--med">MED</span> <span class="legend__txt">severityScore 20–44</span>
+      <span class="pill pill--high">HIGH</span> <span class="legend__txt">severityScore 45–69</span>
+      <span class="pill pill--crit">CRIT</span> <span class="legend__txt">severityScore ≥ 70</span>
+    </div>
 
-      <div class="legend__item"><span class="tag tag--vis">VIS≤…</span> low visibility thresholds (≤800/550/500/300/250/175/150 m) — each has a dedicated color.</div>
-      <div class="legend__item"><span class="tag tag--rvr">RVR≤…</span> runway visual range thresholds (≤500/300/200/75 m) — each has a dedicated color.</div>
+    <div class="legend__row">
+      <span class="tag tag--cig">CIG&lt;500</span>
+      <span class="legend__txt">ceiling below 500 ft AGL (lowest BKN/OVC layer or VV in METAR/TAF; derived as ceiling_ft &lt; 500).</span>
+      <span class="tag tag--eng">ENG ICE OPS</span>
+      <span class="legend__txt">operational stop-flag when VIS ≤150 m and FZFG occur together.</span>
+    </div>
 
-      <div class="legend__item muted">Note: Alert filter is exact — selecting MED will not show CRIT.</div>
-    </section>
+    <div class="legend__row">
+      <span class="tag tag--vis">VIS≤…</span>
+      <span class="legend__txt">low visibility thresholds (≤800/550/500/300/250/175/150 m) — each has a dedicated color.</span>
+      <span class="tag tag--rvr">RVR≤…</span>
+      <span class="legend__txt">runway visual range thresholds (≤500/300/200/75).</span>
+      <span class="tag tag--src">M</span>/<span class="tag tag--src">T</span>
+      <span class="legend__txt">trigger source: METAR (M) vs TAF (T).</span>
+    </div>
+  </section>
 
-    <div id="statusMsg" class="statusMsg" role="status"></div>
-    <div id="diag" class="diag" aria-label="Diagnostics" hidden></div>
+  <section class="statusline" id="statusline">
+    <span class="statusline__item" id="statCounts">Loading…</span>
+    <span class="statusline__item" id="statUpdated"></span>
+  </section>
 
-    <section class="tableShell" aria-label="Status table">
-      <table class="grid" id="tbl">
-        <thead>
-          <tr>
-            <th class="col-icao">ICAO</th>
-            <th class="col-alert">Alert</th>
-            <th class="col-vis">Vis (m)</th>
-            <th class="col-flag">Low VIS</th>
-            <th class="col-trig">Triggers</th>
-            <th class="col-age">METAR age</th>
-            <th class="col-age">TAF age</th>
-            <th class="col-raw">METAR (raw)</th>
-            <th class="col-raw">TAF (raw)</th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr><td colspan="9" class="muted">Loading…</td></tr>
-        </tbody>
-      </table>
-    </section>
-
+  <main class="tablewrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th class="col-airport">ICAO</th>
+          <th class="col-alert">Alert</th>
+          <th class="col-vis">Vis (m)</th>
+          <th class="col-lowvis">Low VIS</th>
+          <th class="col-trig">Triggers</th>
+          <th class="col-age">METAR age</th>
+          <th class="col-age">TAF age</th>
+          <th class="col-raw">METAR (raw)</th>
+          <th class="col-raw">TAF (raw)</th>
+        </tr>
+      </thead>
+      <tbody id="rows">
+        <tr><td colspan="9" class="muted">Loading…</td></tr>
+      </tbody>
+    </table>
   </main>
 
-  <aside id="drawer" class="drawer" aria-hidden="true">
-    <div id="drawerBackdrop" class="drawer__backdrop" tabindex="-1"></div>
-    <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="Airport details">
-      <div class="drawer__head">
-        <div>
-          <div id="dTitle" class="drawer__title mono">—</div>
-          <div id="dSub" class="drawer__sub">—</div>
-        </div>
-        <button id="drawerClose" class="iconBtn" type="button" aria-label="Close">✕</button>
-      </div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <button class="drawer__close" id="drawerClose" title="Close (Esc)">×</button>
 
-      <div class="drawer__body">
-        <div id="dSummary" class="drawer__summary"></div>
+    <div class="drawer__head">
+      <div class="drawer__airport" id="dAirport">—</div>
+      <div class="drawer__sub" id="dSub">—</div>
+    </div>
 
-        <div class="drawer__actions">
-          <button id="copyBrief" class="btn btn--primary" type="button">Copy briefing line</button>
-        </div>
+    <div class="cards">
+      <div class="card"><div class="card__k">Alert</div><div class="card__v" id="dAlert">—</div></div>
+      <div class="card"><div class="card__k">Severity</div><div class="card__v" id="dSev">—</div></div>
+      <div class="card"><div class="card__k">Visibility</div><div class="card__v" id="dVis">—</div></div>
+      <div class="card"><div class="card__k">Worst VIS (METAR/TAF)</div><div class="card__v" id="dWorstVis">—</div></div>
+      <div class="card"><div class="card__k">RVR (min)</div><div class="card__v" id="dRvr">—</div></div>
+      <div class="card"><div class="card__k">Ceiling</div><div class="card__v" id="dCig">—</div></div>
+      <div class="card"><div class="card__k">METAR age</div><div class="card__v" id="dMetAge">—</div></div>
+      <div class="card"><div class="card__k">TAF age</div><div class="card__v" id="dTafAge">—</div></div>
+    </div>
 
-        <div class="drawer__section">
-          <div class="drawer__sectionTitle">METAR</div>
-          <div id="dMetar" class="raw"></div>
-          <div class="drawer__decodedTitle">Decoded</div>
-          <div id="dMetarDecoded" class="decoded"></div>
-        </div>
+    <div class="drawer__section">
+      <div class="drawer__k">Triggers</div>
+      <div class="triggers triggers--drawer" id="dTriggers"></div>
+    </div>
 
-        <div class="drawer__section">
-          <div class="drawer__sectionTitle">TAF</div>
-          <div id="dTaf" class="raw"></div>
-          <div class="drawer__decodedTitle">Decoded</div>
-          <div id="dTafDecoded" class="decoded"></div>
-        </div>
-      </div>
+    <button class="btn" id="copyBrief">Copy briefing line</button>
+
+    <div class="drawer__section">
+      <div class="drawer__k">METAR</div>
+      <pre class="raw" id="dMetRaw"></pre>
+      <div class="drawer__k muted" style="margin-top:8px;">Decoded</div>
+      <div class="decoded" id="dMetDec"></div>
+    </div>
+
+    <div class="drawer__section">
+      <div class="drawer__k">TAF</div>
+      <pre class="raw" id="dTafRaw"></pre>
+      <div class="drawer__k muted" style="margin-top:8px;">Decoded</div>
+      <div class="decoded" id="dTafDec"></div>
     </div>
   </aside>
 
-  <script src="assets/app.js?v=18"></script>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <script src="assets/app.js?v=19"></script>
 </body>
 </html>
