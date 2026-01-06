@@ -43,10 +43,17 @@ function levelFromScore(score){
 }
 
 function hasEngineIcingStopFlag(item){
-  // High-priority operational flag (user-defined): VIS ≤ 150 m AND FZFG present.
-  const hazards = Array.isArray(item.hazards) ? item.hazards : [];
-  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
-  return (worstVis != null && worstVis <= 150) && hazards.includes('FZFG');
+  // High-priority operational flag (user-defined):
+  // VIS ≤ 150 m AND FZFG present (evaluated separately for METAR vs TAF).
+  if(item && (item._engIceM || item._engIceT)) return true;
+  // Fallback (should not happen once derivePerStation ran)
+  const metVis = visNumber(item?.visibility_m ?? visMinFromRaw(item?.metarRaw));
+  const tafVis = visMinFromRaw(item?.tafRaw);
+  const hm = hazardsFromRaw(item?.metarRaw);
+  const ht = hazardsFromRaw(item?.tafRaw);
+  const engM = (metVis != null && metVis <= 150) && hm.has('FZFG');
+  const engT = (tafVis != null && tafVis <= 150) && ht.has('FZFG');
+  return engM || engT;
 }
 
 function displayScore(item){
@@ -105,59 +112,252 @@ function visNumber(m){
   return m;
 }
 
+function minNonNull(...vals){
+  const v = vals.filter(x => x != null && Number.isFinite(x));
+  if(!v.length) return null;
+  return Math.min(...v);
+}
+
+function hazardsFromRaw(raw){
+  const out = new Set();
+  if(!raw) return out;
+  const toks = String(raw).split(/\s+/).filter(Boolean);
+  for(const tok0 of toks){
+    let tok = tok0.toUpperCase();
+    // strip intensity
+    tok = tok.replace(/^[-+]/,'');
+    // remove vicinity prefix
+    if(tok.startsWith('VC')) tok = tok.slice(2);
+
+    // TS group
+    if(tok.includes('TS')) out.add('TS');
+
+    // Fog / mist
+    if(tok.includes('FZFG')) out.add('FZFG');
+    if(tok.includes('FG')) out.add('FG'); // includes MIFG/BCFG/VCFG etc.
+    if(tok === 'BR' || tok.includes('BR')) out.add('BR');
+
+    // Snow / ice pellets
+    if(/SN|SHSN|BLSN|DRSN|SG|PL/.test(tok)) out.add('SN');
+
+    // Rain / drizzle / freezing precip
+    if(/RA|SHRA|DZ|FZRA|FZDZ/.test(tok)) out.add('RA');
+  }
+  return out;
+}
+
+function visMinFromTokens(tokens){
+  // Returns minimum visibility in meters found in a token list.
+  let min = null;
+  for(let i=0;i<tokens.length;i++){
+    const t0 = tokens[i].toUpperCase();
+
+    if(t0 === 'CAVOK'){
+      min = (min == null) ? 10000 : Math.min(min, 10000);
+      continue;
+    }
+
+    // 4-digit meters
+    if(/^\d{4}$/.test(t0)){
+      const v = parseInt(t0,10);
+      if(Number.isFinite(v)){
+        const vm = (v === 9999) ? 10000 : v;
+        min = (min == null) ? vm : Math.min(min, vm);
+      }
+      continue;
+    }
+
+    // statute miles (single token)
+    const sm = parseSmToMeters(t0);
+    if(sm != null){
+      const vm = Math.round(sm);
+      min = (min == null) ? vm : Math.min(min, vm);
+      continue;
+    }
+
+    // statute miles split: "1" + "1/2SM"
+    if(/^\d+$/.test(t0) && i+1 < tokens.length && /^[0-9]+\/[0-9]+SM$/i.test(tokens[i+1])){
+      const whole = parseInt(t0,10);
+      const fracM = parseSmToMeters(tokens[i+1]);
+      if(Number.isFinite(whole) && fracM != null){
+        const vm = Math.round(whole * 1609.344 + fracM);
+        min = (min == null) ? vm : Math.min(min, vm);
+      }
+      continue;
+    }
+  }
+  return min;
+}
+
+function visMinFromRaw(raw){
+  if(!raw) return null;
+  return visMinFromTokens(String(raw).split(/\s+/).filter(Boolean));
+}
+
+function rvrMinFromRaw(raw){
+  const vals = extractRvrValuesMeters(raw);
+  if(!vals.length) return null;
+  return Math.min(...vals);
+}
+
+function ceilingMinFtFromRaw(raw){
+  // Ceiling = lowest BKN/OVC/VV base in feet (AGL)
+  if(!raw) return null;
+  const toks = String(raw).split(/\s+/).filter(Boolean);
+  let min = null;
+  for(const t0 of toks){
+    const t = t0.toUpperCase();
+    if(/^(BKN|OVC|VV)\d{3}/.test(t)){
+      const n = parseInt(t.slice(-3), 10);
+      if(Number.isFinite(n)){
+        const ft = n * 100;
+        min = (min == null) ? ft : Math.min(min, ft);
+      }
+    }
+  }
+  return min;
+}
+
+function derivePerStation(s){
+  const metarRaw = s?.metarRaw || '';
+  const tafRaw = s?.tafRaw || '';
+
+  const hazM = hazardsFromRaw(metarRaw);
+  const hazT = hazardsFromRaw(tafRaw);
+
+  const metVis = visNumber(s?.visibility_m ?? visMinFromRaw(metarRaw));
+  const tafVis = visMinFromRaw(tafRaw);
+  const worstVis = minNonNull(metVis, tafVis);
+
+  const metRvr = rvrMinFromRaw(metarRaw);
+  const tafRvr = rvrMinFromRaw(tafRaw);
+  const rvrMin = minNonNull(metRvr, tafRvr);
+
+  const metCig = (s?.ceiling_ft != null) ? s.ceiling_ft : ceilingMinFtFromRaw(metarRaw);
+  const tafCig = ceilingMinFtFromRaw(tafRaw);
+  const cigMin = minNonNull(metCig, tafCig);
+
+  const engIceM = (metVis != null && metVis <= 150) && hazM.has('FZFG');
+  const engIceT = (tafVis != null && tafVis <= 150) && hazT.has('FZFG');
+
+  return {
+    hazM: Array.from(hazM),
+    hazT: Array.from(hazT),
+    metVis,
+    tafVis,
+    worstVis,
+    metRvr,
+    tafRvr,
+    rvrMin,
+    metCig,
+    tafCig,
+    cigMin,
+    engIceM,
+    engIceT,
+  };
+}
+
 function buildTriggers(item){
   const tags = [];
-  const hazards = Array.isArray(item.hazards) ? item.hazards : [];
-  const has = (x) => hazards.includes(x);
+  const d = item?._d || derivePerStation(item);
+  const hazM = new Set(d.hazM || []);
+  const hazT = new Set(d.hazT || []);
 
-  // RVR (minimum across METAR + TAF if available)
-  const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
-  if(rvrMin != null){
-    if(rvrMin <= 75) tags.push({ t: 'RVR≤75', key: 'rvr75' });
-    else if(rvrMin <= 200) tags.push({ t: 'RVR≤200', key: 'rvr200' });
-    else if(rvrMin <= 300) tags.push({ t: 'RVR≤300', key: 'rvr300' });
-    else if(rvrMin <= 500) tags.push({ t: 'RVR≤500', key: 'rvr500' });
-  }
-
-  const worstVis = item.worst_visibility_m ?? item.visibility_m ?? null;
-  const vis = visNumber(worstVis);
-
-  if(vis != null){
-    if(vis <= 150) tags.push({ t: 'VIS≤150', key: 'vis150' });
-    else if(vis <= 175) tags.push({ t: 'VIS≤175', key: 'vis175' });
-    else if(vis <= 250) tags.push({ t: 'VIS≤250', key: 'vis250' });
-    else if(vis <= 300) tags.push({ t: 'VIS≤300', key: 'vis300' });
-    else if(vis <= 500) tags.push({ t: 'VIS≤500', key: 'vis500' });
-    else if(vis <= 550) tags.push({ t: 'VIS≤550', key: 'vis550' });
-    else if(vis <= 800) tags.push({ t: 'VIS≤800', key: 'vis800' });
-  }
-
-  if(has('FZFG')) tags.push({ t: 'FZFG', key: 'fzfg' });
+  const push = (t, key, m, tt) => {
+    if(!m && !tt) return;
+    tags.push({ t, key, srcM: !!m, srcT: !!tt });
+  };
 
   // Engine operations stop-flag (highest priority)
-  if(hasEngineIcingStopFlag(item)) tags.unshift({ t: 'ENG ICE OPS', key: 'eng' });
-
-  // Fog / mist
-  if(has('FG') || has('BR')) tags.push({ t: has('FG') ? 'FG' : 'BR', key: 'fog' });
-
-  // TS group
-  if(hazards.some(h => /^TS/.test(h))) tags.push({ t: 'TS', key: 'ts' });
-
-  // Snow group
-  if(hazards.some(h => ['SN','SHSN','BLSN','PL','SG'].includes(h))) tags.push({ t: 'SN', key: 'snow' });
-
-  // Rain group
-  if(hazards.some(h => ['RA','+RA','SHRA','DZ','FZDZ','FZRA'].includes(h))) tags.push({ t: 'RA', key: 'rain' });
-
-  // Low ceiling (METAR only from server calc)
-  if(item.ceiling_ft != null){
-    if(item.ceiling_ft < 500) tags.push({ t: 'CIG<500', key: 'cig' });
-    else if(item.ceiling_ft < 1000) tags.push({ t: 'CIG<1000', key: 'cig' });
+  if(d.engIceM || d.engIceT){
+    tags.push({ t: 'ENG ICE OPS', key: 'eng', srcM: !!d.engIceM, srcT: !!d.engIceT });
   }
 
-  // Deduplicate by key
+  // VIS threshold (worst across METAR vs TAF)
+  const vis = d.worstVis;
+  const metVis = d.metVis;
+  const tafVis = d.tafVis;
+
+  if(vis != null){
+    const thresholds = [
+      {v:150, key:'vis150', t:'VIS≤150'},
+      {v:175, key:'vis175', t:'VIS≤175'},
+      {v:250, key:'vis250', t:'VIS≤250'},
+      {v:300, key:'vis300', t:'VIS≤300'},
+      {v:500, key:'vis500', t:'VIS≤500'},
+      {v:550, key:'vis550', t:'VIS≤550'},
+      {v:800, key:'vis800', t:'VIS≤800'},
+    ];
+    for(const th of thresholds){
+      if(vis <= th.v){
+        push(th.t, th.key, (metVis != null && metVis <= th.v), (tafVis != null && tafVis <= th.v));
+        break;
+      }
+    }
+  }
+
+  // RVR threshold (min across METAR vs TAF)
+  const rvr = d.rvrMin;
+  const metRvr = d.metRvr;
+  const tafRvr = d.tafRvr;
+  if(rvr != null){
+    const thresholds = [
+      {v:75, key:'rvr75', t:'RVR≤75'},
+      {v:200, key:'rvr200', t:'RVR≤200'},
+      {v:300, key:'rvr300', t:'RVR≤300'},
+      {v:500, key:'rvr500', t:'RVR≤500'},
+    ];
+    for(const th of thresholds){
+      if(rvr <= th.v){
+        push(th.t, th.key, (metRvr != null && metRvr <= th.v), (tafRvr != null && tafRvr <= th.v));
+        break;
+      }
+    }
+  }
+
+  // FZFG (explicit)
+  push('FZFG', 'fzfg', hazM.has('FZFG'), hazT.has('FZFG'));
+
+  // Fog / mist (show FG if present, else BR)
+  if(hazM.has('FG') || hazT.has('FG')){
+    push('FG', 'fog', hazM.has('FG'), hazT.has('FG'));
+  }else{
+    push('BR', 'fog', hazM.has('BR'), hazT.has('BR'));
+  }
+
+  // TS
+  push('TS', 'ts', hazM.has('TS'), hazT.has('TS'));
+
+  // Snow
+  push('SN', 'snow', hazM.has('SN'), hazT.has('SN'));
+
+  // Rain
+  push('RA', 'rain', hazM.has('RA'), hazT.has('RA'));
+
+  // Ceiling thresholds (CIG)
+  const cig = d.cigMin;
+  const metCig = d.metCig;
+  const tafCig = d.tafCig;
+  if(cig != null){
+    if(cig < 500){
+      push('CIG<500', 'cig', (metCig != null && metCig < 500), (tafCig != null && tafCig < 500));
+    }else if(cig < 1000){
+      push('CIG<1000', 'cig', (metCig != null && metCig < 1000), (tafCig != null && tafCig < 1000));
+    }
+  }
+
+  // Deduplicate by label
   const seen = new Set();
-  return tags.filter(x => (seen.has(x.t) ? false : (seen.add(x.t), true)));
+  const out = [];
+  for(const x of tags){
+    if(seen.has(x.t)) continue;
+    seen.add(x.t);
+    out.push(x);
+  }
+
+  // Always pin ENG ICE OPS at the front if present
+  out.sort((a,b) => (a.key === 'eng' ? -1 : 0) - (b.key === 'eng' ? -1 : 0));
+  return out;
 }
 
 function extractRvrValuesMeters(raw){
@@ -258,6 +458,170 @@ function wxClassFromToken(token){
   return null;
 }
 
+
+function fmtVis(m){
+  if(m == null) return '—';
+  if(m >= 10000) return '10 km or more';
+  if(m >= 1000) return `${(m/1000).toFixed(1)} km (${m} m)`;
+  return `${m} m`;
+}
+
+function parseWind(raw){
+  const m = (raw||'').match(/\b(\d{3}|VRB)(\d{2,3})(G(\d{2,3}))?KT\b/);
+  if(!m) return null;
+  const dir = m[1];
+  const spd = parseInt(m[2],10);
+  const gst = m[4] ? parseInt(m[4],10) : null;
+  if(!Number.isFinite(spd)) return null;
+  return { dir, spd, gst };
+}
+
+function parseTempDew(raw){
+  const m = (raw||'').match(/\b(M?\d{2})\/(M?\d{2})\b/);
+  if(!m) return null;
+  const conv = (x) => {
+    const neg = x.startsWith('M');
+    const n = parseInt(neg ? x.slice(1) : x, 10);
+    return neg ? -n : n;
+  };
+  return { tempC: conv(m[1]), dewC: conv(m[2]) };
+}
+
+function parseQnh(raw){
+  const q = (raw||'').match(/\bQ(\d{4})\b/);
+  if(q) return { hpa: parseInt(q[1],10) };
+  const a = (raw||'').match(/\bA(\d{4})\b/);
+  if(a){
+    const inHg = parseInt(a[1],10) / 100;
+    const hpa = Math.round(inHg * 33.8639);
+    return { hpa, inHg };
+  }
+  return null;
+}
+
+function parseClouds(raw){
+  const toks = String(raw||'').split(/\s+/).filter(Boolean);
+  const out = [];
+  for(const t0 of toks){
+    const t = t0.toUpperCase();
+    const m = t.match(/^(FEW|SCT|BKN|OVC|VV)(\d{3})(CB|TCU)?$/);
+    if(m){
+      const amount = m[1];
+      const ft = parseInt(m[2],10) * 100;
+      out.push({ amount, ft, type: m[3] || '' });
+    }
+  }
+  out.sort((a,b)=>a.ft-b.ft);
+  return out.length ? out : null;
+}
+
+function listWxFromHazards(hazSet){
+  const labels = [];
+  if(hazSet.has('FZFG')) labels.push('Freezing fog (FZFG)');
+  if(hazSet.has('FG')) labels.push('Fog (FG)');
+  if(hazSet.has('BR')) labels.push('Mist (BR)');
+  if(hazSet.has('TS')) labels.push('Thunderstorm (TS)');
+  if(hazSet.has('SN')) labels.push('Snow (SN)');
+  if(hazSet.has('RA')) labels.push('Rain/Drizzle (RA/DZ)');
+  return labels;
+}
+
+function decodeMetar(raw){
+  if(!raw) return '<span class="muted">—</span>';
+  const toks = String(raw).split(/\s+/).filter(Boolean);
+  const haz = hazardsFromRaw(raw);
+
+  const wind = parseWind(raw);
+  const vis = visMinFromTokens(toks);
+  const clouds = parseClouds(raw);
+  const td = parseTempDew(raw);
+  const qnh = parseQnh(raw);
+
+  const lines = [];
+  if(wind){
+    lines.push(`Wind: ${wind.dir}° ${wind.spd} kt${wind.gst ? ` (gust ${wind.gst} kt)` : ''}`);
+  }
+  if(vis != null){
+    lines.push(`Visibility: ${fmtVis(vis)}`);
+  }
+  const wx = listWxFromHazards(haz);
+  if(wx.length){
+    lines.push(`Weather: ${wx.join(', ')}`);
+  }
+  if(clouds){
+    const c0 = clouds.map(c => `${c.amount} ${String(Math.round(c.ft/100)).padStart(3,'0')} (${c.ft} ft)${c.type ? ' '+c.type : ''}`).join(', ');
+    lines.push(`Clouds: ${c0}`);
+  }
+  if(td){
+    lines.push(`Temp/Dew point: ${td.tempC}°C / ${td.dewC}°C`);
+  }
+  if(qnh){
+    lines.push(`QNH: ${qnh.hpa} hPa${qnh.inHg ? ` (${qnh.inHg.toFixed(2)} inHg)` : ''}`);
+  }
+
+  if(!lines.length) return '<span class="muted">No decodable elements.</span>';
+  return `<ul class="decodedList">` + lines.map(x => `<li>${escapeHtml(x)}</li>`).join('') + `</ul>`;
+}
+
+function decodeTaf(raw){
+  if(!raw) return '<span class="muted">—</span>';
+
+  const toks = String(raw).split(/\s+/).filter(Boolean);
+  const haz = hazardsFromRaw(raw);
+
+  // Header: validity DDHH/DDHH
+  const valid = raw.match(/\b(\d{4})\/(\d{4})\b/);
+  const validTxt = valid ? `${valid[1]}–${valid[2]}Z` : null;
+
+  // Identify change groups
+  const groups = [];
+  let cur = { title: 'BASE', tokens: [] };
+  const isChange = (t) => /^(FM\d{6}|TEMPO|BECMG|PROB\d{2})$/.test(t) || /^PROB\d{2}$/.test(t);
+  for(const t of toks){
+    const up = t.toUpperCase();
+    if(isChange(up) && cur.tokens.length){
+      groups.push(cur);
+      cur = { title: up, tokens: [] };
+      continue;
+    }
+    cur.tokens.push(up);
+  }
+  if(cur.tokens.length) groups.push(cur);
+
+  const summarize = (gtoks) => {
+    const wind = parseWind(gtoks.join(' '));
+    const vis = visMinFromTokens(gtoks);
+    const clouds = parseClouds(gtoks.join(' '));
+    const haz2 = hazardsFromRaw(gtoks.join(' '));
+    const parts = [];
+    if(wind) parts.push(`wind ${wind.dir}° ${wind.spd} kt${wind.gst ? ` gust ${wind.gst}` : ''}`);
+    if(vis != null) parts.push(`vis ${fmtVis(vis)}`);
+    const wx = listWxFromHazards(haz2);
+    if(wx.length) parts.push(wx.map(x => x.replace(/\s*\([^)]*\)/g,'')).join(', ').toLowerCase());
+    if(clouds){
+      const cmin = clouds[0];
+      parts.push(`cig ${cmin.ft} ft (${cmin.amount})`);
+    }
+    return parts.length ? parts.join(' · ') : '—';
+  };
+
+  const lines = [];
+  if(validTxt) lines.push(`Validity: ${validTxt}`);
+  const wx = listWxFromHazards(haz);
+  if(wx.length) lines.push(`Weather signals: ${wx.join(', ')}`);
+
+  // Add first 4 groups summaries
+  const maxGroups = 4;
+  const gLines = groups.slice(0, maxGroups).map(g => {
+    const title = (g.title === 'BASE') ? 'Base' : g.title;
+    return `${title}: ${summarize(g.tokens)}`;
+  });
+  if(groups.length > maxGroups) gLines.push(`(+${groups.length - maxGroups} more change groups)`);
+
+  const all = lines.concat(gLines).filter(Boolean);
+  return `<ul class="decodedList">` + all.map(x => `<li>${escapeHtml(x)}</li>`).join('') + `</ul>`;
+}
+
 function highlightRaw(raw, ctx = {}){
   // ctx: { engice: boolean }
   if(!raw) return '<span class="muted">—</span>';
@@ -330,7 +694,8 @@ function alertMatch(item, desired){
 function conditionMatch(item, cond){
   if(cond === 'all') return true;
   const hazards = Array.isArray(item.hazards) ? item.hazards : [];
-  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  const d = item._d || derivePerStation(item);
+  const worstVis = d.worstVis;
   const score = displayScore(item);
   const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
 
@@ -354,6 +719,14 @@ function conditionMatch(item, cond){
     case 'ts': return hazards.some(h => /^TS/.test(h));
     default: return true;
   }
+}
+
+function renderSrc(t){
+  // Renders small origin badges inside trigger tags (M=METAR, T=TAF)
+  if(!t || (!t.srcM && !t.srcT)) return '';
+  const m = t.srcM ? '<span class="src src--m" title="Triggered by METAR">M</span>' : '';
+  const tt = t.srcT ? '<span class="src src--t" title="Triggered by TAF">T</span>' : '';
+  return `<span class="srcWrap">${m}${tt}</span>`;
 }
 
 function renderRow(item, nowIso){
@@ -383,7 +756,8 @@ function renderRow(item, nowIso){
       trendPill = `<span class="trendPill trendPill--flat" title="0 m">•0</span>`;
     }
   }
-  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  const d = item._d || derivePerStation(item);
+  const worstVis = d.worstVis;
   const lowVisLabel = lowVisLabelFromMeters(worstVis);
   const lowVisCls = visClassFromMeters(worstVis);
 
@@ -415,7 +789,7 @@ function renderRow(item, nowIso){
             ? triggers.map(t => {
               const k = (t.key || 'wx');
               const cat = k.startsWith('vis') ? 'vis' : (k.startsWith('rvr') ? 'rvr' : (k === 'cig' ? 'cig' : k));
-              return `<span class="tag tag--${cat}">${escapeHtml(t.t)}</span>`;
+              return `<span class="tag tag--${cat}">${escapeHtml(t.t)}${renderSrc(t)}</span>`;
             }).join('')
             : `<span class="muted">—</span>`
           }
@@ -477,6 +851,8 @@ function openDrawer(item){
   const sum = byId('dSummary');
   const met = byId('dMetar');
   const taf = byId('dTaf');
+  const metDec = byId('dMetarDecoded');
+  const tafDec = byId('dTafDecoded');
 
   const icao = item.icao || '—';
   const iata = item.iata || '';
@@ -490,7 +866,8 @@ function openDrawer(item){
   const tafAge = ageMinutes(item.tafRaw, nowIso);
 
   const vis = visNumber(item.visibility_m ?? null);
-  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  const d = item._d || derivePerStation(item);
+  const worstVis = d.worstVis;
   const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
   const cig = (item.ceiling_ft != null) ? item.ceiling_ft : null;
 
@@ -515,7 +892,7 @@ function openDrawer(item){
       `<div class="kv" style="grid-column:1 / -1;"><div class="kv__k">Triggers</div><div class="kv__v">${trigs.length ? trigs.map(t => {
         const k = (t.key || 'wx');
         const cat = k.startsWith('vis') ? 'vis' : (k.startsWith('rvr') ? 'rvr' : (k === 'cig' ? 'cig' : k));
-        return `<span class="tag tag--${cat}">${escapeHtml(t.t)}</span>`;
+        return `<span class="tag tag--${cat}">${escapeHtml(t.t)}${renderSrc(t)}</span>`;
       }).join(' ') : '<span class="muted">—</span>'}</div></div>`,
     ].join('');
   }
@@ -523,6 +900,9 @@ function openDrawer(item){
   const engice = hasEngineIcingStopFlag(item);
   if(met) met.innerHTML = item.metarRaw ? highlightRaw(item.metarRaw, { engice }) : '<span class="muted">No METAR</span>';
   if(taf) taf.innerHTML = item.tafRaw ? highlightRaw(item.tafRaw, { engice }) : '<span class="muted">No TAF</span>';
+
+  if(metDec) metDec.innerHTML = decodeMetar(item.metarRaw);
+  if(tafDec) tafDec.innerHTML = decodeTaf(item.tafRaw);
 
   drawer.classList.add('is-open');
   drawer.setAttribute('aria-hidden', 'false');
@@ -545,7 +925,8 @@ function updateCriticalBarFromDom(){
     return false;
   };
 
-  const eng = trs.filter(tr => tr.querySelector('.tag--eng') || hasTagText(tr, 'ENG ICE OPS')).length;
+  const engRows = trs.filter(tr => tr.querySelector('.tag--eng') || hasTagText(tr, 'ENG ICE OPS'));
+  const eng = engRows.length;
   const crit = trs.filter(tr => tr.querySelector('.pill--crit')).length;
   const vis175 = trs.filter(tr => {
     const tags = Array.from(tr.querySelectorAll('.tag--vis'));
@@ -558,6 +939,23 @@ function updateCriticalBarFromDom(){
   set('cbCritCount', crit);
   set('cbVis175Count', vis175);
   set('cbTsCount', ts);
+
+  // ENG ICE OPS: show affected IATA codes (big)
+  const iatas = [];
+  for(const tr of engRows){
+    const iataEl = tr.querySelector('.airport__iata');
+    const icaoEl = tr.querySelector('.airport__icao');
+    const code = (iataEl?.textContent || '').trim() || (icaoEl?.textContent || '').trim();
+    if(code) iatas.push(code.toUpperCase());
+  }
+  const uniq = Array.from(new Set(iatas));
+  const maxShow = 10;
+  const shown = uniq.slice(0, maxShow);
+  const more = uniq.length - shown.length;
+  const el = byId('cbEngIatas');
+  if(el){
+    el.textContent = shown.join(' ') + (more > 0 ? ` +${more}` : '');
+  }
 }
 
 
@@ -669,10 +1067,13 @@ async function load(){
 
     state.generatedAt = data.generatedAt || null;
     state.stations = Array.isArray(data.stations) ? data.stations.map((s) => {
-      const rvrMin = computeRvrMin(s);
+      const d = derivePerStation(s);
       return {
         ...s,
-        rvrMin,
+        rvrMin: d.rvrMin,
+        _d: d,
+        _engIceM: d.engIceM,
+        _engIceT: d.engIceT,
       };
     }) : [];
     state.stats = data.stats || null;
@@ -777,7 +1178,8 @@ document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawer
     const score = displayScore(item);
     const lvl = levelFromScore(score);
     const vis = visNumber(item.visibility_m ?? null);
-    const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+    const d = item._d || derivePerStation(item);
+  const worstVis = d.worstVis;
     const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
     const cig = (item.ceiling_ft != null) ? item.ceiling_ft : null;
     const metAge = ageMinutes(item.metarRaw, nowIso);
