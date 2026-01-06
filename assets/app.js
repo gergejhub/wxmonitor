@@ -15,6 +15,7 @@ const STATUS_URL = 'data/status.json';
 const REFRESH_MS = 10 * 60 * 1000;
 
 const $ = (sel) => document.querySelector(sel);
+const byId = (id) => document.getElementById(id);
 
 function escapeHtml(s){
   return (s ?? '').replace(/[&<>"']/g, (c) => ({
@@ -368,6 +369,20 @@ function renderRow(item, nowIso){
 
   // Table VIS shows METAR visibility in meters (as in your reference screenshot).
   const visM = visNumber(item.visibility_m ?? null);
+  const prevVis = (state.prevVis && state.prevVis[item.icao] != null) ? Number(state.prevVis[item.icao]) : null;
+  const deltaVis = (visM != null && prevVis != null && Number.isFinite(prevVis)) ? (visM - prevVis) : null;
+  let trendPill = '';
+  if(visM != null){
+    if(prevVis == null || !Number.isFinite(prevVis)){
+      trendPill = `<span class="trendPill trendPill--new" title="No previous sample">NEW</span>`;
+    }else if(deltaVis > 0){
+      trendPill = `<span class="trendPill trendPill--up" title="+${escapeHtml(String(deltaVis))} m">▲${escapeHtml(String(deltaVis))}</span>`;
+    }else if(deltaVis < 0){
+      trendPill = `<span class="trendPill trendPill--down" title="${escapeHtml(String(deltaVis))} m">▼${escapeHtml(String(Math.abs(deltaVis)))}</span>`;
+    }else{
+      trendPill = `<span class="trendPill trendPill--flat" title="0 m">•0</span>`;
+    }
+  }
   const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
   const lowVisLabel = lowVisLabelFromMeters(worstVis);
   const lowVisCls = visClassFromMeters(worstVis);
@@ -376,12 +391,13 @@ function renderRow(item, nowIso){
   const engice = hasEngineIcingStopFlag(item);
 
   return `
-    <tr>
+    <tr class="row" data-icao="${icao}">
       <td>
         <div class="airport">
           <div class="airport__codes">
             <span class="airport__icao mono">${icao}</span>
             ${iata ? `<span class="airport__iata mono">${iata}</span>` : ''}
+            <button class="openBtn" type="button" title="Open Quick View" aria-label="Open Quick View">›</button>
           </div>
           ${name ? `<div class="airport__name">${name}</div>` : ''}
         </div>
@@ -389,7 +405,7 @@ function renderRow(item, nowIso){
 
       <td><span class="${lvl.cls}">${lvl.label}</span></td>
 
-      <td class="mono"><span class="num">${visM == null ? '—' : visM}</span></td>
+      <td class="mono"><span class="num">${visM == null ? '—' : visM}</span>${trendPill ? ` ${trendPill}` : ''}</td>
 
       <td>${lowVisLabel ? `<span class="hl ${lowVisCls}" data-cat="vis">VIS${lowVisLabel}</span>` : '<span class="muted">—</span>'}</td>
 
@@ -406,8 +422,8 @@ function renderRow(item, nowIso){
         </div>
       </td>
 
-      <td>${metarAge == null ? '<span class="muted">—</span>' : `<span class="age">${metarAge}m</span>`}</td>
-      <td>${tafAge == null ? '<span class="muted">—</span>' : `<span class="age">${tafAge}m</span>`}</td>
+      <td>${metarAge == null ? '<span class="muted">—</span>' : `<span class="${metarAge <= 20 ? 'age age--fresh' : (metarAge <= 60 ? 'age age--warn' : 'age age--stale')}">${metarAge}m</span>`}</td>
+      <td>${tafAge == null ? '<span class="muted">—</span>' : `<span class="${tafAge <= 60 ? 'age age--fresh' : (tafAge <= 180 ? 'age age--warn' : 'age age--stale')}">${tafAge}m</span>`}</td>
 
       <td><div class="raw">${item.metarRaw ? highlightRaw(item.metarRaw, { engice }) : '<span class="muted">No METAR</span>'}</div></td>
       <td><div class="raw">${item.tafRaw ? highlightRaw(item.tafRaw, { engice }) : '<span class="muted">No TAF</span>'}</div></td>
@@ -421,6 +437,129 @@ let state = {
   stats: null,
   errors: [],
 };
+
+// Local persistence for simple trend indicators (client-side only).
+const LS_KEY_VIS = 'wzz_prev_vis_v1';
+
+function loadPrevVis(){
+  try{
+    const raw = localStorage.getItem(LS_KEY_VIS);
+    if(!raw) return {};
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === 'object') ? obj : {};
+  }catch(_e){
+    return {};
+  }
+}
+
+function savePrevVis(map){
+  try{
+    localStorage.setItem(LS_KEY_VIS, JSON.stringify(map || {}));
+  }catch(_e){
+    // ignore
+  }
+}
+
+// Initialize trend baseline
+state.prevVis = loadPrevVis();
+state.drawerItem = null;
+
+// Drawer helpers
+function openDrawer(item){
+  if(!item) return;
+  const drawer = byId('drawer');
+  if(!drawer) return;
+
+  state.drawerItem = item;
+
+  const title = byId('dTitle');
+  const sub = byId('dSub');
+  const sum = byId('dSummary');
+  const met = byId('dMetar');
+  const taf = byId('dTaf');
+
+  const icao = item.icao || '—';
+  const iata = item.iata || '';
+  const name = item.name || '';
+
+  const score = displayScore(item);
+  const lvl = levelFromScore(score);
+
+  const nowIso = new Date().toISOString();
+  const metAge = ageMinutes(item.metarRaw, nowIso);
+  const tafAge = ageMinutes(item.tafRaw, nowIso);
+
+  const vis = visNumber(item.visibility_m ?? null);
+  const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+  const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
+  const cig = (item.ceiling_ft != null) ? item.ceiling_ft : null;
+
+  const trigs = buildTriggers(item);
+
+  if(title) title.textContent = `${icao}${iata ? '  •  ' + iata : ''}`;
+  if(sub) sub.textContent = name ? name : '—';
+
+  const mkAge = (x) => (x == null ? '—' : `${x}m`);
+  const mkNum = (x, suf='') => (x == null ? '—' : `${x}${suf}`);
+
+  if(sum){
+    sum.innerHTML = [
+      `<div class="kv"><div class="kv__k">Alert</div><div class="kv__v"><span class="${lvl.cls}">${lvl.label}</span></div></div>`,
+      `<div class="kv"><div class="kv__k">Severity</div><div class="kv__v mono">${score}</div></div>`,
+      `<div class="kv"><div class="kv__k">Visibility</div><div class="kv__v mono">${mkNum(vis,' m')}</div></div>`,
+      `<div class="kv"><div class="kv__k">Worst VIS (METAR/TAF)</div><div class="kv__v mono">${mkNum(worstVis,' m')}</div></div>`,
+      `<div class="kv"><div class="kv__k">RVR (min)</div><div class="kv__v mono">${mkNum(rvrMin,' m')}</div></div>`,
+      `<div class="kv"><div class="kv__k">Ceiling</div><div class="kv__v mono">${mkNum(cig,' ft')}</div></div>`,
+      `<div class="kv"><div class="kv__k">METAR age</div><div class="kv__v mono">${mkAge(metAge)}</div></div>`,
+      `<div class="kv"><div class="kv__k">TAF age</div><div class="kv__v mono">${mkAge(tafAge)}</div></div>`,
+      `<div class="kv" style="grid-column:1 / -1;"><div class="kv__k">Triggers</div><div class="kv__v">${trigs.length ? trigs.map(t => {
+        const k = (t.key || 'wx');
+        const cat = k.startsWith('vis') ? 'vis' : (k.startsWith('rvr') ? 'rvr' : (k === 'cig' ? 'cig' : k));
+        return `<span class="tag tag--${cat}">${escapeHtml(t.t)}</span>`;
+      }).join(' ') : '<span class="muted">—</span>'}</div></div>`,
+    ].join('');
+  }
+
+  const engice = hasEngineIcingStopFlag(item);
+  if(met) met.innerHTML = item.metarRaw ? highlightRaw(item.metarRaw, { engice }) : '<span class="muted">No METAR</span>';
+  if(taf) taf.innerHTML = item.tafRaw ? highlightRaw(item.tafRaw, { engice }) : '<span class="muted">No TAF</span>';
+
+  drawer.classList.add('is-open');
+  drawer.setAttribute('aria-hidden', 'false');
+}
+
+function closeDrawer(){
+  const drawer = byId('drawer');
+  if(!drawer) return;
+  drawer.classList.remove('is-open');
+  drawer.setAttribute('aria-hidden', 'true');
+}
+
+function updateCriticalBarFromDom(){
+  const tbody = $('#tbody');
+  if(!tbody) return;
+  const trs = Array.from(tbody.querySelectorAll('tr[data-icao]'));
+  const hasTagText = (tr, txt) => {
+    const tags = tr.querySelectorAll('.tag');
+    for(const t of tags){ if((t.textContent || '').trim() === txt) return true; }
+    return false;
+  };
+
+  const eng = trs.filter(tr => tr.querySelector('.tag--eng') || hasTagText(tr, 'ENG ICE OPS')).length;
+  const crit = trs.filter(tr => tr.querySelector('.pill--crit')).length;
+  const vis175 = trs.filter(tr => {
+    const tags = Array.from(tr.querySelectorAll('.tag--vis'));
+    return tags.some(t => /^VIS≤(150|175)$/.test((t.textContent||'').trim()));
+  }).length;
+  const ts = trs.filter(tr => tr.querySelector('.tag--ts') || hasTagText(tr, 'TS')).length;
+
+  const set = (id, val) => { const el = $('#' + id); if(el) el.textContent = String(val); };
+  set('cbEngCount', eng);
+  set('cbCritCount', crit);
+  set('cbVis175Count', vis175);
+  set('cbTsCount', ts);
+}
+
 
 function applyFilters(){
   const text = ($('#filterText').value || '').trim().toUpperCase();
@@ -466,6 +605,17 @@ function render(){
 
   const rows = applyFilters();
 
+  // NOTE: Critical Bar counters are updated after table HTML is rendered (DOM-based),
+  // so they always reflect exactly what you see on screen.
+  const sc = $('#stationsCount'); if(sc) sc.textContent = String((state.stations||[]).length);
+
+  // Prepare trend persistence for next render
+  const nextVisMap = {};
+  state.stations.forEach(s => {
+    const v = visNumber(s.visibility_m ?? null);
+    if(v != null) nextVisMap[s.icao] = v;
+  });
+
   // Status + diagnostics
   const stats = state.stats || null;
   const errList = Array.isArray(state.errors) ? state.errors : [];
@@ -498,6 +648,15 @@ function render(){
   tbody.innerHTML = rows.length
     ? rows.map(r => renderRow(r, nowIso)).join('')
     : '<tr><td colspan="9" class="muted">No matching rows.</td></tr>';
+
+  // Update critical tiles now that the visible rows exist.
+  updateCriticalBarFromDom();
+  // Extra safety: in some browsers innerHTML updates may render on next frame.
+  requestAnimationFrame(updateCriticalBarFromDom);
+
+  // Persist baseline for VIS trend arrows
+  savePrevVis(nextVisMap);
+  state.prevVis = nextVisMap;
 }
 
 async function load(){
@@ -530,6 +689,8 @@ async function load(){
     }catch{ /* ignore */ }
 
     $('#lastUpdate').textContent = formatGeneratedAt(state.generatedAt);
+    const sc = $('#stationsCount');
+    if(sc) sc.textContent = String((state.stations||[]).length);
 
     render();
   }catch(e){
@@ -557,6 +718,103 @@ $('#autoRefresh').addEventListener('change', (e) => e.target.checked ? startTime
   el.addEventListener('input', render);
   el.addEventListener('change', render);
 });
+
+// Critical Bar quick filters
+function setFilters(opts){
+  const o = opts || {};
+  const ft = $('#filterText'); if(ft && o.text != null) ft.value = o.text;
+  const cs = $('#condSel'); if(cs && o.cond != null) cs.value = o.cond;
+  const al = $('#alertSel'); if(al && o.alert != null) al.value = o.alert;
+  const sp = $('#sortPriority'); if(sp && o.sort != null) sp.checked = !!o.sort;
+  render();
+}
+
+(function(){
+  const el = $('#cbEng'); if(el) el.addEventListener('click', () => setFilters({ cond: 'engice', alert: 'all', sort: true }));
+})();
+(function(){
+  const el = $('#cbCrit'); if(el) el.addEventListener('click', () => setFilters({ cond: 'all', alert: 'crit', sort: true }));
+})();
+(function(){
+  const el = $('#cbVis175'); if(el) el.addEventListener('click', () => setFilters({ cond: 'vis175', alert: 'all', sort: true }));
+})();
+(function(){
+  const el = $('#cbTs'); if(el) el.addEventListener('click', () => setFilters({ cond: 'ts', alert: 'all', sort: true }));
+})();
+(function(){
+  const el = $('#cbReset'); if(el) el.addEventListener('click', () => setFilters({ text: '', cond: 'all', alert: 'all', sort: true }));
+})();
+
+// Row click -> drawer
+(function(){
+  const tb = $('#tbody');
+  if(!tb) return;
+  tb.addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-icao]');
+    if(!tr) return;
+    const icao = tr.getAttribute('data-icao');
+    const item = (state.stations || []).find(s => s.icao === icao);
+    openDrawer(item);
+  });
+})();
+
+// Drawer close actions
+(function(){
+  const x = byId('drawerClose'); if(x) x.addEventListener('click', closeDrawer);
+  const b = byId('drawerBackdrop'); if(b) b.addEventListener('click', closeDrawer);
+})();
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawer(); });
+
+// Copy briefing line
+(function(){
+  const btn = $('#copyBrief');
+  if(!btn) return;
+  btn.addEventListener('click', async () => {
+    const item = state.drawerItem;
+    if(!item) return;
+
+    const nowIso = new Date().toISOString();
+    const score = displayScore(item);
+    const lvl = levelFromScore(score);
+    const vis = visNumber(item.visibility_m ?? null);
+    const worstVis = visNumber(item.worst_visibility_m ?? item.visibility_m ?? null);
+    const rvrMin = Number.isFinite(item.rvrMin) ? item.rvrMin : null;
+    const cig = (item.ceiling_ft != null) ? item.ceiling_ft : null;
+    const metAge = ageMinutes(item.metarRaw, nowIso);
+    const tafAge = ageMinutes(item.tafRaw, nowIso);
+
+    const trigs = buildTriggers(item).map(t => t.t).join(', ');
+    const line = [
+      `${item.icao}${item.iata ? `(${item.iata})` : ''}`,
+      `ALERT=${lvl.label}`,
+      `SCORE=${score}`,
+      `VIS=${vis != null ? vis+'m' : '—'}`,
+      `WVIS=${worstVis != null ? worstVis+'m' : '—'}`,
+      `RVRmin=${rvrMin != null ? rvrMin+'m' : '—'}`,
+      `CIG=${cig != null ? cig+'ft' : '—'}`,
+      `METARage=${metAge != null ? metAge+'m' : '—'}`,
+      `TAFage=${tafAge != null ? tafAge+'m' : '—'}`,
+      trigs ? `TRIG=${trigs}` : ''
+    ].filter(Boolean).join(' | ');
+
+    try{
+      await navigator.clipboard.writeText(line);
+      const msg = $('#statusMsg');
+      if(msg){
+        msg.textContent = 'Briefing line copied to clipboard.';
+        setTimeout(() => { if(msg.textContent === 'Briefing line copied to clipboard.') msg.textContent = ''; }, 1800);
+      }
+    }catch(_e){
+      const ta = document.createElement('textarea');
+      ta.value = line;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+  });
+})();
+
 
 load();
 startTimer();
