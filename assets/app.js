@@ -28,6 +28,10 @@ let view = {
   sortPri: true,
 };
 
+// Tracks which station is currently shown in the Quick View drawer
+// so we can keep time-based fields (age) ticking without manual page refresh.
+let drawerIcao = null;
+
 function escapeHtml(s){
   return (s ?? "").replace(/[&<>"']/g, (c)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 }
@@ -466,16 +470,56 @@ function decodeTaf(raw){
   return `<ul>${out.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`;
 }
 
-function trendPill(icao, currentVis){
-  const key = `wxm_prev_vis_${icao}`;
-  const prev = localStorage.getItem(key);
-  localStorage.setItem(key, currentVis === null ? "" : String(currentVis));
-  if (prev === null || prev === "") return {text:"NEW", cls:"trend--new"};
-  const p = parseInt(prev,10);
-  if (Number.isNaN(p) || currentVis === null) return {text:"NEW", cls:"trend--new"};
-  if (currentVis < p) return {text:"▼", cls:"trend--down"};
-  if (currentVis > p) return {text:"▲", cls:"trend--up"};
-  return {text:"•0", cls:"trend--flat"};
+function metarObsKeyFromRaw(raw){
+  if (!raw) return "";
+  const m = raw.match(/\b(\d{2}\d{2}\d{2})Z\b/);
+  return m ? m[0] : ""; // DDHHMMZ
+}
+
+function trendPill(icao, currentMetarVis, metarObsKey){
+  // Trend must ONLY change when a NEW METAR arrives (i.e., the DDHHMMZ group changes).
+  // Otherwise keep the last computed trend symbol.
+  const kObs = `wxm_prev_metar_obs_${icao}`;
+  const kVis = `wxm_prev_metar_vis_${icao}`;
+  const kTrend = `wxm_prev_metar_trend_${icao}`;
+
+  const obs = metarObsKey || "";
+  if (!obs) return {text:"—", cls:"trend--flat"};
+
+  const prevObs = localStorage.getItem(kObs);
+  const prevVisRaw = localStorage.getItem(kVis);
+  const prevTrend = localStorage.getItem(kTrend);
+
+  // First time seeing this station
+  if (!prevObs){
+    localStorage.setItem(kObs, obs);
+    localStorage.setItem(kVis, currentMetarVis === null ? "" : String(currentMetarVis));
+    localStorage.setItem(kTrend, "trend--new|NEW");
+    return {text:"NEW", cls:"trend--new"};
+  }
+
+  // No new METAR yet → keep the last symbol
+  if (prevObs === obs){
+    if (prevTrend){
+      const [cls, text] = prevTrend.split("|");
+      if (cls && text) return {cls, text};
+    }
+    return {text:"•0", cls:"trend--flat"};
+  }
+
+  // New METAR arrived → compute trend vs previous METAR visibility
+  const prevVis = prevVisRaw ? parseInt(prevVisRaw,10) : NaN;
+  let out = {text:"NEW", cls:"trend--new"};
+  if (!Number.isNaN(prevVis) && currentMetarVis !== null){
+    if (currentMetarVis < prevVis) out = {text:"▼", cls:"trend--down"};
+    else if (currentMetarVis > prevVis) out = {text:"▲", cls:"trend--up"};
+    else out = {text:"•0", cls:"trend--flat"};
+  }
+
+  localStorage.setItem(kObs, obs);
+  localStorage.setItem(kVis, currentMetarVis === null ? "" : String(currentMetarVis));
+  localStorage.setItem(kTrend, `${out.cls}|${out.text}`);
+  return out;
 }
 
 function visBucket(vis){
@@ -493,8 +537,11 @@ function buildLowVisTag(st){
 }
 
 function rowHtml(st){
+  // Trend is based on ACTUAL METAR visibility, and only updates when a NEW METAR arrives.
+  const metVisForTrend = (st.met.vis !== null ? st.met.vis : null);
+  const trend = trendPill(st.icao, metVisForTrend, metarObsKeyFromRaw(st.metarRaw || ""));
+
   const vis = (st.met.vis !== null ? st.met.vis : (st.worstVis ?? null));
-  const trend = trendPill(st.icao, vis ?? null);
   const lowVis = buildLowVisTag(st);
 
   const trigHtml = st.triggers.map(t=>{
@@ -502,8 +549,13 @@ function rowHtml(st){
     return `<span class="tag ${t.cls || ""}" data-icao="${st.icao}" data-open="1">${escapeHtml(t.label)} ${srcBadge}</span>`;
   }).join("");
 
-  const metAge = `<span class="age ${ageClass(st.metarAgeMin)}">${escapeHtml(formatAge(st.metarAgeMin))}</span>`;
-  const tafAge = `<span class="age ${ageClass(st.tafAgeMin)}">${escapeHtml(formatAge(st.tafAgeMin))}</span>`;
+  // Age is re-computed on EVERY render (per-minute UI refresh), so it "ticks" without manual reload.
+  const metAgeNow = computeAgeMinutesFromRawZ(st.metarRaw || "");
+  const tafAgeNow = computeAgeMinutesFromRawZ(st.tafRaw || "");
+  const metAgeUse = (metAgeNow !== null) ? metAgeNow : (st.metarAgeMin ?? null);
+  const tafAgeUse = (tafAgeNow !== null) ? tafAgeNow : (st.tafAgeMin ?? null);
+  const metAge = `<span class="age ${ageClass(metAgeUse)}">${escapeHtml(formatAge(metAgeUse))}</span>`;
+  const tafAge = `<span class="age ${ageClass(tafAgeUse)}">${escapeHtml(formatAge(tafAgeUse))}</span>`;
 
   const metRaw = st.metarRaw ? highlightRaw(st.metarRaw) : "<span class='muted'>—</span>";
   const tafRaw = st.tafRaw ? highlightRaw(st.tafRaw) : "<span class='muted'>—</span>";
@@ -658,6 +710,8 @@ function openDrawer(icao){
   const st = stations.find(s=>s.icao === icao);
   if (!st) return;
 
+  drawerIcao = icao;
+
   $("dAirport").textContent = `${st.icao} ${(st.iata||"—").toUpperCase()}`;
   $("dSub").textContent = st.name || "";
 
@@ -667,8 +721,11 @@ function openDrawer(icao){
   $("dWorstVis").textContent = st.worstVis !== null ? `${st.worstVis} m` : "—";
   $("dRvr").textContent = st.rvrMinAll !== null ? `${st.rvrMinAll} m` : "—";
   $("dCig").textContent = st.cigAll !== null ? `${st.cigAll} ft` : "—";
-  $("dMetAge").textContent = formatAge(st.metarAgeMin);
-  $("dTafAge").textContent = formatAge(st.tafAgeMin);
+  // Age should tick without page reload: compute from raw DDHHMMZ each time drawer opens.
+  const metAgeNow = computeAgeMinutesFromRawZ(st.metarRaw || "");
+  const tafAgeNow = computeAgeMinutesFromRawZ(st.tafRaw || "");
+  $("dMetAge").textContent = formatAge(metAgeNow !== null ? metAgeNow : (st.metarAgeMin ?? null));
+  $("dTafAge").textContent = formatAge(tafAgeNow !== null ? tafAgeNow : (st.tafAgeMin ?? null));
 
   // triggers in drawer — fixed: always flex-wrap container; no overlapping
   $("dTriggers").innerHTML = st.triggers.map(t=>{
@@ -707,10 +764,21 @@ function openDrawer(icao){
   $("scrim").hidden = false;
 }
 
+function refreshDrawerAges(){
+  if (!drawerIcao) return;
+  const st = stations.find(s=>s.icao === drawerIcao);
+  if (!st) return;
+  const metAgeNow = computeAgeMinutesFromRawZ(st.metarRaw || "");
+  const tafAgeNow = computeAgeMinutesFromRawZ(st.tafRaw || "");
+  $("dMetAge").textContent = formatAge(metAgeNow !== null ? metAgeNow : (st.metarAgeMin ?? null));
+  $("dTafAge").textContent = formatAge(tafAgeNow !== null ? tafAgeNow : (st.tafAgeMin ?? null));
+}
+
 function closeDrawer(){
   $("drawer").classList.remove("is-open");
   $("drawer").setAttribute("aria-hidden","true");
   $("scrim").hidden = true;
+  drawerIcao = null;
 }
 
 function buildBriefingLine(st){
@@ -794,8 +862,14 @@ function bind(){
   $("scrim").addEventListener("click", closeDrawer);
   document.addEventListener("keydown",(e)=>{ if (e.key==="Escape") closeDrawer(); });
 
-  // refresh "age" every minute without refetch
-  setInterval(()=>{ render(); }, 60_000);
+  // Refresh time-based UI (METAR/TAF age) every minute without refetch.
+  // Also keep the Quick View drawer age fields ticking if it's open.
+  setInterval(()=>{ render(); refreshDrawerAges(); }, 60_000);
+
+  // If the tab becomes visible again, force a refresh so ages don't look frozen.
+  document.addEventListener("visibilitychange", ()=>{
+    if (!document.hidden){ render(); refreshDrawerAges(); }
+  });
 }
 
 bind();
