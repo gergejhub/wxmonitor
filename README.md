@@ -182,3 +182,11 @@ This patch updates only:
 - `README.md`
 
 It does **not** modify `airports.txt` or `data/` to avoid accidental “0 station” regressions.
+
+
+## v20 UX Hotfixes (Layout + Readability + Parsing)
+- **Tiles layout**: centered, equal-width responsive grid; improved contrast for tile numbers.
+- **Sticky tiles**: tile bar stays pinned at the top while scrolling.
+- **Controls readability**: search field has a sane max width; dropdowns use a dark theme with readable option colors (where supported by the browser).
+- **Age robustness**: if `metarAgeMin` / `tafAgeMin` are missing from `data/latest.json`, the UI computes them from the raw `DDHHMMZ` timestamp.
+- **TAF highlight correctness**: visibility highlight no longer tags **TAF time groups** such as `0700/0708` (only standalone 4-digit vis values are highlighted).
