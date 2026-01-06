@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wizz Air METAR/TAF Operations Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=17" />
+  <link rel="stylesheet" href="assets/styles.css?v=18" />
 </head>
 <body>
 
@@ -38,6 +38,7 @@
         <div class="critCard__k">ENG ICE OPS</div>
         <div id="cbEngCount" class="critCard__v mono">0</div>
         <div class="critCard__d">VIS ≤150 m &amp; FZFG</div>
+        <div id="cbEngIatas" class="critCard__iatas mono" aria-label="Affected IATA codes"></div>
       </button>
       <button id="cbCrit" class="critCard critCard--crit" type="button">
         <div class="critCard__k">CRIT</div>
@@ -164,16 +165,20 @@
         <div class="drawer__section">
           <div class="drawer__sectionTitle">METAR</div>
           <div id="dMetar" class="raw"></div>
+          <div class="drawer__decodedTitle">Decoded</div>
+          <div id="dMetarDecoded" class="decoded"></div>
         </div>
 
         <div class="drawer__section">
           <div class="drawer__sectionTitle">TAF</div>
           <div id="dTaf" class="raw"></div>
+          <div class="drawer__decodedTitle">Decoded</div>
+          <div id="dTafDecoded" class="decoded"></div>
         </div>
       </div>
     </div>
   </aside>
 
-  <script src="assets/app.js?v=17"></script>
+  <script src="assets/app.js?v=18"></script>
 </body>
 </html>
