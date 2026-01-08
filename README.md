@@ -233,3 +233,25 @@ How to toggle TV Mode:
 - Double‑click the **Status table** title.
 
 The chosen mode is saved in `localStorage` and will persist across reloads on the same device/browser.
+
+## Stats page (/stat)
+
+This patch adds a monitoring page at `stat/index.html`.
+
+What it does:
+- Polls `data/latest.json` every 60 seconds (browser/CDN only; does **not** increase AviationWeather (AWC) API load).
+- Stores a short local history in the browser (LocalStorage) and plots:
+  - Update intervals (changes in `generatedAt`)
+  - Counts of ENG ICE OPS / CRIT / VIS≤175 / TS
+  - METAR/TAF completeness (missing data)
+
+Notes:
+- The history is kept per-device/browser. For a wall TV, it will build up its own local history after opening `/stat/`.
+- If you want server-side history shared across devices, you can extend the GitHub Actions workflow to append a `data/history.json` file each run.
+
+### Recommended server-side refresh frequency
+
+- GitHub Actions scheduled workflows have a minimum interval of **5 minutes**.
+- AviationWeather (AWC) Data API warns that rate limiting may apply for frequent requests and recommends using cache files for large/global pulls.
+- For this monitor (~159 stations): **every 10 minutes** is conservative and typically sufficient.
+- Use **every 5 minutes** only if you specifically need faster detection of SPECI and short-lived phenomena.
