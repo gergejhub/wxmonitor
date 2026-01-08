@@ -199,13 +199,13 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 - **TAF highlight correctness**: visibility highlight no longer tags **TAF time groups** such as `0700/0708` (only standalone 4-digit vis values are highlighted).
 
 
-## UX v27 adjustments (January 2026)
+## UX v28 adjustments (January 2026)
 - **WOW tiles**: larger, equal-width tiles with a Wizz-inspired neon gradient border and improved number contrast for night shifts.
 - **Sticky header restored**: tiles remain pinned at the top while scrolling.
 - **Quick View drawer offset**: the right-side Quick View now starts **below** the sticky header (`--top-h`) so the header never covers drawer content.
 
 
-## UX v27 adjustments (January 2026)
+## UX v28 adjustments (January 2026)
 - **Trend correctness**: VIS trend pill is based on **METAR** visibility and updates **only when a NEW METAR arrives** (timestamp `DDHHMMZ` changes). It no longer flips on mere UI refreshes or data republishing.
 - **Age ticking without manual reload**: METAR/TAF age values are recomputed on every render, and the minute timer also refreshes age fields inside the Quick View drawer if it is open.
 
