@@ -729,11 +729,35 @@ function updateTiles(currentList){
   $("tileVis175Count").textContent = String(vis175.length);
   $("tileTsCount").textContent = String(ts.length);
 
-  // ENG ICE OPS IATA list (max 10)
-  const iatas = eng.map(s => (s.iata||"—").toUpperCase()).filter(x=>x && x!=="—");
-  const shown = iatas.slice(0,10);
-  const rest = iatas.length - shown.length;
-  $("tileEngIata").innerHTML = shown.map(x=>`<span>${escapeHtml(x)}</span>`).join("") + (rest>0 ? `<span>+${rest}</span>` : "");
+  function uniqIata(list){
+    const out = [];
+    const seen = new Set();
+    for (const s of list){
+      const code = (s.iata || "").toUpperCase().trim();
+      if (!code) continue;
+      if (seen.has(code)) continue;
+      seen.add(code);
+      out.push(code);
+    }
+    return out;
+  }
+
+  function renderIata(elId, list){
+    const el = $(elId);
+    if (!el) return;
+    const codes = uniqIata(list);
+    const max = (viewMode === "tv" ? 18 : 10);
+    const shown = codes.slice(0, max);
+    const rest = codes.length - shown.length;
+    el.innerHTML =
+      shown.map(x=>`<span>${escapeHtml(x)}</span>`).join("") +
+      (rest > 0 ? `<span>+${rest}</span>` : "");
+  }
+
+  renderIata("tileEngIata", eng);
+  renderIata("tileCritIata", crit);
+  renderIata("tileVis175Iata", vis175);
+  renderIata("tileTsIata", ts);
 }
 
 function render(){
