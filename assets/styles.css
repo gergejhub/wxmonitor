@@ -668,3 +668,14 @@ body.view-tv .airport__iata{ font-size:18px; }
 body.view-tv .raw{ font-size:14px; line-height:1.6; }
 body.view-tv .trend{ font-size:13px; padding:4px 10px; }
 body.view-tv .tag{ font-size:13px; padding:6px 10px; }
+
+
+/* v28: ensure VIEW pill stays compact (no full-width bar) */
+.viewpill{
+  width: fit-content;
+  max-width: max-content;
+  flex: 0 0 auto;
+  margin-left: 12px;
+}
+.brand__row{ align-items: center; }
+.brand__title{ white-space: nowrap; }
