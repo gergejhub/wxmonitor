@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>WX Monitor – Stats</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=30"/>
+  <link rel="stylesheet" href="styles.css?v=30"/>
+</head>
+<body>
+  <header class="statTop">
+    <div class="statTop__left">
+      <div class="statTop__title">WX Monitor <span class="muted">/ Stats</span></div>
+      <div class="statTop__sub muted">Health, refresh verification, and simple explanations for non-technical viewers.</div>
+    </div>
+    <div class="statTop__right">
+      <a class="btn btn--ghost" href="../index.html" title="Back to dashboard">Back</a>
+      <button class="btn" id="btnNow" type="button">Refresh now</button>
+    </div>
+  </header>
+
+  <main class="statWrap">
+    <section class="statGrid">
+      <div class="card">
+        <div class="k">Data generatedAt (UTC)</div>
+        <div class="v" id="genAt">—</div>
+        <div class="s muted" id="genAge">—</div>
+      </div>
+      <div class="card">
+        <div class="k">Refresh verification</div>
+        <div class="v" id="verdict">—</div>
+        <div class="s muted" id="verdictSub">—</div>
+      </div>
+      <div class="card">
+        <div class="k">Average update interval</div>
+        <div class="v" id="avgInt">—</div>
+        <div class="s muted" id="avgIntSub">—</div>
+      </div>
+      <div class="card">
+        <div class="k">Stations / Missing</div>
+        <div class="v" id="counts">—</div>
+        <div class="s muted" id="countsSub">—</div>
+      </div>
+    </section>
+
+    <section class="statCharts">
+      <div class="card card--wide">
+        <div class="card__head">
+          <div>
+            <div class="k">Updates over time</div>
+            <div class="s muted">Green points mean new data (generatedAt changed). Grey means unchanged.</div>
+          </div>
+          <div class="pill" id="expectedPill">Expected: 10 min</div>
+        </div>
+        <canvas id="chUpdates" height="120"></canvas>
+      </div>
+
+      <div class="card card--wide">
+        <div class="card__head">
+          <div>
+            <div class="k">Operational impact counts</div>
+            <div class="s muted">Computed from the same trigger rules as the main dashboard.</div>
+          </div>
+        </div>
+        <canvas id="chCounts" height="120"></canvas>
+      </div>
+
+      <div class="card card--wide">
+        <div class="card__head">
+          <div>
+            <div class="k">Data completeness</div>
+            <div class="s muted">How many stations currently have METAR/TAF available.</div>
+          </div>
+        </div>
+        <canvas id="chMissing" height="120"></canvas>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card__head">
+        <div>
+          <div class="k">Recent refresh log</div>
+          <div class="s muted">This page polls latest.json every 60 seconds (CDN). It does not increase AWC API load.</div>
+        </div>
+      </div>
+      <div class="tableWrap">
+        <table class="statTable">
+          <thead><tr>
+            <th>Fetched (local)</th>
+            <th>generatedAt (UTC)</th>
+            <th>Δ since prev</th>
+            <th>New?</th>
+            <th>Stations</th>
+            <th>METAR</th>
+            <th>TAF</th>
+            <th>ENG ICE</th>
+            <th>CRIT</th>
+            <th>VIS≤175</th>
+            <th>TS</th>
+          </tr></thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </div>
+      <div class="muted small" id="storageNote"></div>
+    </section>
+
+    <section class="card">
+      <div class="card__head">
+        <div>
+          <div class="k">How often should it refresh?</div>
+          <div class="s muted">
+            Practical guidance for GitHub Actions + AviationWeather (AWC) Data API.
+          </div>
+        </div>
+      </div>
+      <div class="copy">
+        <ul>
+          <li><b>Hard limit:</b> GitHub Actions scheduled workflows can run <b>no more frequently than every 5 minutes</b> (and may drift).</li>
+          <li><b>AWC guidance:</b> keep requests limited in scope and frequency; rate limiting may apply. For large/global pulls, prefer cache files.</li>
+          <li><b>Recommendation for this monitor (≈159 stations):</b> <b>every 10 minutes</b> is conservative; <b>every 5 minutes</b> is the practical max if you really need near real‑time SPECI detection.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="app.js?v=30"></script>
+</body>
+</html>
