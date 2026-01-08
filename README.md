@@ -297,8 +297,3 @@ Notes:
 - The change history is stored in **your browser localStorage** (per-device/per-browser). It does not sync between devices.
 - Each airport keeps up to the last **30** events to keep storage size safe.
 
-
-
-## v33 additions
-- Added **WIND** tile (gust alerts ≥30KT) with IATA list.
-- Added **IATA WALL** panel (auto-shows when many matches are filtered; manual toggle persists per browser). Clicking an IATA chip filters the list.

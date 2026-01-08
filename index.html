@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Wizz Air METAR/TAF Monitor</title>
-<link href="assets/styles.css?v=33" rel="stylesheet"/>
+<link href="assets/styles.css?v=32" rel="stylesheet"/>
 </head>
 <body>
 <header class="top">
@@ -40,12 +40,6 @@
 <div class="tile__v" id="tileTsCount">0</div>
 <div class="tile__s">thunderstorm present</div>
 <div class="tile__iata" id="tileTsIata"></div>
-</button>
-<button class="tile tile--wind" data-filter="wind" id="tileWind">
-<div class="tile__k">WIND</div>
-<div class="tile__v" id="tileWindCount">0</div>
-<div class="tile__s">gust alerts (≥30KT)</div>
-<div class="tile__iata" id="tileWindIata"></div>
 </button>
 <button class="tile tile--ghost" id="tileReset">
 <div class="tile__k">Reset</div>
@@ -100,14 +94,6 @@
 <input checked="" id="sortPri" type="checkbox"/>
 <span>Sort by priority</span>
 </label>
-<button class="btn btn--mini" id="btnIataWall" type="button" title="Toggle IATA wall (matching airports)">IATA WALL</button>
-</section>
-<section class="iatawall" id="iataWall" hidden>
-<div class="iatawall__head">
-<div class="iatawall__title">Matching airports</div>
-<div class="iatawall__meta"><span id="iataWallCount">0</span> airports</div>
-</div>
-<div class="iatawall__chips" id="iataWallChips"></div>
 </section>
 <section class="legend">
 <div class="legend__tip">
@@ -197,6 +183,6 @@
 </div>
 </aside>
 <div class="scrim" hidden="" id="scrim"></div>
-<script src="assets/app.js?v=33"></script>
+<script src="assets/app.js?v=32"></script>
 </body>
 </html>

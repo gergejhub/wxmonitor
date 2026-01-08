@@ -93,8 +93,6 @@ let view = {
   sortPri: true,
 };
 
-let lastRenderList = null; // last rendered filtered+sorted list (for IATA wall)
-
 // Tracks which station is currently shown in the Quick View drawer
 // so we can keep time-based fields (age) ticking without manual page refresh.
 let drawerIcao = null;
@@ -778,14 +776,11 @@ function updateTiles(currentList){
   const crit = currentList.filter(s=>s.alert==="CRIT");
   const vis175 = currentList.filter(s=>s.worstVis !== null && s.worstVis <= 175);
   const ts = currentList.filter(s=>s.met.hz.ts || s.taf.hz.ts);
-  const wind = currentList.filter(s=>((s.met.gustMax !== null && s.met.gustMax >= 30) || (s.taf.gustMax !== null && s.taf.gustMax >= 30)));
 
   $("tileEngCount").textContent = String(eng.length);
   $("tileCritCount").textContent = String(crit.length);
   $("tileVis175Count").textContent = String(vis175.length);
   $("tileTsCount").textContent = String(ts.length);
-  const windCountEl = $("tileWindCount");
-  if (windCountEl) windCountEl.textContent = String(wind.length);
 
   function uniqIata(list){
     const out = [];
@@ -816,7 +811,6 @@ function updateTiles(currentList){
   renderIata("tileCritIata", crit);
   renderIata("tileVis175Iata", vis175);
   renderIata("tileTsIata", ts);
-  renderIata("tileWindIata", wind);
 }
 
 function render(){
@@ -825,8 +819,6 @@ function render(){
   const sorted = sortList(filtered);
 
   updateTiles(sorted);
-  lastRenderList = sorted;
-  updateIataWall(sorted);
 
   if (!sorted.length){
     tbody.innerHTML = `<tr><td colspan="9" class="muted">No matching rows.</td></tr>`;
@@ -1039,59 +1031,6 @@ function bind(){
   initViewModeUI();
 
 
-
-  // IATA wall (matching airports) toggle
-  const iataWallKey = "iataWallOpen";
-  let iataWallOpen = (localStorage.getItem(iataWallKey) === "1");
-  const btnIataWall = $("btnIataWall");
-  if (btnIataWall){
-    btnIataWall.addEventListener("click", ()=>{
-      iataWallOpen = !iataWallOpen;
-      localStorage.setItem(iataWallKey, iataWallOpen ? "1" : "0");
-      updateIataWall(lastRenderList || []);
-    });
-  }
-
-  function updateIataWall(currentList){
-    const wall = $("iataWall");
-    const chips = $("iataWallChips");
-    const cnt = $("iataWallCount");
-    if (!wall || !chips || !cnt) return;
-    if (viewMode === "tv"){
-      wall.hidden = true;
-      return;
-    }
-    const activeFilters = (view.q && view.q.trim() !== "") || (view.cond && view.cond !== "all") || (view.alert && view.alert !== "all");
-    const autoShow = activeFilters && currentList.length >= 12; // show automatically if many matches
-    const show = iataWallOpen || autoShow;
-    wall.hidden = !show || currentList.length === 0;
-    cnt.textContent = String(currentList.length);
-    if (wall.hidden) return;
-
-    // Unique, ordered IATA codes
-    const codes = [];
-    const seen = new Set();
-    for (const s of currentList){
-      const code = (s.iata || "").toUpperCase().trim();
-      if (!code) continue;
-      if (seen.has(code)) continue;
-      seen.add(code);
-      codes.push(code);
-    }
-    chips.innerHTML = codes.map(c=>`<button class="iatachip" data-iata="${escapeHtml(c)}" type="button">${escapeHtml(c)}</button>`).join("");
-  }
-
-  // Click on a chip filters the table by that IATA quickly
-  document.addEventListener("click", (e)=>{
-    const chip = e.target.closest(".iatachip");
-    if (!chip) return;
-    const code = chip.getAttribute("data-iata") || "";
-    if (!code) return;
-    view.q = code;
-    $("q").value = code;
-    render();
-  });
-
   // tile filters
   $("tiles").addEventListener("click", (e)=>{
     const btn = e.target.closest("button.tile");
@@ -1105,7 +1044,7 @@ function bind(){
     const f = btn.getAttribute("data-filter");
     if (!f) return;
     // toggle: clicking same filter again resets to all
-    const map = {eng:"eng", crit:"crit", vis175:"vis175", ts:"ts", wind:"gust30"};
+    const map = {eng:"eng", crit:"crit", vis175:"vis175", ts:"ts"};
     const target = map[f] || "all";
     view.cond = (view.cond === target ? "all" : target);
     $("cond").value = view.cond;
