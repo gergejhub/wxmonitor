@@ -6,6 +6,8 @@
 const $ = (id)=>document.getElementById(id);
 
 const KEY = "wxmonitor_stats_history_v1";
+const KEY_SNAP = "wxmonitor_station_snap_v1";
+const KEY_EVENTS = "wxmonitor_station_events_v1";
 const MAX = 240; // keep ~4 hours at 1-min polling
 const EXPECTED_MIN_DEFAULT = 10;
 
@@ -75,6 +77,49 @@ function findVisMetersFromMetar(raw){
   if (/\b9999\b/.test(raw)) return 10000;
   return null;
 }
+
+function extractRvrMin(raw){
+  // e.g. R17/0400N or R35/0300N. Return minimum numeric RVR in meters, if any.
+  if (!raw) return null;
+  let min = null;
+  const re = /R\d{2}[A-Z]?\/(\d{4})(?:[NMP])?/g;
+  for (const m of raw.matchAll(re)){
+    const v = parseInt(m[1],10);
+    if (!isFinite(v)) continue;
+    if (min==null || v < min) min = v;
+  }
+  return min;
+}
+
+function worstVisFromTaf(raw){
+  // TAF may contain multiple vis groups (4 digits). Exclude time groups like 0818/0918.
+  if (!raw) return null;
+  let min = null;
+  for (const m of raw.matchAll(/(\d{4})/g)){
+    const idx = m.index;
+    const before = raw[idx-1] || "";
+    const after = raw[idx+m[1].length] || "";
+    if (before === "/" || after === "/") continue; // time group
+    const v0 = parseInt(m[1],10);
+    if (!isFinite(v0)) continue;
+    const v = (v0===9999) ? 10000 : v0;
+    if (min==null || v < min) min = v;
+  }
+  return min;
+}
+
+function wxFlags(raw){
+  const r = raw || "";
+  const out = [];
+  const add = (t)=>{ if (!out.includes(t)) out.push(t); };
+  if (/(^|\s)TS/.test(r)) add("TS");
+  if (hasWx(r,"FZFG")) add("FZFG");
+  if (hasWx(r,"FG") || hasWx(r,"BCFG") || hasWx(r,"MIFG") || hasWx(r,"PRFG")) add("FG");
+  if (/(^|\s)-?SN/.test(r) || /SHSN/.test(r)) add("SN");
+  if (/(^|\s)-?RA/.test(r) || /SHRA/.test(r) || /(^|\s)-?DZ/.test(r) || /FZRA/.test(r)) add("RA/DZ");
+  return out;
+}
+
 function metarTriggers(st){
   const r = st.metarRaw || "";
   const vis = findVisMetersFromMetar(r);
@@ -127,6 +172,18 @@ function computeCounts(stations){
   return {met, taf, eng, crit, vis175, ts};
 }
 
+
+function loadObj(key, fallback){
+  try{
+    const x = JSON.parse(localStorage.getItem(key) || "null");
+    if (x && typeof x === "object") return x;
+  }catch{}
+  return fallback;
+}
+function saveObj(key, obj){
+  localStorage.setItem(key, JSON.stringify(obj));
+}
+
 function loadHistory(){
   try{
     const x = JSON.parse(localStorage.getItem(KEY) || "[]");
@@ -138,6 +195,11 @@ function saveHistory(arr){
 }
 
 let history = loadHistory();
+let stationSnap = loadObj(KEY_SNAP, {});
+let stationEvents = loadObj(KEY_EVENTS, {});
+let latestStations = [];
+let selectedIcao = null;
+
 
 let chUpdates=null, chCounts=null, chMissing=null;
 
@@ -246,6 +308,241 @@ function setExpected(min){
   $("expectedPill").textContent = `Expected: ${min} min`;
 }
 
+
+function pushStationEvent(icao, ev){
+  const key = icao.toUpperCase();
+  if (!stationEvents[key]) stationEvents[key] = [];
+  stationEvents[key].push(ev);
+  stationEvents[key] = stationEvents[key].slice(-30);
+}
+
+function fmtEv(ev){
+  const when = fmtUTC(new Date(ev.t));
+  const src = ev.src ? ` [${ev.src}]` : "";
+  const dir = ev.dir ? ` (${ev.dir})` : "";
+  const fromTo = (ev.from!=null || ev.to!=null) ? `: ${ev.from ?? "—"} → ${ev.to ?? "—"}` : "";
+  return {when, what: `${ev.metric}${src}${dir}`, sub: ev.note || fromTo};
+}
+
+function updateStationHistory(stations, generatedAtIso){
+  // Run only when data.generatedAt changed.
+  const t = new Date(generatedAtIso).getTime();
+  for (const st of stations){
+    const icao = st.icao;
+    const prev = stationSnap[icao] || {};
+    const metVis = findVisMetersFromMetar(st.metarRaw);
+    const metRvr = extractRvrMin(st.metarRaw);
+    const tafVis = worstVisFromTaf(st.tafRaw);
+    const tafRvr = extractRvrMin(st.tafRaw);
+    const metWx = wxFlags(st.metarRaw).join(",");
+    const tafWx = wxFlags(st.tafRaw).join(",");
+
+    // Changes are recorded only when METAR/TAF text changes (proxy: issue group or value changes).
+    const metIssue = parseTimeGroupFromRaw(st.metarRaw);
+    const tafIssue = parseTimeGroupFromRaw(st.tafRaw);
+
+    // METAR VIS / RVR changes (priority: these are "current")
+    if (metIssue && prev.metIssue && (metIssue.dd!==prev.metIssue.dd || metIssue.hh!==prev.metIssue.hh || metIssue.mm!==prev.metIssue.mm)){
+      if (prev.metVis!=null && metVis!=null && prev.metVis !== metVis){
+        pushStationEvent(icao, {
+          t, metric:"METAR VIS", src:"METAR",
+          dir: (metVis < prev.metVis) ? "worsened" : "improved",
+          from: `${prev.metVis} m`, to: `${metVis} m`
+        });
+      }
+      if (prev.metRvr!=null && metRvr!=null && prev.metRvr !== metRvr){
+        pushStationEvent(icao, {
+          t, metric:"METAR RVR(min)", src:"METAR",
+          dir: (metRvr < prev.metRvr) ? "worsened" : "improved",
+          from: `${prev.metRvr} m`, to: `${metRvr} m`
+        });
+      }
+      if (prev.metWx != null && metWx !== prev.metWx){
+        pushStationEvent(icao, {t, metric:"METAR Wx", src:"METAR", note:`${prev.metWx||"—"} → ${metWx||"—"}`});
+      }
+    } else if (!prev.metIssue && metIssue){
+      // first time
+      if (metVis!=null) pushStationEvent(icao, {t, metric:"METAR VIS", src:"METAR", note:`initial: ${metVis} m`});
+      if (metRvr!=null) pushStationEvent(icao, {t, metric:"METAR RVR(min)", src:"METAR", note:`initial: ${metRvr} m`});
+      if (metWx) pushStationEvent(icao, {t, metric:"METAR Wx", src:"METAR", note:`initial: ${metWx}`});
+    }
+
+    // TAF changes (forecast "future")
+    if (tafIssue && prev.tafIssue && (tafIssue.dd!==prev.tafIssue.dd || tafIssue.hh!==prev.tafIssue.hh || tafIssue.mm!==prev.tafIssue.mm)){
+      if (prev.tafVis!=null && tafVis!=null && prev.tafVis !== tafVis){
+        pushStationEvent(icao, {
+          t, metric:"TAF worst VIS", src:"TAF",
+          dir: (tafVis < prev.tafVis) ? "worsened" : "improved",
+          from: `${prev.tafVis} m`, to: `${tafVis} m`
+        });
+      }
+      if (prev.tafRvr!=null && tafRvr!=null && prev.tafRvr !== tafRvr){
+        pushStationEvent(icao, {
+          t, metric:"TAF RVR(min)", src:"TAF",
+          dir: (tafRvr < prev.tafRvr) ? "worsened" : "improved",
+          from: `${prev.tafRvr} m`, to: `${tafRvr} m`
+        });
+      }
+      if (prev.tafWx != null && tafWx !== prev.tafWx){
+        pushStationEvent(icao, {t, metric:"TAF Wx", src:"TAF", note:`${prev.tafWx||"—"} → ${tafWx||"—"}`});
+      }
+    } else if (!prev.tafIssue && tafIssue){
+      if (tafVis!=null) pushStationEvent(icao, {t, metric:"TAF worst VIS", src:"TAF", note:`initial: ${tafVis} m`});
+      if (tafRvr!=null) pushStationEvent(icao, {t, metric:"TAF RVR(min)", src:"TAF", note:`initial: ${tafRvr} m`});
+      if (tafWx) pushStationEvent(icao, {t, metric:"TAF Wx", src:"TAF", note:`initial: ${tafWx}`});
+    }
+
+    stationSnap[icao] = {
+      metIssue: metIssue || prev.metIssue || null,
+      tafIssue: tafIssue || prev.tafIssue || null,
+      metVis, metRvr, tafVis, tafRvr, metWx, tafWx,
+      iata: st.iata || prev.iata || ""
+    };
+  }
+
+  // Persist (size-capped per station by pushStationEvent)
+  // Also cap total stations to keep localStorage healthy.
+  const icaos = Object.keys(stationEvents);
+  if (icaos.length > 250){
+    // keep only the most recently active 200
+    icaos.sort((a,b)=>{
+      const ea = stationEvents[a]?.at(-1)?.t || 0;
+      const eb = stationEvents[b]?.at(-1)?.t || 0;
+      return eb - ea;
+    });
+    for (const k of icaos.slice(200)){
+      delete stationEvents[k];
+      delete stationSnap[k];
+    }
+  }
+  saveObj(KEY_EVENTS, stationEvents);
+  saveObj(KEY_SNAP, stationSnap);
+}
+
+function lastTimesFor(icao){
+  const evs = stationEvents[icao] || [];
+  let lastCh=0, lastDet=0, lastImp=0;
+  for (const ev of evs){
+    lastCh = Math.max(lastCh, ev.t || 0);
+    if (ev.dir === "worsened") lastDet = Math.max(lastDet, ev.t || 0);
+    if (ev.dir === "improved") lastImp = Math.max(lastImp, ev.t || 0);
+  }
+  return {
+    lastCh: lastCh||null,
+    lastDet: lastDet||null,
+    lastImp: lastImp||null
+  };
+}
+
+function pill(txt, kind){
+  const cls = kind === "bad" ? "wxPill wxPill--bad" : "wxPill wxPill--ok";
+  return `<span class="${cls}">${txt}</span>`;
+}
+
+function renderStations(){
+  const tb = $("stBody");
+  if (!tb) return;
+  const q = ($("stSearch")?.value || "").trim().toUpperCase();
+  const sort = ($("stSort")?.value || "det");
+  const rows = latestStations.slice().filter(st=>{
+    if (!q) return true;
+    return (st.icao||"").includes(q) || (st.iata||"").includes(q);
+  }).map(st=>{
+    const icao = st.icao;
+    const metVis = findVisMetersFromMetar(st.metarRaw);
+    const metRvr = extractRvrMin(st.metarRaw);
+    const tafVis = worstVisFromTaf(st.tafRaw);
+    const tafRvr = extractRvrMin(st.tafRaw);
+    const metWx = wxFlags(st.metarRaw);
+    const tafWx = wxFlags(st.tafRaw);
+    const tms = lastTimesFor(icao);
+    return {st, metVis, metRvr, tafVis, tafRvr, metWx, tafWx, ...tms};
+  });
+
+  rows.sort((a,b)=>{
+    const av = sort==="icao" ? a.st.icao.localeCompare(b.st.icao)
+           : sort==="chg" ? ((b.lastCh||0)-(a.lastCh||0))
+           : ((b.lastDet||0)-(a.lastDet||0));
+    return av;
+  });
+
+  tb.innerHTML = "";
+  for (const r of rows){
+    const tr = document.createElement("tr");
+    tr.className = "stRow";
+    tr.dataset.icao = r.st.icao;
+    if (selectedIcao && selectedIcao === r.st.icao) tr.style.background = "rgba(255,255,255,.06)";
+
+    const metWxHtml = r.metWx.length ? `<span class="wxStack">${r.metWx.map(t=>pill(t,"bad")).join("")}</span>` : `<span class="muted">—</span>`;
+    const tafWxHtml = r.tafWx.length ? `<span class="wxStack">${r.tafWx.map(t=>pill(t,"bad")).join("")}</span>` : `<span class="muted">—</span>`;
+
+    const cells = [
+      r.st.icao,
+      r.st.iata || "—",
+      r.metVis==null ? "—" : `${r.metVis} m`,
+      r.metRvr==null ? "—" : `${r.metRvr} m`,
+      metWxHtml,
+      r.tafVis==null ? "—" : `${r.tafVis} m`,
+      r.tafRvr==null ? "—" : `${r.tafRvr} m`,
+      tafWxHtml,
+      r.lastDet ? fmtUTC(new Date(r.lastDet)) : "—",
+      r.lastImp ? fmtUTC(new Date(r.lastImp)) : "—",
+      r.lastCh ? fmtUTC(new Date(r.lastCh)) : "—",
+    ];
+
+    cells.forEach((c, i)=>{
+      const td = document.createElement("td");
+      if (typeof c === "string" && (c.includes("<span") || c.includes("<div"))){
+        td.innerHTML = c;
+      }else{
+        td.textContent = c;
+      }
+      tr.appendChild(td);
+    });
+
+    tr.addEventListener("click", ()=>{
+      selectedIcao = r.st.icao;
+      renderStations();
+      renderStationDetail();
+    });
+
+    tb.appendChild(tr);
+  }
+
+  $("stNote").textContent = `Airports shown: ${rows.length}. Event history is stored locally in this browser (per ICAO).`;
+  renderStationDetail();
+}
+
+function renderStationDetail(){
+  if (!$("stTitle")) return;
+  if (!selectedIcao){
+    $("stTitle").textContent = "—";
+    $("stSub").textContent = "Click a row to view details.";
+    $("stEvents").innerHTML = "";
+    $("stEmpty").style.display = "block";
+    return;
+  }
+  const st = latestStations.find(x=>x.icao===selectedIcao);
+  const iata = st?.iata || stationSnap[selectedIcao]?.iata || "";
+  $("stTitle").textContent = `${selectedIcao}${iata ? " / "+iata : ""}`;
+  $("stSub").textContent = "Events are recorded when new METAR/TAF arrives (generatedAt changes).";
+
+  const evs = (stationEvents[selectedIcao] || []).slice().reverse();
+  const ul = $("stEvents");
+  ul.innerHTML = "";
+  if (!evs.length){
+    $("stEmpty").style.display = "block";
+    return;
+  }
+  $("stEmpty").style.display = "none";
+  for (const ev of evs){
+    const li = document.createElement("li");
+    const f = fmtEv(ev);
+    li.innerHTML = `<div class="evTop"><div class="evWhat">${f.what}</div><div class="evWhen">${f.when}</div></div><div class="evSub">${f.sub}</div>`;
+    ul.appendChild(li);
+  }
+}
+
 async function pullOnce(){
   const fetchedAt = Date.now();
   let data;
@@ -278,6 +575,12 @@ async function pullOnce(){
   const currGen = genDate && !isNaN(genDate.getTime()) ? genDate.getTime() : null;
   const isNew = (prevGen!=null && currGen!=null) ? (currGen !== prevGen) : true;
   const deltaMin = (prevGen!=null && currGen!=null && isNew) ? ((currGen - prevGen)/60000) : null;
+
+  latestStations = stations;
+  if (isNew && genAt) {
+    updateStationHistory(stations, genAt);
+  }
+  renderStations();
 
   history.push({
     fetchedAt,
@@ -315,6 +618,9 @@ async function pullOnce(){
 
 function start(){
   $("btnNow").addEventListener("click", pullOnce);
+  $("btnClearSel")?.addEventListener("click", ()=>{ selectedIcao=null; renderStations(); });
+  $("stSearch")?.addEventListener("input", renderStations);
+  $("stSort")?.addEventListener("change", renderStations);
   pullOnce();
   setInterval(pullOnce, 60*1000);
 }

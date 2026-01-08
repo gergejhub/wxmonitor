@@ -24,3 +24,32 @@ body{min-height:100vh}
 .copy{line-height:1.45}
 .btn--ghost{background:transparent;border:1px solid rgba(255,255,255,.18)}
 .btn--ghost:hover{background:rgba(255,255,255,.08)}
+
+
+/* Airport change history */
+.statControls{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.statSearch{min-width:220px;max-width:320px;width:100%;padding:.55rem .7rem;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.25);color:rgba(255,255,255,.92);font-weight:700;outline:none}
+.statSearch::placeholder{color:rgba(255,255,255,.45)}
+.statSelect{padding:.55rem .7rem;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.25);color:rgba(255,255,255,.92);font-weight:800;outline:none}
+.statSelect option{background:#0b0b12;color:#fff}
+
+.stationGrid{display:grid;grid-template-columns:1.55fr .95fr;gap:.9rem;align-items:start}
+@media (max-width:1100px){.stationGrid{grid-template-columns:1fr}}
+
+.stationDetail{position:sticky;top:92px}
+@media (max-width:1100px){.stationDetail{position:relative;top:auto}}
+
+.stationDetail__head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:.6rem}
+.stationDetail__body{max-height:64vh;overflow:auto;padding-right:.2rem}
+.eventList{list-style:none;padding:0;margin:.6rem 0 0;display:flex;flex-direction:column;gap:.45rem}
+.eventList li{border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:.55rem .65rem;background:rgba(255,255,255,.04)}
+.eventList .evTop{display:flex;justify-content:space-between;gap:.6rem;align-items:baseline}
+.eventList .evWhat{font-weight:900}
+.eventList .evWhen{font-size:.82rem;color:rgba(255,255,255,.70);white-space:nowrap}
+.eventList .evSub{margin-top:.25rem;color:rgba(255,255,255,.75);font-size:.9rem}
+
+.statTable--stations{min-width:1200px}
+.wxPill{display:inline-flex;align-items:center;gap:.35rem;padding:.15rem .5rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);font-weight:900;font-size:.78rem}
+.wxPill--bad{border-color:rgba(255,80,120,.55);background:rgba(255,80,120,.14)}
+.wxPill--ok{border-color:rgba(160,255,190,.35);background:rgba(160,255,190,.10)}
+.wxStack{display:flex;flex-wrap:wrap;gap:.25rem}

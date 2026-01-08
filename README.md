@@ -255,3 +255,35 @@ Notes:
 - AviationWeather (AWC) Data API warns that rate limiting may apply for frequent requests and recommends using cache files for large/global pulls.
 - For this monitor (~159 stations): **every 10 minutes** is conservative and typically sufficient.
 - Use **every 5 minutes** only if you specifically need faster detection of SPECI and short-lived phenomena.
+
+## Auto-refresh behaviour (important)
+
+The dashboard is designed to be **hands-off**: you should not need to press browser refresh.
+
+- The GitHub Action updates `data/latest.json` on its schedule (default: **every 10 minutes**).
+- The **main dashboard** (root `index.html`) **polls** `data/latest.json` every **60 seconds**.
+  - If `generatedAt` is unchanged, it does **not rerender the table** (to avoid scroll jumps); it only
+    updates the **METAR/TAF age** fields.
+  - If `generatedAt` changed, it **reloads and rerenders** stations, counters, priorities, tiles, and Quick View.
+- The **Trend** (improving / worsening) logic updates **only when a new METAR arrives** (i.e. when `generatedAt` changes and the METAR observation time group changes).
+
+This pattern keeps the UI stable on an OCC wallboard while still reflecting new data quickly.
+
+
+
+## Airport change history (stat page)
+
+The `/stat/` page includes an **Airport change history** section that records, per ICAO:
+
+- METAR VIS changes (worsened / improved)
+- METAR RVR(min) changes
+- METAR weather-group changes (e.g. FG/FZFG/TS/SN/RA)
+- TAF worst-visibility changes (forecast worsening / improving)
+- TAF RVR(min) changes
+- TAF weather-group changes
+
+Notes:
+- Events are recorded **only** when a **new dataset** arrives (when `generatedAt` changes).
+- The change history is stored in **your browser localStorage** (per-device/per-browser). It does not sync between devices.
+- Each airport keeps up to the last **30** events to keep storage size safe.
+

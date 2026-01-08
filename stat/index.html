@@ -4,8 +4,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>WX Monitor – Stats</title>
-  <link rel="stylesheet" href="../assets/styles.css?v=30"/>
-  <link rel="stylesheet" href="styles.css?v=30"/>
+  <link rel="stylesheet" href="../assets/styles.css?v=31"/>
+  <link rel="stylesheet" href="styles.css?v=31"/>
 </head>
 <body>
   <header class="statTop">
@@ -104,7 +104,69 @@
       <div class="muted small" id="storageNote"></div>
     </section>
 
-    <section class="card">
+    
+
+<section class="card card--wide" id="airportChanges">
+  <div class="card__head">
+    <div>
+      <div class="k">Airport change history</div>
+      <div class="s muted">
+        For each airport, this tracks when conditions <b>worsened</b> or <b>improved</b> (based on <b>new METAR/TAF arrivals</b> only).
+        Click an airport row to see a simple timeline of detected changes.
+      </div>
+    </div>
+    <div class="statControls">
+      <input class="statSearch" id="stSearch" type="search" placeholder="Search ICAO / IATA..." />
+      <select class="statSelect" id="stSort">
+        <option value="det">Sort: last deterioration</option>
+        <option value="chg">Sort: last change</option>
+        <option value="icao">Sort: ICAO</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="stationGrid">
+    <div class="stationList">
+      <div class="tableWrap">
+        <table class="statTable statTable--stations">
+          <thead><tr>
+            <th>ICAO</th>
+            <th>IATA</th>
+            <th>METAR VIS</th>
+            <th>METAR RVR min</th>
+            <th>METAR Wx</th>
+            <th>TAF worst VIS</th>
+            <th>TAF RVR min</th>
+            <th>TAF Wx</th>
+            <th>Last deterioration (UTC)</th>
+            <th>Last improvement (UTC)</th>
+            <th>Last change (UTC)</th>
+          </tr></thead>
+          <tbody id="stBody"></tbody>
+        </table>
+      </div>
+      <div class="muted small" id="stNote"></div>
+    </div>
+
+    <div class="stationDetail card">
+      <div class="stationDetail__head">
+        <div>
+          <div class="k">Selected airport</div>
+          <div class="v" id="stTitle">—</div>
+          <div class="s muted" id="stSub">Click a row to view details.</div>
+        </div>
+        <button class="btn btn--ghost" id="btnClearSel" type="button">Clear</button>
+      </div>
+      <div class="stationDetail__body">
+        <div class="muted small">Recent change events (newest first):</div>
+        <ul class="eventList" id="stEvents"></ul>
+        <div class="muted small" id="stEmpty">No events recorded yet (leave this page open; events are stored locally).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
       <div class="card__head">
         <div>
           <div class="k">How often should it refresh?</div>
@@ -124,6 +186,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=31"></script>
 </body>
 </html>

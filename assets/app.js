@@ -83,6 +83,9 @@ const VIS_THRESHOLDS = [800, 550, 500, 300, 250, 175, 150];
 const RVR_THRESHOLDS = [500, 300, 200, 75];
 
 let stations = [];
+let stationMap = new Map();
+let lastGeneratedAt = null; // string (ISO) from data.generatedAt
+
 let view = {
   q: "",
   cond: "all",
@@ -616,8 +619,8 @@ function rowHtml(st){
   const tafAgeNow = computeAgeMinutesFromRawZ(st.tafRaw || "");
   const metAgeUse = (metAgeNow !== null) ? metAgeNow : (st.metarAgeMin ?? null);
   const tafAgeUse = (tafAgeNow !== null) ? tafAgeNow : (st.tafAgeMin ?? null);
-  const metAge = `<span class="age ${ageClass(metAgeUse)}">${escapeHtml(formatAge(metAgeUse))}</span>`;
-  const tafAge = `<span class="age ${ageClass(tafAgeUse)}">${escapeHtml(formatAge(tafAgeUse))}</span>`;
+  const metAge = `<span class="age ${ageClass(metAgeUse)}" data-age="metar" data-icao="${escapeHtml(st.icao)}">${escapeHtml(formatAge(metAgeUse))}</span>`;
+  const tafAge = `<span class="age ${ageClass(tafAgeUse)}" data-age="taf" data-icao="${escapeHtml(st.icao)}">${escapeHtml(formatAge(tafAgeUse))}</span>`;
 
   const metRaw = st.metarRaw ? highlightRaw(st.metarRaw) : "<span class='muted'>—</span>";
   const tafRaw = st.tafRaw ? highlightRaw(st.tafRaw) : "<span class='muted'>—</span>";
@@ -881,34 +884,81 @@ function buildBriefingLine(st){
   return parts.join(" | ");
 }
 
-async function load(){
+
+function updateAgesInPlace(){
+  // Update METAR/TAF ages in the existing DOM without rerendering the whole table.
+  // This keeps the UI stable (no scroll jumps) and still shows the "age ticking".
+  const nowUtc = new Date();
+  document.querySelectorAll('span.age[data-age][data-icao]').forEach(el=>{
+    const icao = el.getAttribute('data-icao');
+    const st = stationMap.get(icao);
+    if (!st) return;
+    const kind = el.getAttribute('data-age');
+    const raw = (kind === 'taf') ? (st.tafRaw || "") : (st.metarRaw || "");
+    const ageNow = computeAgeMinutesFromRawZ(raw, nowUtc);
+    const mins = (ageNow !== null) ? ageNow : (kind === 'taf' ? (st.tafAgeMin ?? null) : (st.metarAgeMin ?? null));
+    el.textContent = formatAge(mins);
+    el.classList.remove('age--fresh','age--warn','age--stale');
+    el.classList.add(ageClass(mins));
+  });
+}
+
+
+function applyDataFromLatest(data){
+  const gen = data && data.generatedAt ? new Date(data.generatedAt) : null;
+  const genStr = (data && data.generatedAt) ? String(data.generatedAt) : null;
+  lastGeneratedAt = genStr;
+
+  $("statUpdated").textContent = (gen && !isNaN(gen.getTime()))
+    ? `Last update: ${gen.toISOString().replace('T',' ').slice(0,16)}Z`
+    : "Last update: —";
+
+  const rawStations = Array.isArray(data.stations) ? data.stations : [];
+  stations = rawStations.map(s => ({
+    icao: (s.icao || s.station || "").toUpperCase(),
+    iata: (s.iata || "").toUpperCase(),
+    name: s.name || s.airportName || "",
+    metarRaw: s.metarRaw || s.metar || "",
+    tafRaw: s.tafRaw || s.taf || "",
+    metarAgeMin: s.metarAgeMin ?? s.metarAge ?? null,
+    tafAgeMin: s.tafAgeMin ?? s.tafAge ?? null,
+  })).filter(s=>s.icao && s.icao.length===4).map(deriveStation);
+
+  stationMap = new Map(stations.map(s=>[s.icao, s]));
+
+  const metCnt = stations.filter(s=>!!s.metarRaw).length;
+  const tafCnt = stations.filter(s=>!!s.tafRaw).length;
+  const missMet = stations.length - metCnt;
+  const missTaf = stations.length - tafCnt;
+  $("statCounts").textContent = `ICAO: ${stations.length} | METAR: ${metCnt} | TAF: ${tafCnt} | Missing METAR: ${missMet} | Missing TAF: ${missTaf}`;
+
+  render();
+
+  // If the drawer is open, refresh its content from the updated dataset (without closing).
+  if (drawerIcao){
+    const body = $("drawerBody");
+    const scroll = body ? body.scrollTop : 0;
+    openDrawer(drawerIcao);
+    if (body) body.scrollTop = scroll;
+  }
+}
+
+async function refreshData(force=false){
   const tbody = $("rows");
   try{
     const res = await fetch("data/latest.json?cb=" + Date.now(), {cache:"no-store"});
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    $("statUpdated").textContent = (gen && !isNaN(gen.getTime())) ? `Last update: ${gen.toISOString().replace('T',' ').slice(0,16)}Z` : "Last update: —";
+    const genStr = (data && data.generatedAt) ? String(data.generatedAt) : null;
+    if (!force && genStr && lastGeneratedAt && genStr === lastGeneratedAt){
+      // Data unchanged: only update ages in-place.
+      updateAgesInPlace();
+      refreshDrawerAges();
+      return;
+    }
 
-    const rawStations = Array.isArray(data.stations) ? data.stations : [];
-    stations = rawStations.map(s => ({
-      icao: (s.icao || s.station || "").toUpperCase(),
-      iata: (s.iata || "").toUpperCase(),
-      name: s.name || s.airportName || "",
-      metarRaw: s.metarRaw || s.metar || "",
-      tafRaw: s.tafRaw || s.taf || "",
-      metarAgeMin: s.metarAgeMin ?? s.metarAge ?? null,
-      tafAgeMin: s.tafAgeMin ?? s.tafAge ?? null,
-    })).filter(s=>s.icao && s.icao.length===4).map(deriveStation);
-
-    const metCnt = stations.filter(s=>!!s.metarRaw).length;
-    const tafCnt = stations.filter(s=>!!s.tafRaw).length;
-    const missMet = stations.length - metCnt;
-    const missTaf = stations.length - tafCnt;
-    $("statCounts").textContent = `ICAO: ${stations.length} | METAR: ${metCnt} | TAF: ${tafCnt} | Missing METAR: ${missMet} | Missing TAF: ${missTaf}`;
-
-    render();
+    applyDataFromLatest(data);
   }catch(err){
     console.error(err);
     tbody.innerHTML = `<tr><td colspan="9" class="muted">Data load error: ${escapeHtml(String(err))}. Ensure data/latest.json exists and is valid.</td></tr>`;
@@ -917,6 +967,11 @@ async function load(){
     updateTiles([]);
   }
 }
+
+async function load(){
+  return refreshData(true);
+}
+
 
 function bind(){
   $("q").addEventListener("input", (e)=>{ view.q = e.target.value; render(); });
@@ -952,11 +1007,14 @@ function bind(){
 
   // Refresh time-based UI (METAR/TAF age) every minute without refetch.
   // Also keep the Quick View drawer age fields ticking if it's open.
-  setInterval(()=>{ render(); refreshDrawerAges(); }, 60_000);
+  setInterval(()=>{ updateAgesInPlace(); refreshDrawerAges(); }, 60_000);
+
+  // Poll for new data (generatedAt change) every 60 seconds. Reads only GitHub Pages CDN, not AWC.
+  setInterval(()=>{ refreshData(false); }, 60_000);
 
   // If the tab becomes visible again, force a refresh so ages don't look frozen.
   document.addEventListener("visibilitychange", ()=>{
-    if (!document.hidden){ render(); refreshDrawerAges(); }
+    if (!document.hidden){ refreshData(false); }
   });
 }
 
