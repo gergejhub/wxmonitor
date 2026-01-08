@@ -203,11 +203,11 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 - **WOW tiles**: larger, equal-width tiles with a Wizz-inspired neon gradient border and improved number contrast for night shifts.
 - **Sticky header restored**: tiles remain pinned at the top while scrolling.
 - **Quick View drawer offset**: the right-side Quick View now starts **below** the sticky header (`--top-h`) so the header never covers drawer content.
-
-
-## UX v28 adjustments (January 2026)
 - **Trend correctness**: VIS trend pill is based on **METAR** visibility and updates **only when a NEW METAR arrives** (timestamp `DDHHMMZ` changes). It no longer flips on mere UI refreshes or data republishing.
 - **Age ticking without manual reload**: METAR/TAF age values are recomputed on every render, and the minute timer also refreshes age fields inside the Quick View drawer if it is open.
+
+## UX v29 adjustments (January 2026)
+- **Quick View scroll polish**: adds extra scroll room at the bottom of the drawer so the last "Decoded" panel never looks clipped (bottom border always visible).
 
 
 
