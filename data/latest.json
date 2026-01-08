@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-08T21:34:50.042Z",
+  "generatedAt": "2026-01-08T21:47:19.837Z",
   "stations": [
     {
       "icao": "EDDN",
@@ -149,19 +149,19 @@
       "icao": "UAAA",
       "iata": "ALA",
       "name": "Almaty International Airport",
-      "updatedAt": "082100Z",
-      "visibility_m": 2300,
+      "updatedAt": "082130Z",
+      "visibility_m": 2500,
       "taf_visibility_m": 200,
       "worst_visibility_m": 200,
-      "ceiling_ft": 900,
+      "ceiling_ft": 800,
       "hazards": [
         "BR",
         "FZFG"
       ],
       "severityScore": 100,
-      "metarRaw": "METAR UAAA 082100Z 02002MPS 2300 BR OVC009 M05/M06 Q1027 NOSIG",
+      "metarRaw": "METAR UAAA 082130Z 36002MPS 2500 BR OVC008 M05/M06 Q1027 NOSIG",
       "tafRaw": "TAF UAAA 081714Z 0818/0918 33003MPS 1500 BR BKN011 OVC100 TXM01/0909Z TNM07/0901Z \n  TEMPO 0818/0905 VRB01MPS 0200 FZFG VV001 \n  TEMPO 0905/0907 03003MPS 3100 BKN004 OVC011 \n  FM090700 03002G07MPS 3100 BR FU SCT011 BKN100 \n  TEMPO 0912/0915 1500 \n  TEMPO 0915/0918 VRB01MPS 0500 FZFG VV003",
-      "metarHtml": "METAR UAAA 082100Z 02002MPS 2300 <span class=\"hl\">BR</span> OVC009 M05/M06 Q1027 NOSIG",
+      "metarHtml": "METAR UAAA 082130Z 36002MPS 2500 <span class=\"hl\">BR</span> OVC008 M05/M06 Q1027 NOSIG",
       "tafHtml": "TAF UAAA 081714Z 0818/0918 33003MPS 1500 <span class=\"hl\">BR</span> BKN011 OVC100 TXM01/0909Z TNM07/0901Z \n  TEMPO 0818/0905 VRB01MPS <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001 \n  TEMPO 0905/0907 03003MPS 3100 BKN004 OVC011 \n  FM090700 03002G07MPS 3100 <span class=\"hl\">BR</span> FU SCT011 BKN100 \n  TEMPO 0912/0915 1500 \n  TEMPO 0915/0918 VRB01MPS <span class=\"hl-vis\">0500</span> <span class=\"hl\">FZFG</span> VV003"
     },
     {
@@ -189,7 +189,7 @@
       "icao": "UDSG",
       "iata": "LWN",
       "name": "Shirak International Airport",
-      "updatedAt": "082100Z",
+      "updatedAt": "082130Z",
       "visibility_m": 1400,
       "taf_visibility_m": 800,
       "worst_visibility_m": 800,
@@ -200,17 +200,17 @@
         "FZFG"
       ],
       "severityScore": 95,
-      "metarRaw": "METAR UDSG 082100Z 33002KT 1400 R02/P2000U SN BR OVC016 M06/M06 Q1018 NOSIG",
+      "metarRaw": "METAR UDSG 082130Z 06001KT 1400 R02/P2000N SN BR OVC016 M05/M05 Q1017 NOSIG",
       "tafRaw": "TAF UDSG 081658Z 0818/0918 VRB06KT 3000 BR BKN030 \n  TEMPO 0818/0820 1000 BR OVC020 \n  TEMPO 0820/0906 35016KT 0800 SN FZFG OVC008",
-      "metarHtml": "METAR UDSG 082100Z 33002KT 1400 R02/P2000U <span class=\"hl\">SN</span> <span class=\"hl\">BR</span> OVC016 M06/M06 Q1018 NOSIG",
+      "metarHtml": "METAR UDSG 082130Z 06001KT 1400 R02/P2000N <span class=\"hl\">SN</span> <span class=\"hl\">BR</span> OVC016 M05/M05 Q1017 NOSIG",
       "tafHtml": "TAF UDSG 081658Z 0818/0918 VRB06KT 3000 <span class=\"hl\">BR</span> BKN030 \n  TEMPO 0818/0820 1000 <span class=\"hl\">BR</span> OVC020 \n  TEMPO 0820/0906 35016KT <span class=\"hl-vis\">0800</span> <span class=\"hl\">SN</span> <span class=\"hl\">FZFG</span> OVC008"
     },
     {
       "icao": "UDYZ",
       "iata": "EVN",
       "name": "Zvartnots International Airport",
-      "updatedAt": "082100Z",
-      "visibility_m": 1800,
+      "updatedAt": "082130Z",
+      "visibility_m": 1600,
       "taf_visibility_m": 200,
       "worst_visibility_m": 200,
       "ceiling_ft": null,
@@ -219,9 +219,9 @@
         "FZFG"
       ],
       "severityScore": 95,
-      "metarRaw": "METAR UDYZ 082100Z 06003KT 1800 R08/P2000U BR SCT046 M02/M05 Q1020 NOSIG",
+      "metarRaw": "METAR UDYZ 082130Z 21002KT 1600 1400W R08/P2000U BR SCT046 M02/M05 Q1020 NOSIG",
       "tafRaw": "TAF UDYZ 081700Z 0818/0918 28006KT 1500 BR FEW040 \n  TEMPO 0818/0824 0600 FZFG OVC003 \n  TEMPO 0900/0906 0200 FZFG VV001",
-      "metarHtml": "METAR UDYZ 082100Z 06003KT 1800 R08/P2000U <span class=\"hl\">BR</span> SCT046 M02/M05 Q1020 NOSIG",
+      "metarHtml": "METAR UDYZ 082130Z 21002KT 1600 1400W R08/P2000U <span class=\"hl\">BR</span> SCT046 M02/M05 Q1020 NOSIG",
       "tafHtml": "TAF UDYZ 081700Z 0818/0918 28006KT 1500 <span class=\"hl\">BR</span> FEW040 \n  TEMPO 0818/0824 <span class=\"hl-vis\">0600</span> <span class=\"hl\">FZFG</span> OVC003 \n  TEMPO 0900/0906 <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001"
     },
     {
@@ -2755,16 +2755,16 @@
       "icao": "LWSK",
       "iata": "SKP",
       "name": "Skopje International Airport",
-      "updatedAt": "082050Z",
-      "visibility_m": 10000,
+      "updatedAt": null,
+      "visibility_m": null,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR LWSK 082050Z 33003KT 290V020 CAVOK M03/M08 Q1013 NOSIG",
+      "metarRaw": null,
       "tafRaw": "TAF LWSK 082020Z 0821/0921 VRB02KT CAVOK \n  TEMPO 0821/0823 02010KT",
-      "metarHtml": "METAR LWSK 082050Z 33003KT 290V020 <span class=\"hl-vis\">CAVOK</span> M03/M08 Q1013 NOSIG",
+      "metarHtml": null,
       "tafHtml": "TAF LWSK 082020Z 0821/0921 VRB02KT <span class=\"hl-vis\">CAVOK</span> \n  TEMPO 0821/0823 02010KT"
     },
     {
@@ -2818,10 +2818,10 @@
   ],
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 157,
+    "metarReturned": 156,
     "tafReturned": 131,
     "stationsWritten": 159,
-    "missingMetar": 2,
+    "missingMetar": 3,
     "missingTaf": 28
   },
   "errors": []
