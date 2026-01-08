@@ -4,12 +4,12 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Wizz Air METAR/TAF Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=23"/>
+  <link rel="stylesheet" href="assets/styles.css?v=24"/>
 </head>
 <body>
   <header class="top">
     <div class="brand">
-      <div class="brand__title">Status table</div>
+      <div class="brand__title" id="brandTitle" title="Double-click to toggle TV view">Status table</div>
       <div class="brand__sub">METAR + TAF monitor (aviationweather.gov via GitHub Actions)</div>
     </div>
 
@@ -97,6 +97,13 @@
       <input id="sortPri" type="checkbox" checked/>
       <span>Sort by priority</span>
     </label>
+  
+
+    <button id="viewBtn" class="btn viewbtn" type="button" title="Toggle TV view (Shift+T)">
+      <span class="btn__k">View</span>
+      <span class="btn__v" id="viewBtnLabel">AUTO</span>
+    </button>
+
   </section>
 
   <section class="legend">
@@ -197,6 +204,6 @@
 
   <div class="scrim" id="scrim" hidden></div>
 
-  <script src="assets/app.js?v=23"></script>
+  <script src="assets/app.js?v=24"></script>
 </body>
 </html>

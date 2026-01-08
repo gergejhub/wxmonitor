@@ -206,3 +206,28 @@ It does **not** modify `airports.txt` or `data/` to avoid accidental “0 statio
 ## UX v23 adjustments (January 2026)
 - **Trend correctness**: VIS trend pill is based on **METAR** visibility and updates **only when a NEW METAR arrives** (timestamp `DDHHMMZ` changes). It no longer flips on mere UI refreshes or data republishing.
 - **Age ticking without manual reload**: METAR/TAF age values are recomputed on every render, and the minute timer also refreshes age fields inside the Quick View drawer if it is open.
+
+
+
+## Responsive UI and TV Mode
+
+The dashboard automatically adapts to the current screen size:
+
+- **Mobile / Tablet**: the raw METAR/TAF columns are hidden to keep the table readable.
+- **Desktop**: full table with raw METAR/TAF columns.
+
+### TV Mode (large wall displays)
+
+For OCC wall screens / large TVs you can enable **TV Mode** which increases:
+
+- tile sizes and typography,
+- airport code readability (ICAO/IATA),
+- raw METAR/TAF readability.
+
+How to toggle TV Mode:
+
+- Click the **View** button (AUTO ↔ TV) on the toolbar, or
+- Press **Shift+T**, or
+- Double‑click the **Status table** title.
+
+The chosen mode is saved in `localStorage` and will persist across reloads on the same device/browser.
