@@ -539,6 +539,15 @@ tbody tr:hover{ background:rgba(255,255,255,.02); }
   transition:transform .20s ease;
   z-index:230;
   overflow:auto;
+  scroll-padding-bottom:72px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Extra scroll room so the last "Decoded" box bottom border is always visible */
+.drawer::after{
+  content:"";
+  display:block;
+  height:48px;
 }
 .drawer.is-open{ transform:translateX(0); }
 .drawer__close{
