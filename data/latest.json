@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-01-08T19:47:44.669Z",
+  "generatedAt": "2026-01-08T19:54:29.522Z",
   "stations": [
     {
       "icao": "EDDN",
       "iata": "NUE",
       "name": "Nuremberg Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 10000,
+      "updatedAt": "081950Z",
+      "visibility_m": 4000,
       "taf_visibility_m": 800,
       "worst_visibility_m": 800,
-      "ceiling_ft": 1000,
+      "ceiling_ft": 1200,
       "hazards": [
-        "FZRA",
         "SN",
+        "FZRA",
         "RA"
       ],
       "severityScore": 100,
-      "metarRaw": "METAR EDDN 081920Z AUTO 13008KT 9999 BKN010 BKN015 M00/M02 Q1006 REFZDZ NOSIG",
+      "metarRaw": "METAR EDDN 081950Z AUTO 13009KT 9999 BKN015 OVC028 M00/M02 Q1006 TEMPO 4000 -SN BKN012",
       "tafRaw": "TAF EDDN 081700Z 0818/0918 14006KT 9999 BKN015 \n  BECMG 0818/0820 3500 -SN BKN007 OVC010 \n  TEMPO 0820/0901 0800 SN BKN004 OVC007 \n  PROB40 \n  TEMPO 0900/0903 FZRA \n  BECMG 0903/0905 8000 SCT008 BKN020 \n  BECMG 0908/0911 20012KT \n  TEMPO 0916/0918 RA",
-      "metarHtml": "METAR EDDN 081920Z AUTO 13008KT 9999 BKN010 BKN015 M00/M02 Q1006 REFZDZ NOSIG",
+      "metarHtml": "METAR EDDN 081950Z AUTO 13009KT 9999 BKN015 OVC028 M00/M02 Q1006 TEMPO 4000 -<span class=\"hl\">SN</span> BKN012",
       "tafHtml": "TAF EDDN 081700Z 0818/0918 14006KT 9999 BKN015 \n  BECMG 0818/0820 3500 -<span class=\"hl\">SN</span> BKN007 OVC010 \n  TEMPO 0820/0901 <span class=\"hl-vis\">0800</span> <span class=\"hl\">SN</span> BKN004 OVC007 \n  PROB40 \n  TEMPO 0900/0903 <span class=\"hl\">FZRA</span> \n  BECMG 0903/0905 8000 SCT008 BKN020 \n  BECMG 0908/0911 20012KT \n  TEMPO 0916/0918 <span class=\"hl\">RA</span>"
     },
     {
@@ -222,24 +222,6 @@
       "tafHtml": "TAF UDYZ 081700Z 0818/0918 28006KT 1500 <span class=\"hl\">BR</span> FEW040 \n  TEMPO 0818/0824 <span class=\"hl-vis\">0600</span> <span class=\"hl\">FZFG</span> OVC003 \n  TEMPO 0900/0906 <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001"
     },
     {
-      "icao": "EGBB",
-      "iata": "BHX",
-      "name": "Birmingham Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 500,
-      "taf_visibility_m": null,
-      "worst_visibility_m": 500,
-      "ceiling_ft": 300,
-      "hazards": [
-        "SN"
-      ],
-      "severityScore": 93,
-      "metarRaw": "METAR EGBB 081920Z 07010KT 0500 R15/1200U SN OVC003 00/M00 Q0985 RESN",
-      "tafRaw": null,
-      "metarHtml": "METAR EGBB 081920Z 07010KT <span class=\"hl-vis\">0500</span> R15/1200U <span class=\"hl\">SN</span> OVC003 00/M00 Q0985 RESN",
-      "tafHtml": null
-    },
-    {
       "icao": "EHBK",
       "iata": "MST",
       "name": "Maastricht Aachen Airport",
@@ -300,30 +282,11 @@
       "tafHtml": "TAF EHEH 081728Z 0818/0924 13006KT 1500 <span class=\"hl\">DZ</span> SCT002 BKN003 \n  TEMPO 0821/0902 13012G25KT \n  BECMG 0902/0904 BKN020 \n  BECMG 0904/0906 15015KT 3000 -<span class=\"hl\">RA</span> SCT012 BKN015 \n  TEMPO 0904/0915 1500 SNRA SCT005 BKN006 \n  TEMPO 0915/0924 1000 <span class=\"hl\">SN</span> SCT002 BKN003"
     },
     {
-      "icao": "EDDB",
-      "iata": "BER",
-      "name": "Berlin Brandenburg Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 700,
-      "worst_visibility_m": 700,
-      "ceiling_ft": 1800,
-      "hazards": [
-        "SN",
-        "BLSN"
-      ],
-      "severityScore": 77,
-      "metarRaw": "METAR EDDB 081920Z AUTO 11006KT 9999 BKN018 M04/M07 Q1009 NOSIG",
-      "tafRaw": "TAF EDDB 081700Z 0818/0918 11009KT 9999 SCT015 BKN025 \n  BECMG 0901/0903 10014KT BKN014 \n  PROB30 \n  TEMPO 0903/0906 09015G25KT \n  BECMG 0906/0909 10015G25KT 4000 -SN BKN008 \n  TEMPO 0909/0918 0700 BLSN BKN004 \n  PROB30 \n  TEMPO 0912/0918 10020G30KT +SN",
-      "metarHtml": "METAR EDDB 081920Z AUTO 11006KT 9999 BKN018 M04/M07 Q1009 NOSIG",
-      "tafHtml": "TAF EDDB 081700Z 0818/0918 11009KT 9999 SCT015 BKN025 \n  BECMG 0901/0903 10014KT BKN014 \n  PROB30 \n  TEMPO 0903/0906 09015G25KT \n  BECMG 0906/0909 10015G25KT 4000 -<span class=\"hl\">SN</span> BKN008 \n  TEMPO 0909/0918 <span class=\"hl-vis\">0700</span> <span class=\"hl\">BLSN</span> BKN004 \n  PROB30 \n  TEMPO 0912/0918 10020G30KT +<span class=\"hl\">SN</span>"
-    },
-    {
       "icao": "EDDH",
       "iata": "HAM",
       "name": "Hamburg Helmut Schmidt Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 6000,
+      "updatedAt": "081950Z",
+      "visibility_m": 7000,
       "taf_visibility_m": 1200,
       "worst_visibility_m": 1200,
       "ceiling_ft": 500,
@@ -332,9 +295,9 @@
         "BLSN"
       ],
       "severityScore": 75,
-      "metarRaw": "METAR EDDH 081920Z AUTO 13008KT 6000 -SN BKN005 OVC016 M00/M01 Q1005 BECMG SCT005",
+      "metarRaw": "METAR EDDH 081950Z AUTO 11007KT 7000 BKN005 BKN016 M00/M01 Q1005 BECMG SCT005",
       "tafRaw": "TAF EDDH 081700Z 0818/0924 14008KT 3000 -SN OVC004 \n  BECMG 0818/0821 9999 BKN008 \n  PROB30 \n  TEMPO 0821/0906 SCT010 BKN020 \n  BECMG 0822/0824 11013KT \n  BECMG 0903/0905 09015G25KT \n  TEMPO 0907/0919 08020G35KT 3000 -SN BLSN \n  PROB40 \n  TEMPO 0909/0913 1200 SN BKN004",
-      "metarHtml": "METAR EDDH 081920Z AUTO 13008KT 6000 -<span class=\"hl\">SN</span> BKN005 OVC016 M00/M01 Q1005 BECMG SCT005",
+      "metarHtml": "METAR EDDH 081950Z AUTO 11007KT 7000 BKN005 BKN016 M00/M01 Q1005 BECMG SCT005",
       "tafHtml": "TAF EDDH 081700Z 0818/0924 14008KT 3000 -<span class=\"hl\">SN</span> OVC004 \n  BECMG 0818/0821 9999 BKN008 \n  PROB30 \n  TEMPO 0821/0906 SCT010 BKN020 \n  BECMG 0822/0824 11013KT \n  BECMG 0903/0905 09015G25KT \n  TEMPO 0907/0919 08020G35KT 3000 -<span class=\"hl\">SN</span> <span class=\"hl\">BLSN</span> \n  PROB40 \n  TEMPO 0909/0913 1200 <span class=\"hl\">SN</span> BKN004"
     },
     {
@@ -380,21 +343,39 @@
       "icao": "EGNM",
       "iata": "LBA",
       "name": "Leeds Bradford Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 10000,
+      "updatedAt": "081950Z",
+      "visibility_m": 8000,
       "taf_visibility_m": 800,
       "worst_visibility_m": 800,
-      "ceiling_ft": 3900,
+      "ceiling_ft": 4200,
       "hazards": [
         "SN",
         "RA",
         "SHRA"
       ],
       "severityScore": 69,
-      "metarRaw": "METAR EGNM 081920Z 03007KT 020V090 9999 SCT013 BKN039 M01/M02 Q0992",
+      "metarRaw": "METAR EGNM 081950Z 03007KT 8000 FEW005 SCT012 BKN042 M01/M01 Q0991",
       "tafRaw": "TAF EGNM 081659Z 0818/0918 VRB04KT 9999 FEW010 \n  BECMG 0818/0821 03012KT BKN009 \n  TEMPO 0818/0903 3000 RASN -SN BKN004 \n  PROB30 \n  TEMPO 0820/0903 04015G25KT 0800 SN BKN001 \n  TEMPO 0903/0909 02015G25KT 6000 RA -RADZ \n  PROB30 \n  TEMPO 0903/0909 4000 RADZ RASN BKN004 \n  BECMG 0907/0910 SCT020 \n  PROB30 \n  TEMPO 0910/0916 6000 SHRA BKN012",
-      "metarHtml": "METAR EGNM 081920Z 03007KT 020V090 9999 SCT013 BKN039 M01/M02 Q0992",
+      "metarHtml": "METAR EGNM 081950Z 03007KT 8000 FEW005 SCT012 BKN042 M01/M01 Q0991",
       "tafHtml": "TAF EGNM 081659Z 0818/0918 VRB04KT 9999 FEW010 \n  BECMG 0818/0821 03012KT BKN009 \n  TEMPO 0818/0903 3000 RASN -<span class=\"hl\">SN</span> BKN004 \n  PROB30 \n  TEMPO 0820/0903 04015G25KT <span class=\"hl-vis\">0800</span> <span class=\"hl\">SN</span> BKN001 \n  TEMPO 0903/0909 02015G25KT 6000 <span class=\"hl\">RA</span> -RADZ \n  PROB30 \n  TEMPO 0903/0909 4000 RADZ RASN BKN004 \n  BECMG 0907/0910 SCT020 \n  PROB30 \n  TEMPO 0910/0916 6000 <span class=\"hl\">SHRA</span> BKN012"
+    },
+    {
+      "icao": "EGBB",
+      "iata": "BHX",
+      "name": "Birmingham Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 1000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 1000,
+      "ceiling_ft": 300,
+      "hazards": [
+        "SN"
+      ],
+      "severityScore": 68,
+      "metarRaw": "METAR EGBB 081950Z 05010KT 1000 R15/1100N SN OVC003 00/M00 Q0985 RESN",
+      "tafRaw": null,
+      "metarHtml": "METAR EGBB 081950Z 05010KT 1000 R15/1100N <span class=\"hl\">SN</span> OVC003 00/M00 Q0985 RESN",
+      "tafHtml": null
     },
     {
       "icao": "LKMT",
@@ -420,8 +401,8 @@
       "icao": "EGGP",
       "iata": "LPL",
       "name": "Liverpool John Lennon Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 9000,
+      "updatedAt": "081950Z",
+      "visibility_m": 8000,
       "taf_visibility_m": 1200,
       "worst_visibility_m": 1200,
       "ceiling_ft": 1000,
@@ -431,16 +412,35 @@
         "SHRA"
       ],
       "severityScore": 66,
-      "metarRaw": "METAR EGGP 081920Z 05012KT 020V080 9000 -RA OVC010 02/00 Q0990",
+      "metarRaw": "METAR EGGP 081950Z 05013KT 8000 -RA OVC010 01/M00 Q0990",
       "tafRaw": "TAF EGGP 081700Z 0818/0918 06012KT 9999 FEW010 \n  TEMPO 0818/0819 6000 RA -RADZ BKN009 \n  PROB30 \n  TEMPO 0818/0819 4000 RADZ BKN004 \n  BECMG 0819/0822 36012KT \n  TEMPO 0819/0823 35016G28KT 4000 RADZ RASN BKN008 \n  PROB30 \n  TEMPO 0819/0823 1200 +RASN SN BKN002 \n  TEMPO 0823/0909 35016G28KT 6000 RA BKN012 \n  PROB30 \n  TEMPO 0823/0904 4000 RADZ BKN008 \n  PROB30 \n  TEMPO 0909/0918 7000 SHRA BKN012",
-      "metarHtml": "METAR EGGP 081920Z 05012KT 020V080 9000 -<span class=\"hl\">RA</span> OVC010 02/00 Q0990",
+      "metarHtml": "METAR EGGP 081950Z 05013KT 8000 -<span class=\"hl\">RA</span> OVC010 01/M00 Q0990",
       "tafHtml": "TAF EGGP 081700Z 0818/0918 06012KT 9999 FEW010 \n  TEMPO 0818/0819 6000 <span class=\"hl\">RA</span> -RADZ BKN009 \n  PROB30 \n  TEMPO 0818/0819 4000 RADZ BKN004 \n  BECMG 0819/0822 36012KT \n  TEMPO 0819/0823 35016G28KT 4000 RADZ RASN BKN008 \n  PROB30 \n  TEMPO 0819/0823 1200 +RASN <span class=\"hl\">SN</span> BKN002 \n  TEMPO 0823/0909 35016G28KT 6000 <span class=\"hl\">RA</span> BKN012 \n  PROB30 \n  TEMPO 0823/0904 4000 RADZ BKN008 \n  PROB30 \n  TEMPO 0909/0918 7000 <span class=\"hl\">SHRA</span> BKN012"
+    },
+    {
+      "icao": "EDDB",
+      "iata": "BER",
+      "name": "Berlin Brandenburg Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 700,
+      "worst_visibility_m": 700,
+      "ceiling_ft": 2000,
+      "hazards": [
+        "SN",
+        "BLSN"
+      ],
+      "severityScore": 65,
+      "metarRaw": "METAR EDDB 081950Z AUTO 12007KT 9999 BKN020 OVC025 M04/M07 Q1009 NOSIG",
+      "tafRaw": "TAF EDDB 081700Z 0818/0918 11009KT 9999 SCT015 BKN025 \n  BECMG 0901/0903 10014KT BKN014 \n  PROB30 \n  TEMPO 0903/0906 09015G25KT \n  BECMG 0906/0909 10015G25KT 4000 -SN BKN008 \n  TEMPO 0909/0918 0700 BLSN BKN004 \n  PROB30 \n  TEMPO 0912/0918 10020G30KT +SN",
+      "metarHtml": "METAR EDDB 081950Z AUTO 12007KT 9999 BKN020 OVC025 M04/M07 Q1009 NOSIG",
+      "tafHtml": "TAF EDDB 081700Z 0818/0918 11009KT 9999 SCT015 BKN025 \n  BECMG 0901/0903 10014KT BKN014 \n  PROB30 \n  TEMPO 0903/0906 09015G25KT \n  BECMG 0906/0909 10015G25KT 4000 -<span class=\"hl\">SN</span> BKN008 \n  TEMPO 0909/0918 <span class=\"hl-vis\">0700</span> <span class=\"hl\">BLSN</span> BKN004 \n  PROB30 \n  TEMPO 0912/0918 10020G30KT +<span class=\"hl\">SN</span>"
     },
     {
       "icao": "EYKA",
       "iata": "KUN",
       "name": "Kaunas International Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 600,
       "worst_visibility_m": 600,
@@ -450,16 +450,16 @@
         "BLSN"
       ],
       "severityScore": 65,
-      "metarRaw": "METAR EYKA 081920Z 36010KT 320V030 CAVOK M09/M12 Q1011",
+      "metarRaw": "METAR EYKA 081950Z 01010KT 330V040 CAVOK M09/M12 Q1011",
       "tafRaw": "TAF EYKA 081725Z 0818/0918 02010KT 9000 SCT010 \n  TEMPO 0818/0905 BKN015 \n  BECMG 0905/0907 3000 SN BKN015 \n  TEMPO 0907/0918 02015G25KT 0600 +SN BLSN BKN005",
-      "metarHtml": "METAR EYKA 081920Z 36010KT 320V030 <span class=\"hl-vis\">CAVOK</span> M09/M12 Q1011",
+      "metarHtml": "METAR EYKA 081950Z 01010KT 330V040 <span class=\"hl-vis\">CAVOK</span> M09/M12 Q1011",
       "tafHtml": "TAF EYKA 081725Z 0818/0918 02010KT 9000 SCT010 \n  TEMPO 0818/0905 BKN015 \n  BECMG 0905/0907 3000 <span class=\"hl\">SN</span> BKN015 \n  TEMPO 0907/0918 02015G25KT <span class=\"hl-vis\">0600</span> +<span class=\"hl\">SN</span> <span class=\"hl\">BLSN</span> BKN005"
     },
     {
       "icao": "EYVI",
       "iata": "VNO",
       "name": "Vilnius International Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 600,
       "worst_visibility_m": 600,
@@ -469,9 +469,9 @@
         "BLSN"
       ],
       "severityScore": 65,
-      "metarRaw": "METAR EYVI 081920Z 01014KT 9999 FEW013 M10/M12 Q1007 NOSIG",
+      "metarRaw": "METAR EYVI 081950Z 02014KT 9999 FEW036 M10/M13 Q1007 NOSIG",
       "tafRaw": "TAF EYVI 081725Z 0818/0918 02015KT 9000 BKN010 \n  TEMPO 0818/0822 BKN005 \n  BECMG 0822/0824 02015G25KT 3000 SN BLSN \n  TEMPO 0900/0918 0600 +SN BKN005",
-      "metarHtml": "METAR EYVI 081920Z 01014KT 9999 FEW013 M10/M12 Q1007 NOSIG",
+      "metarHtml": "METAR EYVI 081950Z 02014KT 9999 FEW036 M10/M13 Q1007 NOSIG",
       "tafHtml": "TAF EYVI 081725Z 0818/0918 02015KT 9000 BKN010 \n  TEMPO 0818/0822 BKN005 \n  BECMG 0822/0824 02015G25KT 3000 <span class=\"hl\">SN</span> <span class=\"hl\">BLSN</span> \n  TEMPO 0900/0918 <span class=\"hl-vis\">0600</span> +<span class=\"hl\">SN</span> BKN005"
     },
     {
@@ -510,26 +510,6 @@
       "tafRaw": "TAF EPKT 081730Z 0818/0918 32004KT 7000 OVC005 \n  TEMPO 0818/0908 3000 -SN BR OVC004 \n  PROB40 0900/0908 1200 BR \n  BECMG 0908/0910 CAVOK",
       "metarHtml": "METAR EPKT 081930Z 30006KT 9000 OVC006 M07/M08 Q1009",
       "tafHtml": "TAF EPKT 081730Z 0818/0918 32004KT 7000 OVC005 \n  TEMPO 0818/0908 3000 -<span class=\"hl\">SN</span> <span class=\"hl\">BR</span> OVC004 \n  PROB40 0900/0908 1200 <span class=\"hl\">BR</span> \n  BECMG 0908/0910 <span class=\"hl-vis\">CAVOK</span>"
-    },
-    {
-      "icao": "EGPF",
-      "iata": "GLA",
-      "name": "Glasgow Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 4000,
-      "taf_visibility_m": 4000,
-      "worst_visibility_m": 4000,
-      "ceiling_ft": 900,
-      "hazards": [
-        "BR",
-        "RA",
-        "SHRA"
-      ],
-      "severityScore": 61,
-      "metarRaw": "METAR EGPF 081920Z VRB02KT 4000 BR BKN009 OVC013 00/00 Q0996",
-      "tafRaw": "TAF EGPF 081659Z 0818/0918 VRB03KT 9999 SCT025 \n  TEMPO 0818/0821 4000 RADZ BR BKN009 \n  PROB30 0821/0911 4000 BR MIFG \n  TEMPO 0911/0918 6000 RA SHRA BKN009 \n  PROB30 \n  TEMPO 0911/0918 4000 -SHRASN BR BKN004",
-      "metarHtml": "METAR EGPF 081920Z VRB02KT 4000 <span class=\"hl\">BR</span> BKN009 OVC013 00/00 Q0996",
-      "tafHtml": "TAF EGPF 081659Z 0818/0918 VRB03KT 9999 SCT025 \n  TEMPO 0818/0821 4000 RADZ <span class=\"hl\">BR</span> BKN009 \n  PROB30 0821/0911 4000 <span class=\"hl\">BR</span> MIFG \n  TEMPO 0911/0918 6000 <span class=\"hl\">RA</span> <span class=\"hl\">SHRA</span> BKN009 \n  PROB30 \n  TEMPO 0911/0918 4000 -SHRASN <span class=\"hl\">BR</span> BKN004"
     },
     {
       "icao": "ENGM",
@@ -628,25 +608,6 @@
       "tafHtml": "TAF LTAC 081640Z 0818/0918 25015KT 6000 BKN030 BKN080 \n  TEMPO 0818/0822 4000 -<span class=\"hl\">SHRA</span> <span class=\"hl\">BR</span> \n  TEMPO 0822/0902 4000 -RASN <span class=\"hl\">BR</span> \n  TEMPO 0903/0907 2500 -<span class=\"hl\">SN</span> <span class=\"hl\">BR</span> \n  TEMPO 0913/0917 25015G25KT 2500 -<span class=\"hl\">SHSN</span> <span class=\"hl\">BR</span>"
     },
     {
-      "icao": "EGKK",
-      "iata": "LGW",
-      "name": "London Gatwick Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 6000,
-      "taf_visibility_m": 2000,
-      "worst_visibility_m": 2000,
-      "ceiling_ft": 700,
-      "hazards": [
-        "RA",
-        "SHRA"
-      ],
-      "severityScore": 51,
-      "metarRaw": "METAR EGKK 081920Z 19010KT 150V220 6000 RA FEW004 BKN007 09/09 Q0984",
-      "tafRaw": "TAF EGKK 081704Z 0818/0924 10011KT 9999 SCT010 BKN020 \n  BECMG 0818/0820 19012KT \n  TEMPO 0818/0904 6000 RA BKN010 \n  PROB40 \n  TEMPO 0818/0904 4000 +RA RADZ BKN006 \n  PROB30 \n  TEMPO 0818/0819 12015G25KT \n  TEMPO 0819/0823 20016G27KT \n  BECMG 0823/0902 32016G26KT \n  TEMPO 0904/0912 6000 -RASN BKN008 \n  PROB30 \n  TEMPO 0904/0911 32019G36KT 2000 RASN BKN004 \n  TEMPO 0912/0921 6000 RA SHRA BKN008",
-      "metarHtml": "METAR EGKK 081920Z 19010KT 150V220 6000 <span class=\"hl\">RA</span> FEW004 BKN007 09/09 Q0984",
-      "tafHtml": "TAF EGKK 081704Z 0818/0924 10011KT 9999 SCT010 BKN020 \n  BECMG 0818/0820 19012KT \n  TEMPO 0818/0904 6000 <span class=\"hl\">RA</span> BKN010 \n  PROB40 \n  TEMPO 0818/0904 4000 +<span class=\"hl\">RA</span> RADZ BKN006 \n  PROB30 \n  TEMPO 0818/0819 12015G25KT \n  TEMPO 0819/0823 20016G27KT \n  BECMG 0823/0902 32016G26KT \n  TEMPO 0904/0912 6000 -RASN BKN008 \n  PROB30 \n  TEMPO 0904/0911 32019G36KT 2000 RASN BKN004 \n  TEMPO 0912/0921 6000 <span class=\"hl\">RA</span> <span class=\"hl\">SHRA</span> BKN008"
-    },
-    {
       "icao": "EPKK",
       "iata": "KRK",
       "name": "Kraków John Paul II International Airport",
@@ -664,6 +625,26 @@
       "tafRaw": "TAF EPKK 081730Z 0818/0918 27010KT 9999 BKN020 \n  TEMPO 0818/0906 4000 -SN BR BKN012 \n  BECMG 0902/0904 VRB02KT \n  PROB30 0904/0908 1200 BR \n  BECMG 0912/0915 07010KT",
       "metarHtml": "METAR EPKK 081930Z 28008KT 9999 BKN011 M05/M08 Q1009",
       "tafHtml": "TAF EPKK 081730Z 0818/0918 27010KT 9999 BKN020 \n  TEMPO 0818/0906 4000 -<span class=\"hl\">SN</span> <span class=\"hl\">BR</span> BKN012 \n  BECMG 0902/0904 VRB02KT \n  PROB30 0904/0908 1200 <span class=\"hl\">BR</span> \n  BECMG 0912/0915 07010KT"
+    },
+    {
+      "icao": "EGPF",
+      "iata": "GLA",
+      "name": "Glasgow Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 4300,
+      "taf_visibility_m": 4000,
+      "worst_visibility_m": 4000,
+      "ceiling_ft": 1400,
+      "hazards": [
+        "BR",
+        "RA",
+        "SHRA"
+      ],
+      "severityScore": 48,
+      "metarRaw": "METAR EGPF 081950Z 26002KT 4300 BR FEW010 OVC014 00/00 Q0996",
+      "tafRaw": "TAF EGPF 081659Z 0818/0918 VRB03KT 9999 SCT025 \n  TEMPO 0818/0821 4000 RADZ BR BKN009 \n  PROB30 0821/0911 4000 BR MIFG \n  TEMPO 0911/0918 6000 RA SHRA BKN009 \n  PROB30 \n  TEMPO 0911/0918 4000 -SHRASN BR BKN004",
+      "metarHtml": "METAR EGPF 081950Z 26002KT 4300 <span class=\"hl\">BR</span> FEW010 OVC014 00/00 Q0996",
+      "tafHtml": "TAF EGPF 081659Z 0818/0918 VRB03KT 9999 SCT025 \n  TEMPO 0818/0821 4000 RADZ <span class=\"hl\">BR</span> BKN009 \n  PROB30 0821/0911 4000 <span class=\"hl\">BR</span> MIFG \n  TEMPO 0911/0918 6000 <span class=\"hl\">RA</span> <span class=\"hl\">SHRA</span> BKN009 \n  PROB30 \n  TEMPO 0911/0918 4000 -SHRASN <span class=\"hl\">BR</span> BKN004"
     },
     {
       "icao": "LIRP",
@@ -952,7 +933,7 @@
       "icao": "LLBG",
       "iata": "TLV",
       "name": "Ben Gurion International Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
@@ -962,29 +943,29 @@
         "RA"
       ],
       "severityScore": 37,
-      "metarRaw": "METAR LLBG 081920Z VRB03KT CAVOK 17/10 Q1015 NOSIG",
+      "metarRaw": "METAR LLBG 081950Z VRB03KT CAVOK 18/10 Q1015 NOSIG",
       "tafRaw": "TAF LLBG 081720Z 0818/0918 16006KT CAVOK \n  BECMG 0900/0902 22010KT 9999 SCT030 \n  TEMPO 0902/0907 27018G28KT 5000 TSRA FEW020CB BKN025 \n  FM090700 27020G30KT 9999 SCT030 \n  TEMPO 0907/0915 27025G40KT 5000 TSRA FEW020CB BKN025 \n  PROB40 \n  TEMPO 0915/0918 29022G35KT 7000 RA FEW020TCU BKN025 TX18/0911Z TN14/0903Z",
-      "metarHtml": "METAR LLBG 081920Z VRB03KT <span class=\"hl-vis\">CAVOK</span> 17/10 Q1015 NOSIG",
+      "metarHtml": "METAR LLBG 081950Z VRB03KT <span class=\"hl-vis\">CAVOK</span> 18/10 Q1015 NOSIG",
       "tafHtml": "TAF LLBG 081720Z 0818/0918 16006KT <span class=\"hl-vis\">CAVOK</span> \n  BECMG 0900/0902 22010KT 9999 SCT030 \n  TEMPO 0902/0907 27018G28KT 5000 <span class=\"hl\">TSRA</span> FEW020CB BKN025 \n  FM090700 27020G30KT 9999 SCT030 \n  TEMPO 0907/0915 27025G40KT 5000 <span class=\"hl\">TSRA</span> FEW020CB BKN025 \n  PROB40 \n  TEMPO 0915/0918 29022G35KT 7000 <span class=\"hl\">RA</span> FEW020TCU BKN025 TX18/0911Z TN14/0903Z"
     },
     {
       "icao": "EDDS",
       "iata": "STR",
       "name": "Stuttgart Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 6000,
+      "updatedAt": "081950Z",
+      "visibility_m": 4000,
       "taf_visibility_m": 3000,
       "worst_visibility_m": 3000,
-      "ceiling_ft": 3500,
+      "ceiling_ft": null,
       "hazards": [
         "RA",
         "BR",
         "SHRA"
       ],
       "severityScore": 36,
-      "metarRaw": "METAR EDDS 081920Z AUTO VRB02KT 6000 -RADZ SCT020 BKN035 00/M00 Q1004 TEMPO RA",
+      "metarRaw": "METAR EDDS 081950Z AUTO VRB02KT 8000 -RA SCT020 01/01 Q1004 TEMPO 4000 RADZ",
       "tafRaw": "TAF EDDS 081700Z 0818/0918 15004KT 9999 BKN015 \n  TEMPO 0818/0902 3000 RA BR BKN010 \n  BECMG 0900/0902 20010KT \n  BECMG 0902/0904 20015G25KT \n  TEMPO 0902/0918 20020G35KT \n  PROB40 \n  TEMPO 0902/0907 SHRA BKN015CB \n  PROB40 \n  TEMPO 0913/0918 20025G40KT SHRA BKN015CB",
-      "metarHtml": "METAR EDDS 081920Z AUTO VRB02KT 6000 -RADZ SCT020 BKN035 00/M00 Q1004 TEMPO <span class=\"hl\">RA</span>",
+      "metarHtml": "METAR EDDS 081950Z AUTO VRB02KT 8000 -<span class=\"hl\">RA</span> SCT020 01/01 Q1004 TEMPO 4000 RADZ",
       "tafHtml": "TAF EDDS 081700Z 0818/0918 15004KT 9999 BKN015 \n  TEMPO 0818/0902 3000 <span class=\"hl\">RA</span> <span class=\"hl\">BR</span> BKN010 \n  BECMG 0900/0902 20010KT \n  BECMG 0902/0904 20015G25KT \n  TEMPO 0902/0918 20020G35KT \n  PROB40 \n  TEMPO 0902/0907 <span class=\"hl\">SHRA</span> BKN015CB \n  PROB40 \n  TEMPO 0913/0918 20025G40KT <span class=\"hl\">SHRA</span> BKN015CB"
     },
     {
@@ -1063,19 +1044,19 @@
       "icao": "EDDK",
       "iata": "CGN",
       "name": "Cologne Bonn Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 2500,
       "worst_visibility_m": 2500,
-      "ceiling_ft": 3000,
+      "ceiling_ft": 2400,
       "hazards": [
         "RA",
         "SN"
       ],
       "severityScore": 30,
-      "metarRaw": "METAR EDDK 081920Z AUTO 13009KT 090V150 9999 -RA FEW014 BKN030 BKN039 02/01 Q1001 TEMPO RA",
+      "metarRaw": "METAR EDDK 081950Z AUTO 12008KT 090V150 9999 -RA FEW018 BKN024 02/01 Q1001 RERA TEMPO RA",
       "tafRaw": "TAF EDDK 081700Z 0818/0924 13011KT 9999 BKN020 \n  TEMPO 0819/0902 RA BKN012 \n  PROB30 \n  TEMPO 0819/0821 4000 RASN \n  TEMPO 0900/0904 13015G25KT \n  BECMG 0904/0906 19015G25KT \n  TEMPO 0907/0915 19020G30KT RA \n  BECMG 0915/0918 26010KT \n  TEMPO 0915/0924 4000 RASN BKN008 \n  PROB30 \n  TEMPO 0921/0924 2500 SN",
-      "metarHtml": "METAR EDDK 081920Z AUTO 13009KT 090V150 9999 -<span class=\"hl\">RA</span> FEW014 BKN030 BKN039 02/01 Q1001 TEMPO <span class=\"hl\">RA</span>",
+      "metarHtml": "METAR EDDK 081950Z AUTO 12008KT 090V150 9999 -<span class=\"hl\">RA</span> FEW018 BKN024 02/01 Q1001 RERA TEMPO <span class=\"hl\">RA</span>",
       "tafHtml": "TAF EDDK 081700Z 0818/0924 13011KT 9999 BKN020 \n  TEMPO 0819/0902 <span class=\"hl\">RA</span> BKN012 \n  PROB30 \n  TEMPO 0819/0821 4000 RASN \n  TEMPO 0900/0904 13015G25KT \n  BECMG 0904/0906 19015G25KT \n  TEMPO 0907/0915 19020G30KT <span class=\"hl\">RA</span> \n  BECMG 0915/0918 26010KT \n  TEMPO 0915/0924 4000 RASN BKN008 \n  PROB30 \n  TEMPO 0921/0924 2500 <span class=\"hl\">SN</span>"
     },
     {
@@ -1136,8 +1117,8 @@
       "icao": "EKBI",
       "iata": "BLL",
       "name": "Billund Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 6000,
+      "updatedAt": "081950Z",
+      "visibility_m": 7000,
       "taf_visibility_m": 3000,
       "worst_visibility_m": 3000,
       "ceiling_ft": null,
@@ -1146,9 +1127,9 @@
         "SN"
       ],
       "severityScore": 28,
-      "metarRaw": "METAR EKBI 081920Z AUTO 10010KT 6000 OVC006/// M01/M02 Q1006",
+      "metarRaw": "METAR EKBI 081950Z AUTO 11008KT 7000 OVC006/// M01/M02 Q1006",
       "tafRaw": "TAF EKBI 081727Z 0818/0918 11008KT 6000 BKN008 \n  TEMPO 0818/0823 4000 BR BKN015 \n  TEMPO 0823/0905 3000 -SN DRSN BKN015 \n  BECMG 0901/0904 11018KT \n  FM090500 09022G36KT 9999 FEW020 \n  TEMPO 0905/0918 DRSN",
-      "metarHtml": "METAR EKBI 081920Z AUTO 10010KT 6000 OVC006/// M01/M02 Q1006",
+      "metarHtml": "METAR EKBI 081950Z AUTO 11008KT 7000 OVC006/// M01/M02 Q1006",
       "tafHtml": "TAF EKBI 081727Z 0818/0918 11008KT 6000 BKN008 \n  TEMPO 0818/0823 4000 <span class=\"hl\">BR</span> BKN015 \n  TEMPO 0823/0905 3000 -<span class=\"hl\">SN</span> DRSN BKN015 \n  BECMG 0901/0904 11018KT \n  FM090500 09022G36KT 9999 FEW020 \n  TEMPO 0905/0918 DRSN"
     },
     {
@@ -1174,39 +1155,20 @@
       "icao": "ESKN",
       "iata": "NYO",
       "name": "Stockholm Skavsta Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 2000,
       "worst_visibility_m": 2000,
-      "ceiling_ft": 2900,
+      "ceiling_ft": 3300,
       "hazards": [
         "SN",
         "SHSN"
       ],
       "severityScore": 28,
-      "metarRaw": "METAR ESKN 081920Z 04003KT 9999 -SN BKN029 BKN037 M03/M04 Q1015",
+      "metarRaw": "METAR ESKN 081950Z 00000KT 9999 -SN BKN033 BKN046 M04/M04 Q1015",
       "tafRaw": "TAF ESKN 081730Z 0818/0918 VRB03KT 9999 BKN030 \n  PROB40 0818/0904 2000 SHSN BKN012 BKN020TCU \n  BECMG 0905/0907 09012KT",
-      "metarHtml": "METAR ESKN 081920Z 04003KT 9999 -<span class=\"hl\">SN</span> BKN029 BKN037 M03/M04 Q1015",
+      "metarHtml": "METAR ESKN 081950Z 00000KT 9999 -<span class=\"hl\">SN</span> BKN033 BKN046 M04/M04 Q1015",
       "tafHtml": "TAF ESKN 081730Z 0818/0918 VRB03KT 9999 BKN030 \n  PROB40 0818/0904 2000 <span class=\"hl\">SHSN</span> BKN012 BKN020TCU \n  BECMG 0905/0907 09012KT"
-    },
-    {
-      "icao": "ESSA",
-      "iata": "ARN",
-      "name": "Stockholm-Arlanda Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 2500,
-      "taf_visibility_m": 2500,
-      "worst_visibility_m": 2500,
-      "ceiling_ft": 5100,
-      "hazards": [
-        "SN",
-        "SHSN"
-      ],
-      "severityScore": 28,
-      "metarRaw": "METAR ESSA 081920Z 14008KT 9999 -SN SCT038 OVC051 M02/M04 Q1016 TEMPO 2500 SHSN BKN025CB",
-      "tafRaw": "TAF ESSA 081730Z 0818/0918 16010KT 9999 BKN040 \n  PROB40 0818/0902 2500 -SHSN BKN013 BKN025TCU \n  PROB40 0907/0909 4000 -SHSN BKN014 BKN030TCU \n  BECMG 0900/0902 10007KT",
-      "metarHtml": "METAR ESSA 081920Z 14008KT 9999 -<span class=\"hl\">SN</span> SCT038 OVC051 M02/M04 Q1016 TEMPO 2500 <span class=\"hl\">SHSN</span> BKN025CB",
-      "tafHtml": "TAF ESSA 081730Z 0818/0918 16010KT 9999 BKN040 \n  PROB40 0818/0902 2500 -<span class=\"hl\">SHSN</span> BKN013 BKN025TCU \n  PROB40 0907/0909 4000 -<span class=\"hl\">SHSN</span> BKN014 BKN030TCU \n  BECMG 0900/0902 10007KT"
     },
     {
       "icao": "LBWN",
@@ -1322,6 +1284,25 @@
       "tafHtml": "TAF EDSB 081700Z 0818/0918 20010KT 9999 BKN020 \n  TEMPO 0818/0901 4000 <span class=\"hl\">RA</span> BKN010 \n  BECMG 0820/0822 20015G25KT \n  BECMG 0900/0902 21020G35KT \n  TEMPO 0901/0918 <span class=\"hl\">SHRA</span> BKN020CB \n  PROB40 \n  TEMPO 0908/0915 21030G45KT"
     },
     {
+      "icao": "EGKK",
+      "iata": "LGW",
+      "name": "London Gatwick Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 2000,
+      "worst_visibility_m": 2000,
+      "ceiling_ft": 2200,
+      "hazards": [
+        "RA",
+        "SHRA"
+      ],
+      "severityScore": 26,
+      "metarRaw": "METAR EGKK 081950Z 21011G21KT 9999 -RA FEW012 SCT017 BKN022 10/08 Q0983 RERA",
+      "tafRaw": "TAF EGKK 081704Z 0818/0924 10011KT 9999 SCT010 BKN020 \n  BECMG 0818/0820 19012KT \n  TEMPO 0818/0904 6000 RA BKN010 \n  PROB40 \n  TEMPO 0818/0904 4000 +RA RADZ BKN006 \n  PROB30 \n  TEMPO 0818/0819 12015G25KT \n  TEMPO 0819/0823 20016G27KT \n  BECMG 0823/0902 32016G26KT \n  TEMPO 0904/0912 6000 -RASN BKN008 \n  PROB30 \n  TEMPO 0904/0911 32019G36KT 2000 RASN BKN004 \n  TEMPO 0912/0921 6000 RA SHRA BKN008",
+      "metarHtml": "METAR EGKK 081950Z 21011G21KT 9999 -<span class=\"hl\">RA</span> FEW012 SCT017 BKN022 10/08 Q0983 RERA",
+      "tafHtml": "TAF EGKK 081704Z 0818/0924 10011KT 9999 SCT010 BKN020 \n  BECMG 0818/0820 19012KT \n  TEMPO 0818/0904 6000 <span class=\"hl\">RA</span> BKN010 \n  PROB40 \n  TEMPO 0818/0904 4000 +<span class=\"hl\">RA</span> RADZ BKN006 \n  PROB30 \n  TEMPO 0818/0819 12015G25KT \n  TEMPO 0819/0823 20016G27KT \n  BECMG 0823/0902 32016G26KT \n  TEMPO 0904/0912 6000 -RASN BKN008 \n  PROB30 \n  TEMPO 0904/0911 32019G36KT 2000 RASN BKN004 \n  TEMPO 0912/0921 6000 <span class=\"hl\">RA</span> <span class=\"hl\">SHRA</span> BKN008"
+    },
+    {
       "icao": "LFLL",
       "iata": "LYS",
       "name": "Lyon Saint-Exupéry Airport",
@@ -1419,18 +1400,18 @@
       "icao": "EETN",
       "iata": "TLL",
       "name": "Lennart Meri Tallinn Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
-      "ceiling_ft": 1600,
+      "ceiling_ft": 1700,
       "hazards": [
         "BR"
       ],
       "severityScore": 22,
-      "metarRaw": "METAR EETN 081920Z 10010KT 9999 OVC016 M06/M08 Q1020 NOSIG",
+      "metarRaw": "METAR EETN 081950Z 10011KT 9999 OVC017 M06/M08 Q1020 NOSIG",
       "tafRaw": "TAF EETN 081730Z 0818/0918 09012KT 9999 BKN015 \n  PROB40 \n  TEMPO 0818/0901 5000 BR BKN008 \n  BECMG 0901/0903 SCT020 \n  TEMPO 0909/0918 06016G30KT BKN015",
-      "metarHtml": "METAR EETN 081920Z 10010KT 9999 OVC016 M06/M08 Q1020 NOSIG",
+      "metarHtml": "METAR EETN 081950Z 10011KT 9999 OVC017 M06/M08 Q1020 NOSIG",
       "tafHtml": "TAF EETN 081730Z 0818/0918 09012KT 9999 BKN015 \n  PROB40 \n  TEMPO 0818/0901 5000 <span class=\"hl\">BR</span> BKN008 \n  BECMG 0901/0903 SCT020 \n  TEMPO 0909/0918 06016G30KT BKN015"
     },
     {
@@ -1599,18 +1580,18 @@
       "icao": "EGGW",
       "iata": "LTN",
       "name": "London Luton Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 4600,
+      "updatedAt": "081950Z",
+      "visibility_m": 2700,
       "taf_visibility_m": null,
-      "worst_visibility_m": 4600,
+      "worst_visibility_m": 2700,
       "ceiling_ft": null,
       "hazards": [
         "RA"
       ],
       "severityScore": 17,
-      "metarRaw": "METAR EGGW 081920Z AUTO 10017KT 4600 -RA OVC005/// //////CB 02/02 Q0984 RERA",
+      "metarRaw": "METAR EGGW 081950Z AUTO 10017G28KT 2700 -RA OVC005/// //////CB 02/02 Q0983",
       "tafRaw": null,
-      "metarHtml": "METAR EGGW 081920Z AUTO 10017KT 4600 -<span class=\"hl\">RA</span> OVC005/// //////CB 02/02 Q0984 RERA",
+      "metarHtml": "METAR EGGW 081950Z AUTO 10017G28KT 2700 -<span class=\"hl\">RA</span> OVC005/// //////CB 02/02 Q0983",
       "tafHtml": null
     },
     {
@@ -1758,22 +1739,6 @@
       "tafHtml": "TAF EDLW 081700Z 0818/0918 14007KT 9999 BKN025 \n  TEMPO 0820/0904 4000 <span class=\"hl\">RA</span> BKN012 \n  BECMG 0822/0901 16012KT \n  PROB30 \n  TEMPO 0909/0915 16015G25KT <span class=\"hl\">RA</span> \n  TEMPO 0915/0918 <span class=\"hl\">RA</span> BKN012"
     },
     {
-      "icao": "ESMS",
-      "iata": "MMX",
-      "name": "Malmö Sturup Airport",
-      "updatedAt": "081920Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": 1800,
-      "hazards": [],
-      "severityScore": 12,
-      "metarRaw": "METAR ESMS 081920Z 11010KT 9999 BKN018 M02/M05 Q1010",
-      "tafRaw": "TAF ESMS 081727Z 0818/0918 16010KT 9999 BKN020 \n  BECMG 0821/0824 10010KT \n  TEMPO 0912/0918 09015G30KT",
-      "metarHtml": "METAR ESMS 081920Z 11010KT 9999 BKN018 M02/M05 Q1010",
-      "tafHtml": "TAF ESMS 081727Z 0818/0918 16010KT 9999 BKN020 \n  BECMG 0821/0824 10010KT \n  TEMPO 0912/0918 09015G30KT"
-    },
-    {
       "icao": "HESX",
       "iata": "SPX",
       "name": "Sphinx International Airport",
@@ -1883,18 +1848,18 @@
       "icao": "LWOH",
       "iata": "OHD",
       "name": "Ohrid St. Paul the Apostle Airport",
-      "updatedAt": null,
-      "visibility_m": null,
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
-      "ceiling_ft": null,
+      "ceiling_ft": 3500,
       "hazards": [
         "RA"
       ],
       "severityScore": 12,
-      "metarRaw": null,
+      "metarRaw": "METAR LWOH 081950Z VRB03KT 9999 FEW015 BKN035 00/M03 Q1010",
       "tafRaw": "TAF LWOH 081735Z 0818/0918 20010KT 9999 FEW015 BKN035 \n  BECMG 0914/0916 RA BKN010 OVC025",
-      "metarHtml": null,
+      "metarHtml": "METAR LWOH 081950Z VRB03KT 9999 FEW015 BKN035 00/M03 Q1010",
       "tafHtml": "TAF LWOH 081735Z 0818/0918 20010KT 9999 FEW015 BKN035 \n  BECMG 0914/0916 <span class=\"hl\">RA</span> BKN010 OVC025"
     },
     {
@@ -1919,8 +1884,8 @@
       "icao": "BKPR",
       "iata": "PRN",
       "name": "Priština Adem Jashari International Airport",
-      "updatedAt": "081930Z",
-      "visibility_m": 10000,
+      "updatedAt": null,
+      "visibility_m": null,
       "taf_visibility_m": 3000,
       "worst_visibility_m": 3000,
       "ceiling_ft": null,
@@ -1928,9 +1893,9 @@
         "BR"
       ],
       "severityScore": 10,
-      "metarRaw": "METAR BKPR 081930Z 32004KT 9999 FEW080 M06/M09 Q1012 NOSIG",
+      "metarRaw": null,
       "tafRaw": "TAF BKPR 081730Z 0818/0918 VRB05KT 9999 SCT080 \n  TEMPO 0902/0909 3000 BR \n  BECMG 0909/0911 22012KT \n  TEMPO 0911/0917 22015G25KT",
-      "metarHtml": "METAR BKPR 081930Z 32004KT 9999 FEW080 M06/M09 Q1012 NOSIG",
+      "metarHtml": null,
       "tafHtml": "TAF BKPR 081730Z 0818/0918 VRB05KT 9999 SCT080 \n  TEMPO 0902/0909 3000 <span class=\"hl\">BR</span> \n  BECMG 0909/0911 22012KT \n  TEMPO 0911/0917 22015G25KT"
     },
     {
@@ -1955,7 +1920,7 @@
       "icao": "EGPD",
       "iata": "ABZ",
       "name": "Aberdeen International Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 4000,
       "worst_visibility_m": 4000,
@@ -1964,16 +1929,34 @@
         "BR"
       ],
       "severityScore": 10,
-      "metarRaw": "METAR EGPD 081920Z COR VRB02KT CAVOK M07/M08 Q0997 NOSIG",
+      "metarRaw": "METAR EGPD 081950Z COR VRB01KT 9999 1000E PRFG NSC M07/M08 Q0997 NOSIG",
       "tafRaw": "TAF EGPD 081656Z 0818/0918 VRB03KT 9999 SCT020 \n  PROB30 \n  TEMPO 0818/0820 4000 BR \n  TEMPO 0820/0915 6000 -RADZ BKN014 \n  PROB30 \n  TEMPO 0820/0903 BKN008 \n  PROB40 \n  TEMPO 0903/0910 4000 RADZ BR BKN004 \n  BECMG 0907/0910 12010KT \n  PROB40 \n  TEMPO 0912/0918 4000 RASN BR BKN006",
-      "metarHtml": "METAR EGPD 081920Z COR VRB02KT <span class=\"hl-vis\">CAVOK</span> M07/M08 Q0997 NOSIG",
+      "metarHtml": "METAR EGPD 081950Z COR VRB01KT 9999 1000E PRFG NSC M07/M08 Q0997 NOSIG",
       "tafHtml": "TAF EGPD 081656Z 0818/0918 VRB03KT 9999 SCT020 \n  PROB30 \n  TEMPO 0818/0820 4000 <span class=\"hl\">BR</span> \n  TEMPO 0820/0915 6000 -RADZ BKN014 \n  PROB30 \n  TEMPO 0820/0903 BKN008 \n  PROB40 \n  TEMPO 0903/0910 4000 RADZ <span class=\"hl\">BR</span> BKN004 \n  BECMG 0907/0910 12010KT \n  PROB40 \n  TEMPO 0912/0918 4000 RASN <span class=\"hl\">BR</span> BKN006"
+    },
+    {
+      "icao": "ESSA",
+      "iata": "ARN",
+      "name": "Stockholm-Arlanda Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 2500,
+      "taf_visibility_m": 2500,
+      "worst_visibility_m": 2500,
+      "ceiling_ft": 4700,
+      "hazards": [
+        "SHSN"
+      ],
+      "severityScore": 10,
+      "metarRaw": "METAR ESSA 081950Z 16009KT 9999 FEW031 BKN047 M01/M04 Q1016 TEMPO 2500 SHSN BKN025CB",
+      "tafRaw": "TAF ESSA 081730Z 0818/0918 16010KT 9999 BKN040 \n  PROB40 0818/0902 2500 -SHSN BKN013 BKN025TCU \n  PROB40 0907/0909 4000 -SHSN BKN014 BKN030TCU \n  BECMG 0900/0902 10007KT",
+      "metarHtml": "METAR ESSA 081950Z 16009KT 9999 FEW031 BKN047 M01/M04 Q1016 TEMPO 2500 <span class=\"hl\">SHSN</span> BKN025CB",
+      "tafHtml": "TAF ESSA 081730Z 0818/0918 16010KT 9999 BKN040 \n  PROB40 0818/0902 2500 -<span class=\"hl\">SHSN</span> BKN013 BKN025TCU \n  PROB40 0907/0909 4000 -<span class=\"hl\">SHSN</span> BKN014 BKN030TCU \n  BECMG 0900/0902 10007KT"
     },
     {
       "icao": "EYPA",
       "iata": "PLQ",
       "name": "Palanga International Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
@@ -1982,9 +1965,9 @@
         "BR"
       ],
       "severityScore": 10,
-      "metarRaw": "METAR EYPA 081920Z 08010KT CAVOK M09/M10 Q1015",
+      "metarRaw": "METAR EYPA 081950Z 07008KT CAVOK M09/M10 Q1015",
       "tafRaw": "TAF EYPA 081725Z 0818/0918 07010KT 9000 BKN005 \n  TEMPO 0818/0908 5000 BR BKN002 \n  BECMG 0908/0909 SCT015 \n  TEMPO 0909/0914 06015G25KT BKN015",
-      "metarHtml": "METAR EYPA 081920Z 08010KT <span class=\"hl-vis\">CAVOK</span> M09/M10 Q1015",
+      "metarHtml": "METAR EYPA 081950Z 07008KT <span class=\"hl-vis\">CAVOK</span> M09/M10 Q1015",
       "tafHtml": "TAF EYPA 081725Z 0818/0918 07010KT 9000 BKN005 \n  TEMPO 0818/0908 5000 <span class=\"hl\">BR</span> BKN002 \n  BECMG 0908/0909 SCT015 \n  TEMPO 0909/0914 06015G25KT BKN015"
     },
     {
@@ -2269,32 +2252,32 @@
       "icao": "EFTU",
       "iata": "TKU",
       "name": "Turku Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 6000,
       "worst_visibility_m": 6000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR EFTU 081920Z AUTO 10008KT CAVOK M15/M17 Q1022",
+      "metarRaw": "METAR EFTU 081950Z AUTO 10007KT CAVOK M15/M17 Q1022",
       "tafRaw": "TAF EFTU 081733Z 0818/0918 10009KT 9999 BKN027 \n  PROB30 0903/0908 6000 BKN006 \n  BECMG 0911/0913 04010KT",
-      "metarHtml": "METAR EFTU 081920Z AUTO 10008KT <span class=\"hl-vis\">CAVOK</span> M15/M17 Q1022",
+      "metarHtml": "METAR EFTU 081950Z AUTO 10007KT <span class=\"hl-vis\">CAVOK</span> M15/M17 Q1022",
       "tafHtml": "TAF EFTU 081733Z 0818/0918 10009KT 9999 BKN027 \n  PROB30 0903/0908 6000 BKN006 \n  BECMG 0911/0913 04010KT"
     },
     {
       "icao": "EKCH",
       "iata": "CPH",
       "name": "Copenhagen Kastrup Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR EKCH 081920Z AUTO 12015KT 9999 BKN023/// M01/M05 Q1010 NOSIG",
+      "metarRaw": "METAR EKCH 081950Z AUTO 12017KT 9999 BKN021/// M01/M05 Q1010 NOSIG",
       "tafRaw": "TAF EKCH 081727Z 0818/0918 12015KT 9999 BKN020 \n  TEMPO 0903/0908 10018G28KT \n  TEMPO 0912/0918 09020G30KT",
-      "metarHtml": "METAR EKCH 081920Z AUTO 12015KT 9999 BKN023/// M01/M05 Q1010 NOSIG",
+      "metarHtml": "METAR EKCH 081950Z AUTO 12017KT 9999 BKN021/// M01/M05 Q1010 NOSIG",
       "tafHtml": "TAF EKCH 081727Z 0818/0918 12015KT 9999 BKN020 \n  TEMPO 0903/0908 10018G28KT \n  TEMPO 0912/0918 09020G30KT"
     },
     {
@@ -2365,17 +2348,33 @@
       "icao": "ESGG",
       "iata": "GOT",
       "name": "Göteborg Landvetter Airport",
-      "updatedAt": "081920Z",
+      "updatedAt": "081950Z",
       "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR ESGG 081920Z 13004KT CAVOK M06/M07 Q1010",
+      "metarRaw": "METAR ESGG 081950Z 13005KT CAVOK M06/M07 Q1010",
       "tafRaw": "TAF ESGG 081730Z 0818/0918 13007KT 9999 SCT025 BKN030 \n  PROB40 0818/0819 BKN014 \n  PROB40 0909/0913 BKN012",
-      "metarHtml": "METAR ESGG 081920Z 13004KT <span class=\"hl-vis\">CAVOK</span> M06/M07 Q1010",
+      "metarHtml": "METAR ESGG 081950Z 13005KT <span class=\"hl-vis\">CAVOK</span> M06/M07 Q1010",
       "tafHtml": "TAF ESGG 081730Z 0818/0918 13007KT 9999 SCT025 BKN030 \n  PROB40 0818/0819 BKN014 \n  PROB40 0909/0913 BKN012"
+    },
+    {
+      "icao": "ESMS",
+      "iata": "MMX",
+      "name": "Malmö Sturup Airport",
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 10000,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": 2100,
+      "hazards": [],
+      "severityScore": 0,
+      "metarRaw": "METAR ESMS 081950Z 12012KT 9999 SCT017 BKN021 M02/M05 Q1010",
+      "tafRaw": "TAF ESMS 081727Z 0818/0918 16010KT 9999 BKN020 \n  BECMG 0821/0824 10010KT \n  TEMPO 0912/0918 09015G30KT",
+      "metarHtml": "METAR ESMS 081950Z 12012KT 9999 SCT017 BKN021 M02/M05 Q1010",
+      "tafHtml": "TAF ESMS 081727Z 0818/0918 16010KT 9999 BKN020 \n  BECMG 0821/0824 10010KT \n  TEMPO 0912/0918 09015G30KT"
     },
     {
       "icao": "HEGN",
@@ -2429,16 +2428,16 @@
       "icao": "LATI",
       "iata": "TIA",
       "name": "Tirana International Airport Mother Teresa",
-      "updatedAt": null,
-      "visibility_m": null,
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": null,
+      "metarRaw": "METAR LATI 081950Z 29004KT CAVOK 04/M02 Q1014 NOSIG",
       "tafRaw": "TAF LATI 081700Z 0818/0918 VRB05KT 9999 SCT050 BKN070 TX11/0918Z TN01/0902Z \n  BECMG 0908/0910 15010KT",
-      "metarHtml": null,
+      "metarHtml": "METAR LATI 081950Z 29004KT <span class=\"hl-vis\">CAVOK</span> 04/M02 Q1014 NOSIG",
       "tafHtml": "TAF LATI 081700Z 0818/0918 VRB05KT 9999 SCT050 BKN070 TX11/0918Z TN01/0902Z \n  BECMG 0908/0910 15010KT"
     },
     {
@@ -2781,16 +2780,16 @@
       "icao": "LWSK",
       "iata": "SKP",
       "name": "Skopje International Airport",
-      "updatedAt": null,
-      "visibility_m": null,
+      "updatedAt": "081950Z",
+      "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": null,
+      "metarRaw": "METAR LWSK 081950Z 02004KT 330V070 CAVOK M02/M07 Q1013 NOSIG",
       "tafRaw": "TAF LWSK 081735Z 0818/0918 VRB02KT 9999 SCT080 \n  TEMPO 0818/0822 02010KT",
-      "metarHtml": null,
+      "metarHtml": "METAR LWSK 081950Z 02004KT 330V070 <span class=\"hl-vis\">CAVOK</span> M02/M07 Q1013 NOSIG",
       "tafHtml": "TAF LWSK 081735Z 0818/0918 VRB02KT 9999 SCT080 \n  TEMPO 0818/0822 02010KT"
     },
     {
@@ -2844,10 +2843,10 @@
   ],
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 156,
+    "metarReturned": 158,
     "tafReturned": 142,
     "stationsWritten": 159,
-    "missingMetar": 3,
+    "missingMetar": 1,
     "missingTaf": 17
   },
   "errors": []
