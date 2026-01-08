@@ -68,10 +68,12 @@ Top row tiles are **clickable filters**:
 - **ENG ICE OPS** (pinned)  
   Condition: **METAR VIS ≤150 m AND FZFG**.  
   This is treated as an operational **stop-flag** and always sorts to the top.
-  The tile also shows the affected **IATA codes** in large, bold “chips”.
+  The tile shows the affected **IATA codes** in large, bold “chips”.
 - **CRIT** (severityScore ≥ 70)
 - **VIS ≤175** (worst of METAR/TAF)
 - **TS** (thunderstorm signal present)
+
+All tiles also render the affected **IATA codes** as readable chips (not only counts).
 - **Reset** clears filters
 
 Tiles always show counts for the **currently visible list** (after filters).

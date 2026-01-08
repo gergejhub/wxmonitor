@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Wizz Air METAR/TAF Monitor</title>
-  <link rel="stylesheet" href="assets/styles.css?v=24"/>
+  <link rel="stylesheet" href="assets/styles.css?v=25"/>
 </head>
 <body>
   <header class="top">
@@ -25,18 +25,21 @@
         <div class="tile__k">CRIT</div>
         <div class="tile__v" id="tileCritCount">0</div>
         <div class="tile__s">severityScore ≥ 70</div>
+        <div class="tile__iata" id="tileCritIata"></div>
       </button>
 
       <button class="tile" id="tileVis175" data-filter="vis175">
         <div class="tile__k">VIS ≤175</div>
         <div class="tile__v" id="tileVis175Count">0</div>
         <div class="tile__s">rapid operational impact</div>
+        <div class="tile__iata" id="tileVis175Iata"></div>
       </button>
 
       <button class="tile" id="tileTs" data-filter="ts">
         <div class="tile__k">TS</div>
         <div class="tile__v" id="tileTsCount">0</div>
         <div class="tile__s">thunderstorm present</div>
+        <div class="tile__iata" id="tileTsIata"></div>
       </button>
 
       <button class="tile tile--ghost" id="tileReset">
@@ -204,6 +207,6 @@
 
   <div class="scrim" id="scrim" hidden></div>
 
-  <script src="assets/app.js?v=24"></script>
+  <script src="assets/app.js?v=25"></script>
 </body>
 </html>
