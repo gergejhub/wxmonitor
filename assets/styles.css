@@ -217,6 +217,42 @@ body{
   user-select:none;
   font-weight:700;
 }
+
+/* View toggle button (Auto / TV) */
+.viewbtn{
+  margin-left:auto;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,47,166,.35);
+  background:linear-gradient(90deg, rgba(255,47,166,.18), rgba(122,60,255,.16));
+  color:var(--txt);
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.03) inset;
+}
+.viewbtn:hover{ border-color:rgba(255,47,166,.55); }
+.viewbtn .btn__k{
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.78;
+}
+.viewbtn .btn__v{
+  font-weight:950;
+  padding:3px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+}
+
+/* Device-aware responsiveness (keep data dense on desktop, reduce columns on small screens) */
+body.device-mobile .col-raw,
+body.device-tablet .col-raw{
+  display:none;
+}
+body.device-mobile .search{ min-width: 180px; }
 .toggle input{ transform:scale(1.05); }
 
 .legend{
@@ -541,3 +577,41 @@ tbody tr:hover{ background:rgba(255,255,255,.02); }
 
 .select{ color-scheme: dark; }
 .select option, .select optgroup{ background:#0f0c1a; color:#fff; }
+
+
+/* TV mode: large typography + extra readable, far-distance dashboard */
+body.view-tv{
+  --top-h: var(--top-h);
+}
+body.view-tv .tiles{
+  grid-template-columns:repeat(3, minmax(320px, 1fr));
+  width:min(1600px, 100%);
+  gap:18px;
+}
+body.view-tv .tile{
+  border-radius:22px;
+  padding:18px 18px;
+  min-height:130px;
+  box-shadow:
+    0 24px 44px rgba(0,0,0,.42),
+    0 0 0 1px rgba(255,255,255,.04) inset,
+    0 0 46px rgba(255,47,166,.16);
+}
+body.view-tv .tile__k{ font-size:14px; letter-spacing:.18em; }
+body.view-tv .tile__v{ font-size:54px; text-shadow:0 0 18px rgba(255,47,166,.22), 0 0 26px rgba(46,244,255,.14); }
+body.view-tv .tile__s{ font-size:13px; }
+body.view-tv .tile__iata span{
+  font-size:16px;
+  padding:7px 10px;
+  border-radius:999px;
+}
+body.view-tv .brand__title{ font-size:26px; }
+body.view-tv .brand__sub{ font-size:13px; }
+
+body.view-tv .tbl th{ font-size:13px; }
+body.view-tv .tbl td{ font-size:16px; }
+body.view-tv .airport__icao{ font-size:20px; }
+body.view-tv .airport__iata{ font-size:18px; }
+body.view-tv .raw{ font-size:14px; line-height:1.6; }
+body.view-tv .trend{ font-size:13px; padding:4px 10px; }
+body.view-tv .tag{ font-size:13px; padding:6px 10px; }

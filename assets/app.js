@@ -8,6 +8,68 @@
 const $ = (id) => document.getElementById(id);
 
 
+// View mode (Auto / TV) ----------------------------------------------------
+const VIEW_MODE_KEY = "wizz_viewMode"; // "auto" | "tv"
+let viewMode = (localStorage.getItem(VIEW_MODE_KEY) || "auto");
+
+function detectDeviceClass(){
+  const w = window.innerWidth || 1200;
+  if (w < 640) return "mobile";
+  if (w < 1024) return "tablet";
+  if (w >= 1800) return "tvhint"; // large wall displays; still requires manual TV mode
+  return "desktop";
+}
+function applyDeviceClass(){
+  const cls = detectDeviceClass();
+  document.body.classList.remove("device-mobile","device-tablet","device-desktop","device-tvhint");
+  document.body.classList.add(`device-${cls}`);
+}
+function applyViewMode(mode){
+  viewMode = mode;
+  localStorage.setItem(VIEW_MODE_KEY, viewMode);
+
+  document.body.classList.toggle("view-tv", viewMode === "tv");
+  document.body.classList.toggle("view-auto", viewMode === "auto");
+
+  applyDeviceClass();
+
+  const lbl = $("viewBtnLabel");
+  if (lbl) lbl.textContent = (viewMode === "tv" ? "TV" : "AUTO");
+
+  // Header height changes with font scale; recompute drawer offset
+  requestAnimationFrame(updateTopHeight);
+}
+function toggleTvMode(){
+  applyViewMode(viewMode === "tv" ? "auto" : "tv");
+}
+function initViewModeUI(){
+  // Default: auto adapts layout via CSS media queries; TV mode is manual
+  applyViewMode(viewMode);
+
+  const btn = $("viewBtn");
+  if (btn) btn.addEventListener("click", toggleTvMode);
+
+  const title = $("brandTitle");
+  if (title) title.addEventListener("dblclick", toggleTvMode);
+
+  window.addEventListener("resize", ()=>{
+    if (viewMode === "auto"){
+      applyDeviceClass();
+      requestAnimationFrame(updateTopHeight);
+    }
+  });
+
+  document.addEventListener("keydown", (e)=>{
+    if (e.shiftKey && (e.key === "T" || e.key === "t")){
+      e.preventDefault();
+      toggleTvMode();
+    }
+  });
+}
+
+
+
+
 
 function updateTopHeight(){
   const top = document.querySelector('header.top');
@@ -579,8 +641,8 @@ function rowHtml(st){
     <td><div class="triggers">${trigHtml}</div></td>
     <td>${metAge}</td>
     <td>${tafAge}</td>
-    <td><div class="raw">${metRaw}</div></td>
-    <td><div class="raw">${tafRaw}</div></td>
+    <td class="col-raw"><div class="raw">${metRaw}</div></td>
+    <td class="col-raw"><div class="raw">${tafRaw}</div></td>
   </tr>`;
 }
 
@@ -837,6 +899,8 @@ function bind(){
   $("cond").addEventListener("change", (e)=>{ view.cond = e.target.value; render(); });
   $("alert").addEventListener("change", (e)=>{ view.alert = e.target.value; render(); });
   $("sortPri").addEventListener("change", (e)=>{ view.sortPri = e.target.checked; render(); });
+  initViewModeUI();
+
 
   // tile filters
   $("tiles").addEventListener("click", (e)=>{
