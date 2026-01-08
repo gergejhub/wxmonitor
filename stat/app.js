@@ -91,6 +91,18 @@ function extractRvrMin(raw){
   return min;
 }
 
+function gustMaxKt(raw){
+  // Max gust in KT from groups like 27015G30KT or VRB05G25KT
+  if (!raw) return null;
+  let max = null;
+  for (const m of raw.matchAll(/\b(?:\d{3}|VRB)\d{2,3}G(\d{2,3})KT\b/g)){
+    const g = parseInt(m[1],10);
+    if (!isFinite(g)) continue;
+    if (max==null || g > max) max = g;
+  }
+  return max;
+}
+
 function worstVisFromTaf(raw){
   // TAF may contain multiple vis groups (4 digits). Exclude time groups like 0818/0918.
   if (!raw) return null;
@@ -332,8 +344,10 @@ function updateStationHistory(stations, generatedAtIso){
     const prev = stationSnap[icao] || {};
     const metVis = findVisMetersFromMetar(st.metarRaw);
     const metRvr = extractRvrMin(st.metarRaw);
+    const metGust = gustMaxKt(st.metarRaw);
     const tafVis = worstVisFromTaf(st.tafRaw);
     const tafRvr = extractRvrMin(st.tafRaw);
+    const tafGust = gustMaxKt(st.tafRaw);
     const metWx = wxFlags(st.metarRaw).join(",");
     const tafWx = wxFlags(st.tafRaw).join(",");
 
@@ -357,6 +371,14 @@ function updateStationHistory(stations, generatedAtIso){
           from: `${prev.metRvr} m`, to: `${metRvr} m`
         });
       }
+
+if (prev.metGust!=null && metGust!=null && prev.metGust !== metGust){
+  pushStationEvent(icao, {
+    t, metric:"METAR GUST(max)", src:"METAR",
+    dir: (metGust > prev.metGust) ? "worsened" : "improved",
+    from: `${prev.metGust} kt`, to: `${metGust} kt`
+  });
+}
       if (prev.metWx != null && metWx !== prev.metWx){
         pushStationEvent(icao, {t, metric:"METAR Wx", src:"METAR", note:`${prev.metWx||"—"} → ${metWx||"—"}`});
       }
@@ -383,6 +405,14 @@ function updateStationHistory(stations, generatedAtIso){
           from: `${prev.tafRvr} m`, to: `${tafRvr} m`
         });
       }
+
+if (prev.tafGust!=null && tafGust!=null && prev.tafGust !== tafGust){
+  pushStationEvent(icao, {
+    t, metric:"TAF GUST(max)", src:"TAF",
+    dir: (tafGust > prev.tafGust) ? "worsened" : "improved",
+    from: `${prev.tafGust} kt`, to: `${tafGust} kt`
+  });
+}
       if (prev.tafWx != null && tafWx !== prev.tafWx){
         pushStationEvent(icao, {t, metric:"TAF Wx", src:"TAF", note:`${prev.tafWx||"—"} → ${tafWx||"—"}`});
       }
@@ -395,7 +425,7 @@ function updateStationHistory(stations, generatedAtIso){
     stationSnap[icao] = {
       metIssue: metIssue || prev.metIssue || null,
       tafIssue: tafIssue || prev.tafIssue || null,
-      metVis, metRvr, tafVis, tafRvr, metWx, tafWx,
+      metVis, metRvr, metGust, tafVis, tafRvr, tafGust, metWx, tafWx,
       iata: st.iata || prev.iata || ""
     };
   }
@@ -451,12 +481,14 @@ function renderStations(){
     const icao = st.icao;
     const metVis = findVisMetersFromMetar(st.metarRaw);
     const metRvr = extractRvrMin(st.metarRaw);
+    const metGust = gustMaxKt(st.metarRaw);
     const tafVis = worstVisFromTaf(st.tafRaw);
     const tafRvr = extractRvrMin(st.tafRaw);
+    const tafGust = gustMaxKt(st.tafRaw);
     const metWx = wxFlags(st.metarRaw);
     const tafWx = wxFlags(st.tafRaw);
     const tms = lastTimesFor(icao);
-    return {st, metVis, metRvr, tafVis, tafRvr, metWx, tafWx, ...tms};
+    return {st, metVis, metRvr, metGust, tafVis, tafRvr, tafGust, metWx, tafWx, ...tms};
   });
 
   rows.sort((a,b)=>{
@@ -481,9 +513,11 @@ function renderStations(){
       r.st.iata || "—",
       r.metVis==null ? "—" : `${r.metVis} m`,
       r.metRvr==null ? "—" : `${r.metRvr} m`,
+      r.metGust==null ? "—" : `${r.metGust} kt`,
       metWxHtml,
       r.tafVis==null ? "—" : `${r.tafVis} m`,
       r.tafRvr==null ? "—" : `${r.tafRvr} m`,
+      r.tafGust==null ? "—" : `${r.tafGust} kt`,
       tafWxHtml,
       r.lastDet ? fmtUTC(new Date(r.lastDet)) : "—",
       r.lastImp ? fmtUTC(new Date(r.lastImp)) : "—",

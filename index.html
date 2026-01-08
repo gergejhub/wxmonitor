@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Wizz Air METAR/TAF Monitor</title>
-<link href="assets/styles.css?v=31" rel="stylesheet"/>
+<link href="assets/styles.css?v=32" rel="stylesheet"/>
 </head>
 <body>
 <header class="top">
@@ -78,6 +78,8 @@
 <option value="snow">SN</option>
 <option value="rain">RA / DZ</option>
 <option value="ts">TS</option>
+<option value="gust40">GUST ≥40KT</option>
+<option value="gust30">GUST ≥30KT</option>
 <option value="cig500">CIG&lt;500</option>
 </optgroup>
 </select>
@@ -108,6 +110,10 @@
 <span class="legend__txt">ceiling below 500 ft AGL (lowest BKN/OVC layer or VV in METAR/TAF; derived as ceiling_ft &lt; 500).</span>
 <span class="tag tag--eng">ENG ICE OPS</span>
 <span class="legend__txt">operational stop-flag when VIS ≤150 m and FZFG occur together.</span>
+</div>
+<div class="legend__row">
+  <span class="tag tag--gust">GUST≥30KT</span>
+  <span class="legend__txt">strong wind gusts detected in wind group (e.g. 27015G30KT). Shown with a dedicated highlight in METAR/TAF raw.</span>
 </div>
 <div class="legend__row">
 <span class="tag tag--vis">VIS≤…</span>
@@ -177,6 +183,6 @@
 </div>
 </aside>
 <div class="scrim" hidden="" id="scrim"></div>
-<script src="assets/app.js?v=31"></script>
+<script src="assets/app.js?v=32"></script>
 </body>
 </html>

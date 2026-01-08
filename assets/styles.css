@@ -446,6 +446,7 @@ tbody tr:hover{ background:rgba(255,255,255,.02); }
 .tag--vis{ border-color:rgba(255,207,90,.35); }
 .tag--rvr{ border-color:rgba(122,60,255,.35); }
 .tag--wx{ border-color:rgba(255,255,255,.18); }
+.tag--gust{ border-color:rgba(46,244,255,.35); }
 .tag--src{
   border-color:rgba(255,255,255,.18);
   padding:1px 6px;
@@ -505,6 +506,11 @@ tbody tr:hover{ background:rgba(255,255,255,.02); }
 .hl-wx-snow{ background:rgba(46,244,255,.14); }
 .hl-wx-fog{ background:rgba(255,255,255,.10); }
 .hl-wx-rain{ background:rgba(255,207,90,.10); }
+
+/* wind gusts */
+.hl[data-cat="wind"]{ border-color:rgba(46,244,255,.30); }
+.hl-gust-30{ background:rgba(46,244,255,.12); }
+.hl-gust-40{ background:rgba(255,75,92,.18); }
 
 .trend{
   display:inline-flex;

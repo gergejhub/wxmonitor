@@ -122,6 +122,16 @@ Buckets:
 - ≤500, ≤300, ≤200, ≤75 m  
 Each bucket has a dedicated color.
 
+### Wind gusts (GUST)
+Wind groups like `27015G30KT` are parsed for gust speed.
+- Gusts ≥30KT are highlighted (cyan) and flagged as `GUST≥30KT`
+- Gusts ≥40KT are highlighted more strongly (red) and flagged as `GUST≥40KT`
+
+Triggers show the source:
+- `M` = METAR (current)
+- `T` = TAF (forecast)
+- `M+T` = both
+
 ### Ceiling (CIG<500)
 Ceiling is derived from the lowest:
 - `BKN###`, `OVC###`, or `VV###`  

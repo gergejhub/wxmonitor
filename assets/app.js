@@ -146,6 +146,24 @@ function extractRvrMeters(raw){
   return vals;
 }
 
+function extractGustKt(raw){
+  // Returns all gust values in knots found in wind groups like 27015G30KT or VRB05G25KT
+  if (!raw) return [];
+  const out = [];
+  const re = /\b(?:\d{3}|VRB)\d{2,3}G(\d{2,3})KT\b/g;
+  let m;
+  while ((m = re.exec(raw)) !== null){
+    const g = parseInt(m[1],10);
+    if (!Number.isNaN(g)) out.push(g);
+  }
+  return out;
+}
+
+function gustMaxKt(raw){
+  const vals = extractGustKt(raw);
+  return vals.length ? Math.max(...vals) : null;
+}
+
 function ceilingFt(raw){
   if (!raw) return null;
   // BKN/OVC### or VV### where ### is hundreds of feet
@@ -184,6 +202,7 @@ function computeScores(raw){
   const rvrMin = rvr.length ? Math.min(...rvr) : null;
   const cig = ceilingFt(raw);
   const hz = hazardFlags(raw);
+  const gustMax = gustMaxKt(raw);
 
   let score = 0;
 
@@ -220,10 +239,16 @@ function computeScores(raw){
   if (hz.ra) score += 8;
   if (hz.br) score += 6;
 
+  // Wind gust contribution
+  if (gustMax !== null){
+    if (gustMax >= 40) score += 10;
+    else if (gustMax >= 30) score += 6;
+  }
+
   // cap-ish
   score = Math.min(100, score);
 
-  return {vis, rvrMin, cig, hz, score};
+  return {vis, rvrMin, cig, hz, gustMax, score};
 }
 
 function deriveStation(st){
@@ -312,6 +337,14 @@ function deriveStation(st){
         (ceilingFt(st.metarRaw || "") !== null && ceilingFt(st.metarRaw || "") < 500),
         (ceilingFt(st.tafRaw || "") !== null && ceilingFt(st.tafRaw || "") < 500));
 
+// Wind gusts
+const mg30 = (met.gustMax !== null && met.gustMax >= 30);
+const tg30 = (taf.gustMax !== null && taf.gustMax >= 30);
+const mg40 = (met.gustMax !== null && met.gustMax >= 40);
+const tg40 = (taf.gustMax !== null && taf.gustMax >= 40);
+// Show higher threshold if met/taf gusts are very strong
+addBy("GUST≥40KT", "tag--gust", mg40, tg40);
+addBy("GUST≥30KT", "tag--gust", mg30 && !mg40, tg30 && !tg40);
   // Wx
   const mhz = met.hz, thz = taf.hz;
   addBy("TS", "tag--wx", mhz.ts, thz.ts);
@@ -393,6 +426,17 @@ function computeAgeMinutesFromRawZ(raw, nowUtc=new Date()){
 function highlightRaw(raw){
   // escape
   let s = escapeHtml(raw || "");
+
+// Wind gusts (KT): highlight gust groups like 27015G30KT
+s = s.replace(/\b(?:\d{3}|VRB)\d{2,3}G(\d{2,3})KT\b/g, (m, g) => {
+  const gv = parseInt(g,10);
+  if (Number.isNaN(gv)) return m;
+  let cls = null;
+  if (gv >= 40) cls = "hl-gust-40";
+  else if (gv >= 30) cls = "hl-gust-30";
+  if (!cls) return m;
+  return `<span class="hl ${cls}" data-cat="wind">${m}</span>`;
+});
 
   // RVR
   s = s.replace(/\bR\d{2}[LRC]?\/([PM]?)(\d{4})(?:V([PM]?)(\d{4}))?([UDN])?\b/g, (m, p1, v1, p2, v2) => {
@@ -693,6 +737,12 @@ function applyFilters(list){
       case "ts":
         if (!(st.met.hz.ts || st.taf.hz.ts)) return false;
         break;
+case "gust40":
+  if (!((st.met.gustMax !== null && st.met.gustMax >= 40) || (st.taf.gustMax !== null && st.taf.gustMax >= 40))) return false;
+  break;
+case "gust30":
+  if (!((st.met.gustMax !== null && st.met.gustMax >= 30) || (st.taf.gustMax !== null && st.taf.gustMax >= 30))) return false;
+  break;
       case "cig500":
         if (!(st.cigAll !== null && st.cigAll < 500)) return false;
         break;
