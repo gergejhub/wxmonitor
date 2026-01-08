@@ -700,3 +700,58 @@ body.view-tv .tag{ font-size:13px; padding:6px 10px; }
 .statsLink{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:#fff;text-decoration:none;font-weight:700;letter-spacing:.04em;font-size:.78rem;background:rgba(0,0,0,.18)}
 .statsLink:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.08)}
 .brand__sub--links{margin-top:.35rem}
+
+
+/* v33: WIND tile + IATA wall */
+.tile--wind{
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 14px 40px rgba(0,0,0,.35);
+}
+
+.iatawall{
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(10px);
+}
+.iatawall__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.iatawall__title{
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.iatawall__meta{
+  opacity: .8;
+  font-size: 12px;
+}
+.iatawall__chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+}
+.iatachip{
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.iatachip:hover{ background: rgba(255,255,255,.10); }
+
+.btn--mini{
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  width: auto;
+}
