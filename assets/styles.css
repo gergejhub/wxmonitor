@@ -57,6 +57,7 @@ body{
 
 
 .brand__title{
+  white-space:nowrap;
   font-size:22px;
   font-weight:800;
   letter-spacing:.3px;
@@ -66,6 +67,39 @@ body{
   color:transparent;
   text-shadow:0 0 18px rgba(255,47,166,.18);
 }
+
+.viewpill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,47,166,.45);
+  background:linear-gradient(90deg, rgba(255,47,166,.30), rgba(122,60,255,.24));
+  color:rgba(255,255,255,.92);
+  font-weight:900;
+  letter-spacing:.25px;
+  cursor:pointer;
+  flex:0 0 auto;
+  user-select:none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset;
+}
+.viewpill__k{
+  font-size:11px;
+  opacity:.9;
+}
+.viewpill__v{
+  font-size:12px;
+  padding:2px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.14);
+}
+@media (max-width: 520px){
+  .brand__row{flex-wrap:wrap;}
+  .brand__title{white-space:normal;}
+}
+
 .brand__sub{
   margin-top:4px;
   color:var(--mut);
@@ -78,7 +112,8 @@ body{
   align-items:baseline;
   gap:12px;
 }
-.brand__row .brand__title{ margin:0; }
+.brand__row .brand__title{
+  white-space:nowrap; margin:0; }
 
 .tiles{
   display:grid;
@@ -622,7 +657,8 @@ body.view-tv .tile__iata span{
   padding:7px 10px;
   border-radius:999px;
 }
-body.view-tv .brand__title{ font-size:26px; }
+body.view-tv .brand__title{
+  white-space:nowrap; font-size:26px; }
 body.view-tv .brand__sub{ font-size:13px; }
 
 body.view-tv .tbl th{ font-size:13px; }
