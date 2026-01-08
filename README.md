@@ -228,7 +228,7 @@ For OCC wall screens / large TVs you can enable **TV Mode** which increases:
 
 How to toggle TV Mode:
 
-- Click the **View** button (AUTO ↔ TV) on the toolbar, or
+- Click the **View** indicator/button (AUTO ↔ TV) next to the **Status table** title in the header, or
 - Press **Shift+T**, or
 - Double‑click the **Status table** title.
 
