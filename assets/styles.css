@@ -72,6 +72,14 @@ body{
   font-size:13px;
 }
 
+
+.brand__row{
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+}
+.brand__row .brand__title{ margin:0; }
+
 .tiles{
   display:grid;
   grid-template-columns:repeat(5, minmax(210px, 1fr));
@@ -221,7 +229,9 @@ body{
 
 /* View toggle button (Auto / TV) */
 .viewbtn{
-  margin-left:auto;
+  margin-left:12px;
+  margin-top:0;
+  width:auto;
   display:inline-flex;
   align-items:center;
   gap:10px;
