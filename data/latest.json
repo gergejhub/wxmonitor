@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-10T19:36:08.161Z",
+  "generatedAt": "2026-01-10T19:43:05.511Z",
   "stations": [
     {
       "icao": "LJLJ",
@@ -2059,9 +2059,9 @@
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR EDLW 101920Z 03005KT CAVOK M05/M09 Q1018",
+      "metarRaw": "METAR EDLW 101920Z COR 03005KT CAVOK M05/M09 Q1018",
       "tafRaw": "TAF EDLW 101700Z 1018/1118 05008KT CAVOK \n  BECMG 1019/1022 VRB03KT \n  BECMG 1102/1105 15005KT",
-      "metarHtml": "METAR EDLW 101920Z 03005KT <span class=\"hl-vis\">CAVOK</span> M05/M09 Q1018",
+      "metarHtml": "METAR EDLW 101920Z COR 03005KT <span class=\"hl-vis\">CAVOK</span> M05/M09 Q1018",
       "tafHtml": "TAF EDLW 101700Z 1018/1118 05008KT <span class=\"hl-vis\">CAVOK</span> \n  BECMG 1019/1022 VRB03KT \n  BECMG 1102/1105 15005KT"
     },
     {
