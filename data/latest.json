@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-10T20:34:53.080Z",
+  "generatedAt": "2026-01-10T20:46:57.515Z",
   "stations": [
     {
       "icao": "EPGD",
@@ -7,18 +7,17 @@
       "name": "Gdańsk Lech Wałęsa Airport",
       "updatedAt": "102030Z",
       "visibility_m": 100,
-      "taf_visibility_m": 400,
+      "taf_visibility_m": null,
       "worst_visibility_m": 100,
       "ceiling_ft": 100,
       "hazards": [
-        "SHSN",
-        "BLSN"
+        "SHSN"
       ],
       "severityScore": 100,
       "metarRaw": "METAR EPGD 102030Z 34018G32KT 0100 R29///// +SHSN DRSN BKN001 BKN009CB M02/M03 Q1006",
-      "tafRaw": "TAF EPGD 101730Z 1018/1118 34012KT 9999 -SHSN SCT020TCU \n  TEMPO 1018/1118 35020G31KT 0900 +SHSN DRSN BKN014 BKN020CB \n  PROB40 \n  TEMPO 1018/1118 0400 +SHSNGS BLSN BKN002 BKN009CB",
+      "tafRaw": null,
       "metarHtml": "METAR EPGD 102030Z 34018G32KT <span class=\"hl-vis\">0100</span> R29///// +<span class=\"hl\">SHSN</span> DRSN BKN001 BKN009CB M02/M03 Q1006",
-      "tafHtml": "TAF EPGD 101730Z 1018/1118 34012KT 9999 -<span class=\"hl\">SHSN</span> SCT020TCU \n  TEMPO 1018/1118 35020G31KT 0900 +<span class=\"hl\">SHSN</span> DRSN BKN014 BKN020CB \n  PROB40 \n  TEMPO 1018/1118 <span class=\"hl-vis\">0400</span> +SHSNGS <span class=\"hl\">BLSN</span> BKN002 BKN009CB"
+      "tafHtml": null
     },
     {
       "icao": "LJLJ",
@@ -63,7 +62,7 @@
       "icao": "UAAA",
       "iata": "ALA",
       "name": "Almaty International Airport",
-      "updatedAt": "102000Z",
+      "updatedAt": "102030Z",
       "visibility_m": 1400,
       "taf_visibility_m": 200,
       "worst_visibility_m": 200,
@@ -73,17 +72,17 @@
         "FZFG"
       ],
       "severityScore": 95,
-      "metarRaw": "METAR UAAA 102000Z 20002MPS 1400 R23L/P2000N BR FEW100 M05/M07 Q1017 NOSIG",
+      "metarRaw": "METAR UAAA 102030Z VRB01MPS 1400 R23L/P2000D BR FEW100 M05/M07 Q1017 NOSIG",
       "tafRaw": "TAF UAAA 101700Z 1018/1118 24003MPS 0800 FZFG SCT011 BKN100 TX05/1109Z TNM07/1101Z \n  TEMPO 1018/1105 17002MPS 0200 VV002 \n  FM110600 02003MPS 3100 BR FU SCT020 BKN100 \n  TEMPO 1106/1112 28003G08MPS \n  TEMPO 1112/1118 21003MPS 1200 SCT005 BKN020",
-      "metarHtml": "METAR UAAA 102000Z 20002MPS 1400 R23L/P2000N <span class=\"hl\">BR</span> FEW100 M05/M07 Q1017 NOSIG",
+      "metarHtml": "METAR UAAA 102030Z VRB01MPS 1400 R23L/P2000D <span class=\"hl\">BR</span> FEW100 M05/M07 Q1017 NOSIG",
       "tafHtml": "TAF UAAA 101700Z 1018/1118 24003MPS <span class=\"hl-vis\">0800</span> <span class=\"hl\">FZFG</span> SCT011 BKN100 TX05/1109Z TNM07/1101Z \n  TEMPO 1018/1105 17002MPS <span class=\"hl-vis\">0200</span> VV002 \n  FM110600 02003MPS 3100 <span class=\"hl\">BR</span> FU SCT020 BKN100 \n  TEMPO 1106/1112 28003G08MPS \n  TEMPO 1112/1118 21003MPS 1200 SCT005 BKN020"
     },
     {
       "icao": "UDYZ",
       "iata": "EVN",
       "name": "Zvartnots International Airport",
-      "updatedAt": "102000Z",
-      "visibility_m": 6000,
+      "updatedAt": "102030Z",
+      "visibility_m": 4300,
       "taf_visibility_m": 200,
       "worst_visibility_m": 200,
       "ceiling_ft": null,
@@ -92,9 +91,9 @@
         "FZFG"
       ],
       "severityScore": 95,
-      "metarRaw": "METAR UDYZ 102000Z 36003KT 6000 2100W BR FEW046 M04/M05 Q1018 NOSIG",
+      "metarRaw": "METAR UDYZ 102030Z VRB01KT 4300 BR FEW046 M04/M06 Q1019 NOSIG",
       "tafRaw": "TAF UDYZ 101700Z 1018/1118 VRB04KT 0800 FZFG FEW020 \n  TEMPO 1018/1024 0200 FZFG VV001",
-      "metarHtml": "METAR UDYZ 102000Z 36003KT 6000 2100W <span class=\"hl\">BR</span> FEW046 M04/M05 Q1018 NOSIG",
+      "metarHtml": "METAR UDYZ 102030Z VRB01KT 4300 <span class=\"hl\">BR</span> FEW046 M04/M06 Q1019 NOSIG",
       "tafHtml": "TAF UDYZ 101700Z 1018/1118 VRB04KT <span class=\"hl-vis\">0800</span> <span class=\"hl\">FZFG</span> FEW020 \n  TEMPO 1018/1024 <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001"
     },
     {
@@ -880,9 +879,9 @@
         "SN"
       ],
       "severityScore": 35,
-      "metarRaw": "METAR LQTZ 102030Z 31006KT 7000 -SN FEW005 OVC015 00/00 Q1006",
+      "metarRaw": "METAR LQTZ 102030Z COR 31006KT 7000 -SN FEW005 OVC015 00/00 Q1006",
       "tafRaw": null,
-      "metarHtml": "METAR LQTZ 102030Z 31006KT 7000 -<span class=\"hl\">SN</span> FEW005 OVC015 00/00 Q1006",
+      "metarHtml": "METAR LQTZ 102030Z COR 31006KT 7000 -<span class=\"hl\">SN</span> FEW005 OVC015 00/00 Q1006",
       "tafHtml": null
     },
     {
@@ -1292,9 +1291,9 @@
       ],
       "severityScore": 18,
       "metarRaw": "METAR EFTU 102020Z AUTO 03008KT 360V070 CAVOK M08/M11 Q1012",
-      "tafRaw": "TAF EFTU 101734Z 1018/1118 02010KT CAVOK \n  TEMPO 1018/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -SN \n  BECMG 1112/1114 8000 BKN013 \n  TEMPO 1114/1118 6000 BKN015",
+      "tafRaw": "TAF EFTU 102024Z 1021/1121 02010KT CAVOK \n  TEMPO 1021/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -SN \n  BECMG 1112/1114 8000 BKN013 \n  TEMPO 1114/1121 6000 BKN015",
       "metarHtml": "METAR EFTU 102020Z AUTO 03008KT 360V070 <span class=\"hl-vis\">CAVOK</span> M08/M11 Q1012",
-      "tafHtml": "TAF EFTU 101734Z 1018/1118 02010KT <span class=\"hl-vis\">CAVOK</span> \n  TEMPO 1018/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -<span class=\"hl\">SN</span> \n  BECMG 1112/1114 8000 BKN013 \n  TEMPO 1114/1118 6000 BKN015"
+      "tafHtml": "TAF EFTU 102024Z 1021/1121 02010KT <span class=\"hl-vis\">CAVOK</span> \n  TEMPO 1021/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -<span class=\"hl\">SN</span> \n  BECMG 1112/1114 8000 BKN013 \n  TEMPO 1114/1121 6000 BKN015"
     },
     {
       "icao": "EPWR",
@@ -1426,7 +1425,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "102015Z",
+      "updatedAt": "102045Z",
       "visibility_m": 10000,
       "taf_visibility_m": 4000,
       "worst_visibility_m": 4000,
@@ -1435,9 +1434,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 102015Z 28026G40KT 250V320 9999 SCT028 SCT047 12/05 Q1012 NOSIG",
+      "metarRaw": "METAR LMML 102045Z 29021G31KT 9999 FEW028 12/04 Q1013 NOSIG",
       "tafRaw": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 SHRA SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS",
-      "metarHtml": "METAR LMML 102015Z 28026G40KT 250V320 9999 SCT028 SCT047 12/05 Q1012 NOSIG",
+      "metarHtml": "METAR LMML 102045Z 29021G31KT 9999 FEW028 12/04 Q1013 NOSIG",
       "tafHtml": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 <span class=\"hl\">SHRA</span> SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS"
     },
     {
@@ -1838,7 +1837,7 @@
       "icao": "UDSG",
       "iata": "LWN",
       "name": "Shirak International Airport",
-      "updatedAt": "102000Z",
+      "updatedAt": "102030Z",
       "visibility_m": 10000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
@@ -1847,9 +1846,9 @@
         "BR"
       ],
       "severityScore": 10,
-      "metarRaw": "METAR UDSG 102000Z 05003KT 9999 FEW049 M15/M17 Q1017 NOSIG",
+      "metarRaw": "METAR UDSG 102030Z 04004KT 9999 FEW049 M16/M18 Q1018 NOSIG",
       "tafRaw": "TAF UDSG 101658Z 1018/1118 VRB06KT 9999 FEW040 \n  TEMPO 1018/1024 5000 BR",
-      "metarHtml": "METAR UDSG 102000Z 05003KT 9999 FEW049 M15/M17 Q1017 NOSIG",
+      "metarHtml": "METAR UDSG 102030Z 04004KT 9999 FEW049 M16/M18 Q1018 NOSIG",
       "tafHtml": "TAF UDSG 101658Z 1018/1118 VRB06KT 9999 FEW040 \n  TEMPO 1018/1024 5000 <span class=\"hl\">BR</span>"
     },
     {
@@ -2088,9 +2087,9 @@
       "hazards": [],
       "severityScore": 0,
       "metarRaw": "METAR ENAL 102020Z 15009KT CAVOK M02/M10 Q1021",
-      "tafRaw": "TAF ENAL 101700Z 1018/1103 16008KT CAVOK",
+      "tafRaw": "TAF ENAL 102000Z 1021/1106 16008KT CAVOK",
       "metarHtml": "METAR ENAL 102020Z 15009KT <span class=\"hl-vis\">CAVOK</span> M02/M10 Q1021",
-      "tafHtml": "TAF ENAL 101700Z 1018/1103 16008KT <span class=\"hl-vis\">CAVOK</span>"
+      "tafHtml": "TAF ENAL 102000Z 1021/1106 16008KT <span class=\"hl-vis\">CAVOK</span>"
     },
     {
       "icao": "ENBR",
@@ -2784,26 +2783,26 @@
       "icao": "UGKO",
       "iata": "KUT",
       "name": "David the Builder Kutaisi International Airport",
-      "updatedAt": "102000Z",
+      "updatedAt": "102030Z",
       "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR UGKO 102000Z 08014KT CAVOK 03/M00 Q1013 NOSIG",
+      "metarRaw": "METAR UGKO 102030Z 08012KT CAVOK 03/M00 Q1013 NOSIG",
       "tafRaw": "TAF UGKO 101700Z 1018/1118 08017G27KT CAVOK TX15/1111Z TN03/1022Z \n  TEMPO 1102/1109 08024G37KT BKN050",
-      "metarHtml": "METAR UGKO 102000Z 08014KT <span class=\"hl-vis\">CAVOK</span> 03/M00 Q1013 NOSIG",
+      "metarHtml": "METAR UGKO 102030Z 08012KT <span class=\"hl-vis\">CAVOK</span> 03/M00 Q1013 NOSIG",
       "tafHtml": "TAF UGKO 101700Z 1018/1118 08017G27KT <span class=\"hl-vis\">CAVOK</span> TX15/1111Z TN03/1022Z \n  TEMPO 1102/1109 08024G37KT BKN050"
     }
   ],
   "stats": {
     "icaoCount": 159,
     "metarReturned": 157,
-    "tafReturned": 148,
+    "tafReturned": 147,
     "stationsWritten": 159,
     "missingMetar": 2,
-    "missingTaf": 11
+    "missingTaf": 12
   },
   "errors": []
 }
