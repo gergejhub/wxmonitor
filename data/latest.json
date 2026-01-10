@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-10T21:38:37.100Z",
+  "generatedAt": "2026-01-10T21:46:00.452Z",
   "stations": [
     {
       "icao": "LJLJ",
@@ -18,25 +18,6 @@
       "tafRaw": "TAF LJLJ 101700Z 1018/1118 VRB02KT 0200 FZFG VV001 \n  BECMG 1108/1110 7000 NSW SCT010",
       "metarHtml": "METAR LJLJ 102130Z 28003KT 240V320 <span class=\"hl-vis\">0500</span> R30/0700U <span class=\"hl\">FZFG</span> VV001 M01/M01 Q1007 NOSIG",
       "tafHtml": "TAF LJLJ 101700Z 1018/1118 VRB02KT <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001 \n  BECMG 1108/1110 7000 NSW SCT010"
-    },
-    {
-      "icao": "LWSK",
-      "iata": "SKP",
-      "name": "Skopje International Airport",
-      "updatedAt": "102120Z",
-      "visibility_m": 600,
-      "taf_visibility_m": 200,
-      "worst_visibility_m": 200,
-      "ceiling_ft": 300,
-      "hazards": [
-        "FG",
-        "SN"
-      ],
-      "severityScore": 100,
-      "metarRaw": "METAR LWSK 102120Z VRB02KT 0600 R34/1300D FG BKN003 OVC015 01/00 Q1000 NOSIG",
-      "tafRaw": "TAF LWSK 102050Z 1021/1121 VRB02KT 0200 FG OVC002 \n  TEMPO 1021/1023 0600 -DZFG BKN003 OVC015 \n  BECMG 1023/1101 34010KT 9999 BKN005 OVC020 \n  PROB40 \n  TEMPO 1023/1106 1500 -SN BKN008 OVC030 \n  TEMPO 1109/1120 36015G25KT SCT020 BKN040",
-      "metarHtml": "METAR LWSK 102120Z VRB02KT <span class=\"hl-vis\">0600</span> R34/1300D <span class=\"hl\">FG</span> BKN003 OVC015 01/00 Q1000 NOSIG",
-      "tafHtml": "TAF LWSK 102050Z 1021/1121 VRB02KT <span class=\"hl-vis\">0200</span> <span class=\"hl\">FG</span> OVC002 \n  TEMPO 1021/1023 <span class=\"hl-vis\">0600</span> -DZFG BKN003 OVC015 \n  BECMG 1023/1101 34010KT 9999 BKN005 OVC020 \n  PROB40 \n  TEMPO 1023/1106 1500 -<span class=\"hl\">SN</span> BKN008 OVC030 \n  TEMPO 1109/1120 36015G25KT SCT020 BKN040"
     },
     {
       "icao": "UAAA",
@@ -134,6 +115,24 @@
       "tafRaw": "TAF LFBD 101700Z 1018/1124 30005KT 9999 SCT030 TX07/1115Z TN00/1106Z \n  BECMG 1018/1020 VRB02KT \n  BECMG 1101/1103 4000 BR \n  BECMG 1103/1105 0300 FG VV/// \n  BECMG 1111/1113 4000 BR BKN002 \n  BECMG 1113/1115 CAVOK \n  BECMG 1117/1119 BKN030 \n  TEMPO 1119/1124 4000 -RA",
       "metarHtml": "METAR LFBD 102130Z AUTO 22002KT 4900 1100 R23/1100D R05/1900D R29/P2300 <span class=\"hl\">BR</span> FEW007 03/03 Q1025",
       "tafHtml": "TAF LFBD 101700Z 1018/1124 30005KT 9999 SCT030 TX07/1115Z TN00/1106Z \n  BECMG 1018/1020 VRB02KT \n  BECMG 1101/1103 4000 <span class=\"hl\">BR</span> \n  BECMG 1103/1105 <span class=\"hl-vis\">0300</span> <span class=\"hl\">FG</span> VV/// \n  BECMG 1111/1113 4000 <span class=\"hl\">BR</span> BKN002 \n  BECMG 1113/1115 <span class=\"hl-vis\">CAVOK</span> \n  BECMG 1117/1119 BKN030 \n  TEMPO 1119/1124 4000 -<span class=\"hl\">RA</span>"
+    },
+    {
+      "icao": "LWSK",
+      "iata": "SKP",
+      "name": "Skopje International Airport",
+      "updatedAt": "102120Z",
+      "visibility_m": 600,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 600,
+      "ceiling_ft": 300,
+      "hazards": [
+        "FG"
+      ],
+      "severityScore": 85,
+      "metarRaw": "METAR LWSK 102120Z VRB02KT 0600 R34/1300D FG BKN003 OVC015 01/00 Q1000 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR LWSK 102120Z VRB02KT <span class=\"hl-vis\">0600</span> R34/1300D <span class=\"hl\">FG</span> BKN003 OVC015 01/00 Q1000 NOSIG",
+      "tafHtml": null
     },
     {
       "icao": "UDYZ",
@@ -1441,7 +1440,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "102115Z",
+      "updatedAt": "102145Z",
       "visibility_m": 10000,
       "taf_visibility_m": 4000,
       "worst_visibility_m": 4000,
@@ -1450,9 +1449,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 102115Z 27026G39KT 9999 FEW028 SCT045 12/04 Q1013 NOSIG",
+      "metarRaw": "METAR LMML 102145Z 28027G37KT 9999 FEW025 SCT045 12/03 Q1012 NOSIG",
       "tafRaw": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 SHRA SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS",
-      "metarHtml": "METAR LMML 102115Z 27026G39KT 9999 FEW028 SCT045 12/04 Q1013 NOSIG",
+      "metarHtml": "METAR LMML 102145Z 28027G37KT 9999 FEW025 SCT045 12/03 Q1012 NOSIG",
       "tafHtml": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 <span class=\"hl\">SHRA</span> SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS"
     },
     {
@@ -2791,10 +2790,10 @@
   "stats": {
     "icaoCount": 159,
     "metarReturned": 157,
-    "tafReturned": 145,
+    "tafReturned": 144,
     "stationsWritten": 159,
     "missingMetar": 2,
-    "missingTaf": 14
+    "missingTaf": 15
   },
   "errors": []
 }
