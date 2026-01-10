@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-10T22:35:02.741Z",
+  "generatedAt": "2026-01-10T22:47:13.178Z",
   "stations": [
     {
       "icao": "LJLJ",
@@ -23,19 +23,18 @@
       "icao": "UDYZ",
       "iata": "EVN",
       "name": "Zvartnots International Airport",
-      "updatedAt": "102200Z",
-      "visibility_m": 1900,
+      "updatedAt": "102230Z",
+      "visibility_m": 750,
       "taf_visibility_m": 200,
       "worst_visibility_m": 200,
-      "ceiling_ft": null,
+      "ceiling_ft": 100,
       "hazards": [
-        "BR",
         "FZFG"
       ],
-      "severityScore": 95,
-      "metarRaw": "METAR UDYZ 102200Z 15001KT 1900 R08/P2000D BR FEW046 M07/M09 Q1019 NOSIG",
+      "severityScore": 100,
+      "metarRaw": "METAR UDYZ 102230Z 00000KT 0750 0050W R08/0225N FZFG VV001 M09/M10 Q1020 NOSIG",
       "tafRaw": "TAF UDYZ 101700Z 1018/1118 VRB04KT 0800 FZFG FEW020 \n  TEMPO 1018/1024 0200 FZFG VV001",
-      "metarHtml": "METAR UDYZ 102200Z 15001KT 1900 R08/P2000D <span class=\"hl\">BR</span> FEW046 M07/M09 Q1019 NOSIG",
+      "metarHtml": "METAR UDYZ 102230Z 00000KT <span class=\"hl-vis\">0750</span> 0050W R08/0225N <span class=\"hl\">FZFG</span> VV001 M09/M10 Q1020 NOSIG",
       "tafHtml": "TAF UDYZ 101700Z 1018/1118 VRB04KT <span class=\"hl-vis\">0800</span> <span class=\"hl\">FZFG</span> FEW020 \n  TEMPO 1018/1024 <span class=\"hl-vis\">0200</span> <span class=\"hl\">FZFG</span> VV001"
     },
     {
@@ -649,25 +648,6 @@
       "tafHtml": "TAF LRTM 101400Z 1015/1024 VRB04KT 9999 SCT020 BKN030 \n  BECMG 1015/1017 5000 <span class=\"hl\">BR</span> \n  TEMPO 1018/1021 1500 <span class=\"hl\">BR</span> BKN005 \n  TEMPO 1021/1024 3000 -<span class=\"hl\">SN</span> BKN010 OVC020"
     },
     {
-      "icao": "LATI",
-      "iata": "TIA",
-      "name": "Tirana International Airport Mother Teresa",
-      "updatedAt": "102220Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 4000,
-      "worst_visibility_m": 4000,
-      "ceiling_ft": 2800,
-      "hazards": [
-        "RA",
-        "TSRA"
-      ],
-      "severityScore": 37,
-      "metarRaw": "METAR LATI 102220Z 13011KT 090V150 9999 -RA FEW005 SCT020CB BKN028 07/03 Q0998 NOSIG",
-      "tafRaw": "TAF LATI 101700Z 1018/1118 14014KT 9999 SCT030 BKN060 TX12/1112Z TN03/1105Z \n  TEMPO 1018/1101 VRB10G20KT 4000 TSRA FEW010 SCT015CB OVC040 \n  BECMG 1100/1102 34014KT",
-      "metarHtml": "METAR LATI 102220Z 13011KT 090V150 9999 -<span class=\"hl\">RA</span> FEW005 SCT020CB BKN028 07/03 Q0998 NOSIG",
-      "tafHtml": "TAF LATI 101700Z 1018/1118 14014KT 9999 SCT030 BKN060 TX12/1112Z TN03/1105Z \n  TEMPO 1018/1101 VRB10G20KT 4000 <span class=\"hl\">TSRA</span> FEW010 SCT015CB OVC040 \n  BECMG 1100/1102 34014KT"
-    },
-    {
       "icao": "LICA",
       "iata": "SUF",
       "name": "Lamezia Terme Sant'Eufemia International Airport",
@@ -1055,25 +1035,6 @@
       "tafHtml": null
     },
     {
-      "icao": "LWSK",
-      "iata": "SKP",
-      "name": "Skopje International Airport",
-      "updatedAt": "102220Z",
-      "visibility_m": 3000,
-      "taf_visibility_m": null,
-      "worst_visibility_m": 3000,
-      "ceiling_ft": null,
-      "hazards": [
-        "BR",
-        "RA"
-      ],
-      "severityScore": 27,
-      "metarRaw": "METAR LWSK 102220Z VRB02KT 3000 -RA BR FEW005/// OVC025/// 01/01 Q1001 NOSIG",
-      "tafRaw": null,
-      "metarHtml": "METAR LWSK 102220Z VRB02KT 3000 -<span class=\"hl\">RA</span> <span class=\"hl\">BR</span> FEW005/// OVC025/// 01/01 Q1001 NOSIG",
-      "tafHtml": null
-    },
-    {
       "icao": "LEBB",
       "iata": "BIO",
       "name": "Bilbao Airport",
@@ -1126,6 +1087,24 @@
       "tafRaw": "TAF ENGM 101700Z 1018/1118 34005KT CAVOK \n  PROB30 1018/1118 2000 BCFG BKN002",
       "metarHtml": "METAR ENGM 102220Z 34004KT 300V040 9999 BKN006 M16/M18 Q1023",
       "tafHtml": "TAF ENGM 101700Z 1018/1118 34005KT <span class=\"hl-vis\">CAVOK</span> \n  PROB30 1018/1118 2000 BCFG BKN002"
+    },
+    {
+      "icao": "LATI",
+      "iata": "TIA",
+      "name": "Tirana International Airport Mother Teresa",
+      "updatedAt": null,
+      "visibility_m": null,
+      "taf_visibility_m": 4000,
+      "worst_visibility_m": 4000,
+      "ceiling_ft": null,
+      "hazards": [
+        "TSRA"
+      ],
+      "severityScore": 25,
+      "metarRaw": null,
+      "tafRaw": "TAF LATI 101700Z 1018/1118 14014KT 9999 SCT030 BKN060 TX12/1112Z TN03/1105Z \n  TEMPO 1018/1101 VRB10G20KT 4000 TSRA FEW010 SCT015CB OVC040 \n  BECMG 1100/1102 34014KT",
+      "metarHtml": null,
+      "tafHtml": "TAF LATI 101700Z 1018/1118 14014KT 9999 SCT030 BKN060 TX12/1112Z TN03/1105Z \n  TEMPO 1018/1101 VRB10G20KT 4000 <span class=\"hl\">TSRA</span> FEW010 SCT015CB OVC040 \n  BECMG 1100/1102 34014KT"
     },
     {
       "icao": "LBWN",
@@ -1345,18 +1324,18 @@
       "icao": "UAAA",
       "iata": "ALA",
       "name": "Almaty International Airport",
-      "updatedAt": "102200Z",
-      "visibility_m": 1700,
+      "updatedAt": "102230Z",
+      "visibility_m": 1800,
       "taf_visibility_m": null,
-      "worst_visibility_m": 1700,
+      "worst_visibility_m": 1800,
       "ceiling_ft": null,
       "hazards": [
         "BR"
       ],
       "severityScore": 15,
-      "metarRaw": "METAR UAAA 102200Z VRB01MPS 1700 R23L/P2000U BR SCT100 M05/M07 Q1016 NOSIG",
+      "metarRaw": "METAR UAAA 102230Z VRB01MPS 1800 R23L/P2000U BR SCT100 M06/M08 Q1016 NOSIG",
       "tafRaw": null,
-      "metarHtml": "METAR UAAA 102200Z VRB01MPS 1700 R23L/P2000U <span class=\"hl\">BR</span> SCT100 M05/M07 Q1016 NOSIG",
+      "metarHtml": "METAR UAAA 102230Z VRB01MPS 1800 R23L/P2000U <span class=\"hl\">BR</span> SCT100 M06/M08 Q1016 NOSIG",
       "tafHtml": null
     },
     {
@@ -1435,7 +1414,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "102215Z",
+      "updatedAt": "102245Z",
       "visibility_m": 10000,
       "taf_visibility_m": 4000,
       "worst_visibility_m": 4000,
@@ -1444,9 +1423,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 102215Z 28031G42KT 9999 FEW025 SCT044 13/03 Q1013 NOSIG",
+      "metarRaw": "METAR LMML 102245Z 28028G39KT 9999 FEW024TCU SCT044 13/03 Q1013 NOSIG",
       "tafRaw": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 SHRA SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS",
-      "metarHtml": "METAR LMML 102215Z 28031G42KT 9999 FEW025 SCT044 13/03 Q1013 NOSIG",
+      "metarHtml": "METAR LMML 102245Z 28028G39KT 9999 FEW024TCU SCT044 13/03 Q1013 NOSIG",
       "tafHtml": "TAF LMML 101700Z 1018/1118 29028G38KT 9999 FEW020TCU \n  TEMPO 1018/1118 7000 <span class=\"hl\">SHRA</span> SHGS SCT018CB \n  PROB40 \n  TEMPO 1018/1115 4000 +SHRAGS"
     },
     {
@@ -1777,7 +1756,7 @@
       "icao": "UDSG",
       "iata": "LWN",
       "name": "Shirak International Airport",
-      "updatedAt": "102200Z",
+      "updatedAt": "102230Z",
       "visibility_m": 10000,
       "taf_visibility_m": 5000,
       "worst_visibility_m": 5000,
@@ -1786,9 +1765,9 @@
         "BR"
       ],
       "severityScore": 10,
-      "metarRaw": "METAR UDSG 102200Z 10003KT 9999 FEW049 M15/M18 Q1018 NOSIG",
+      "metarRaw": "METAR UDSG 102230Z 05002KT 9999 FEW049 M14/M17 Q1018 NOSIG",
       "tafRaw": "TAF UDSG 101658Z 1018/1118 VRB06KT 9999 FEW040 \n  TEMPO 1018/1024 5000 BR",
-      "metarHtml": "METAR UDSG 102200Z 10003KT 9999 FEW049 M15/M18 Q1018 NOSIG",
+      "metarHtml": "METAR UDSG 102230Z 05002KT 9999 FEW049 M14/M17 Q1018 NOSIG",
       "tafHtml": "TAF UDSG 101658Z 1018/1118 VRB06KT 9999 FEW040 \n  TEMPO 1018/1024 5000 <span class=\"hl\">BR</span>"
     },
     {
@@ -1840,6 +1819,22 @@
       "tafHtml": null
     },
     {
+      "icao": "LEAL",
+      "iata": "ALC",
+      "name": "Alicante-Elche Miguel Hernández Airport",
+      "updatedAt": "102230Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR LEAL 102230Z 31015G26KT CAVOK 13/01 Q1025 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR LEAL 102230Z 31015G26KT <span class=\"hl-vis\">CAVOK</span> 13/01 Q1025 NOSIG",
+      "tafHtml": null
+    },
+    {
       "icao": "LECH",
       "iata": "CDT",
       "name": "Castellón-Costa Azahar Airport",
@@ -1872,6 +1867,22 @@
       "tafHtml": null
     },
     {
+      "icao": "LFMN",
+      "iata": "NCE",
+      "name": "Nice-Côte d'Azur Airport",
+      "updatedAt": "102230Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR LFMN 102230Z 04003KT 350V090 CAVOK 08/M10 Q1010 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR LFMN 102230Z 04003KT 350V090 <span class=\"hl-vis\">CAVOK</span> 08/M10 Q1010 NOSIG",
+      "tafHtml": null
+    },
+    {
       "icao": "LRSM",
       "iata": "SUJ",
       "name": "Satu Mare International Airport",
@@ -1885,6 +1896,22 @@
       "metarRaw": "METAR LRSM 102230Z AUTO 33008KT 9999 BKN049/// M08/M12 Q1006",
       "tafRaw": null,
       "metarHtml": "METAR LRSM 102230Z AUTO 33008KT 9999 BKN049/// M08/M12 Q1006",
+      "tafHtml": null
+    },
+    {
+      "icao": "LWSK",
+      "iata": "SKP",
+      "name": "Skopje International Airport",
+      "updatedAt": null,
+      "visibility_m": null,
+      "taf_visibility_m": null,
+      "worst_visibility_m": null,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": null,
+      "tafRaw": null,
+      "metarHtml": null,
       "tafHtml": null
     },
     {
@@ -2272,22 +2299,6 @@
       "tafHtml": "TAF HESH 101700Z 1018/1124 36012KT <span class=\"hl-vis\">CAVOK</span>"
     },
     {
-      "icao": "LEAL",
-      "iata": "ALC",
-      "name": "Alicante-Elche Miguel Hernández Airport",
-      "updatedAt": "102230Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR LEAL 102230Z 31015G26KT CAVOK 13/01 Q1025 NOSIG",
-      "tafRaw": "TAF LEAL 101700Z 1018/1118 28008KT CAVOK TX16/1114Z TN07/1106Z \n  TEMPO 1112/1118 09006KT",
-      "metarHtml": "METAR LEAL 102230Z 31015G26KT <span class=\"hl-vis\">CAVOK</span> 13/01 Q1025 NOSIG",
-      "tafHtml": "TAF LEAL 101700Z 1018/1118 28008KT <span class=\"hl-vis\">CAVOK</span> TX16/1114Z TN07/1106Z \n  TEMPO 1112/1118 09006KT"
-    },
-    {
       "icao": "LEBL",
       "iata": "BCN",
       "name": "Josep Tarradellas Barcelona-El Prat Airport",
@@ -2350,22 +2361,6 @@
       "tafRaw": "TAF LEVC 101700Z 1018/1118 29008KT CAVOK TX16/1114Z TN04/1106Z \n  TEMPO 1112/1118 VRB04KT",
       "metarHtml": "METAR LEVC 102230Z 27004KT <span class=\"hl-vis\">CAVOK</span> 05/M00 Q1025 NOSIG",
       "tafHtml": "TAF LEVC 101700Z 1018/1118 29008KT <span class=\"hl-vis\">CAVOK</span> TX16/1114Z TN04/1106Z \n  TEMPO 1112/1118 VRB04KT"
-    },
-    {
-      "icao": "LFMN",
-      "iata": "NCE",
-      "name": "Nice-Côte d'Azur Airport",
-      "updatedAt": "102230Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR LFMN 102230Z 04003KT 350V090 CAVOK 08/M10 Q1010 NOSIG",
-      "tafRaw": "TAF LFMN 102000Z 1021/1203 33013KT CAVOK \n  BECMG 1111/1114 24010KT \n  BECMG 1117/1120 32010KT",
-      "metarHtml": "METAR LFMN 102230Z 04003KT 350V090 <span class=\"hl-vis\">CAVOK</span> 08/M10 Q1010 NOSIG",
-      "tafHtml": "TAF LFMN 102000Z 1021/1203 33013KT <span class=\"hl-vis\">CAVOK</span> \n  BECMG 1111/1114 24010KT \n  BECMG 1117/1120 32010KT"
     },
     {
       "icao": "LIBG",
@@ -2786,11 +2781,11 @@
   ],
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 157,
-    "tafReturned": 141,
+    "metarReturned": 155,
+    "tafReturned": 139,
     "stationsWritten": 159,
-    "missingMetar": 2,
-    "missingTaf": 18
+    "missingMetar": 4,
+    "missingTaf": 20
   },
   "errors": []
 }
