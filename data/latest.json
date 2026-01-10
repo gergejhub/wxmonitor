@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-10T11:36:09.289Z",
+  "generatedAt": "2026-01-10T11:44:24.384Z",
   "stations": [
     {
       "icao": "LJLJ",
@@ -1407,6 +1407,24 @@
       "tafHtml": "TAF EDNY 101100Z 1012/1021 25015G25KT 7000 BKN015 \n  BECMG 1012/1014 25012KT \n  TEMPO 1012/1015 4000 -SNRA OVC010 \n  BECMG 1015/1017 OVC012 \n  TEMPO 1015/1021 2000 -<span class=\"hl\">SN</span> OVC006"
     },
     {
+      "icao": "EFTU",
+      "iata": "TKU",
+      "name": "Turku Airport",
+      "updatedAt": "101120Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 4000,
+      "worst_visibility_m": 4000,
+      "ceiling_ft": null,
+      "hazards": [
+        "SN"
+      ],
+      "severityScore": 18,
+      "metarRaw": "METAR EFTU 101120Z AUTO 03010KT 350V070 CAVOK M09/M12 Q1013",
+      "tafRaw": "TAF EFTU 101122Z 1012/1112 02011KT CAVOK \n  TEMPO 1016/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -SN",
+      "metarHtml": "METAR EFTU 101120Z AUTO 03010KT 350V070 <span class=\"hl-vis\">CAVOK</span> M09/M12 Q1013",
+      "tafHtml": "TAF EFTU 101122Z 1012/1112 02011KT <span class=\"hl-vis\">CAVOK</span> \n  TEMPO 1016/1104 02015G25KT DRSN \n  BECMG 1104/1106 4000 -<span class=\"hl\">SN</span>"
+    },
+    {
       "icao": "LZIB",
       "iata": "BTS",
       "name": "M. R. Štefánik Airport",
@@ -1599,6 +1617,24 @@
       "tafHtml": "TAF LBPD 101100Z 1012/1112 VRB03KT 9999 SCT050 \n  TEMPO 1012/1017 5000 <span class=\"hl\">RA</span> BKN015 OVC030 \n  BECMG 1017/1019 28014KT \n  BECMG 1021/1023 28017G27KT \n  TEMPO 1104/1110 5000 <span class=\"hl\">RA</span> BKN015 OVC020"
     },
     {
+      "icao": "LFPO",
+      "iata": "ORY",
+      "name": "Paris-Orly Airport",
+      "updatedAt": "101130Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 10000,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": 2600,
+      "hazards": [
+        "RA"
+      ],
+      "severityScore": 12,
+      "metarRaw": "METAR LFPO 101130Z 32017KT 280V360 9999 BKN026 BKN040 04/M01 Q1013 NOSIG",
+      "tafRaw": "TAF LFPO 101100Z 1012/1118 31010G25KT 9999 SCT025 \n  PROB30 \n  TEMPO 1017/1020 -RA BKN012 \n  BECMG 1022/1024 27005KT \n  BECMG 1104/1106 17005KT \n  BECMG 1112/1114 16010G20KT",
+      "metarHtml": "METAR LFPO 101130Z 32017KT 280V360 9999 BKN026 BKN040 04/M01 Q1013 NOSIG",
+      "tafHtml": "TAF LFPO 101100Z 1012/1118 31010G25KT 9999 SCT025 \n  PROB30 \n  TEMPO 1017/1020 -<span class=\"hl\">RA</span> BKN012 \n  BECMG 1022/1024 27005KT \n  BECMG 1104/1106 17005KT \n  BECMG 1112/1114 16010G20KT"
+    },
+    {
       "icao": "LGAV",
       "iata": "ATH",
       "name": "Athens Eleftherios Venizelos International Airport",
@@ -1761,24 +1797,6 @@
       "tafHtml": "TAF LPPT 101100Z 1012/1118 29005KT 9999 FEW020 BKN035 \n  BECMG 1100/1103 VRB02KT SCT012 BKN025 \n  TEMPO 1103/1118 6000 -<span class=\"hl\">RA</span> SCT006 BKN012 \n  BECMG 1112/1114 21010KT"
     },
     {
-      "icao": "LTAC",
-      "iata": "ESB",
-      "name": "Esenboğa International Airport",
-      "updatedAt": "101120Z",
-      "visibility_m": 6000,
-      "taf_visibility_m": 4000,
-      "worst_visibility_m": 4000,
-      "ceiling_ft": 2300,
-      "hazards": [
-        "RA"
-      ],
-      "severityScore": 12,
-      "metarRaw": "METAR LTAC 101120Z 02005KT 6000 FEW010 BKN023 BKN090 00/M02 Q1010 RERASN NOSIG RMK RWY21C 01004KT RWY03L 01004KT RWY21R 36003KT RWY03R 01003KT 340V050 RWY21L 36005KT 350V050",
-      "tafRaw": "TAF LTAC 101040Z 1012/1112 VRB02KT 9999 SCT035 BKN090 \n  BECMG 1012/1014 20012KT \n  TEMPO 1012/1016 -RA FEW010 BKN030 BKN080 \n  TEMPO 1018/1022 20020G30KT \n  TEMPO 1022/1102 20020G30KT \n  TEMPO 1102/1106 20020G30KT -RASN FEW010 BKN030 BKN080 \n  TEMPO 1106/1110 4000 RA FEW010 BKN030 BKN080",
-      "metarHtml": "METAR LTAC 101120Z 02005KT 6000 FEW010 BKN023 BKN090 00/M02 Q1010 RERASN NOSIG RMK RWY21C 01004KT RWY03L 01004KT RWY21R 36003KT RWY03R 01003KT 340V050 RWY21L 36005KT 350V050",
-      "tafHtml": "TAF LTAC 101040Z 1012/1112 VRB02KT 9999 SCT035 BKN090 \n  BECMG 1012/1014 20012KT \n  TEMPO 1012/1016 -<span class=\"hl\">RA</span> FEW010 BKN030 BKN080 \n  TEMPO 1018/1022 20020G30KT \n  TEMPO 1022/1102 20020G30KT \n  TEMPO 1102/1106 20020G30KT -RASN FEW010 BKN030 BKN080 \n  TEMPO 1106/1110 4000 <span class=\"hl\">RA</span> FEW010 BKN030 BKN080"
-    },
-    {
       "icao": "EDDB",
       "iata": "BER",
       "name": "Berlin Brandenburg Airport",
@@ -1833,22 +1851,6 @@
       "tafHtml": "TAF LRCL 101100Z 1012/1021 VRB04KT 9999 OVC025 \n  TEMPO 1015/1020 3000 <span class=\"hl\">BR</span> BKN010"
     },
     {
-      "icao": "EFTU",
-      "iata": "TKU",
-      "name": "Turku Airport",
-      "updatedAt": "101120Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": null,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 5,
-      "metarRaw": "METAR EFTU 101120Z AUTO 03010KT 350V070 CAVOK M09/M12 Q1013",
-      "tafRaw": null,
-      "metarHtml": "METAR EFTU 101120Z AUTO 03010KT 350V070 <span class=\"hl-vis\">CAVOK</span> M09/M12 Q1013",
-      "tafHtml": null
-    },
-    {
       "icao": "LATI",
       "iata": "TIA",
       "name": "Tirana International Airport Mother Teresa",
@@ -1894,6 +1896,22 @@
       "metarRaw": "METAR LRSM 101130Z AUTO VRB02KT 9999 OVC035/// M02/M06 Q1000",
       "tafRaw": null,
       "metarHtml": "METAR LRSM 101130Z AUTO VRB02KT 9999 OVC035/// M02/M06 Q1000",
+      "tafHtml": null
+    },
+    {
+      "icao": "LTAC",
+      "iata": "ESB",
+      "name": "Esenboğa International Airport",
+      "updatedAt": "101120Z",
+      "visibility_m": 6000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 6000,
+      "ceiling_ft": 2300,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR LTAC 101120Z 02005KT 6000 FEW010 BKN023 BKN090 00/M02 Q1010 RERASN NOSIG RMK RWY21C 01004KT RWY03L 01004KT RWY21R 36003KT RWY03R 01003KT 340V050 RWY21L 36005KT 350V050",
+      "tafRaw": null,
+      "metarHtml": "METAR LTAC 101120Z 02005KT 6000 FEW010 BKN023 BKN090 00/M02 Q1010 RERASN NOSIG RMK RWY21C 01004KT RWY03L 01004KT RWY21R 36003KT RWY03R 01003KT 340V050 RWY21L 36005KT 350V050",
       "tafHtml": null
     },
     {
@@ -2407,22 +2425,6 @@
       "tafRaw": "TAF LFMN 100800Z 1009/1115 33013KT CAVOK \n  PROB40 \n  TEMPO 1009/1018 30015G25KT \n  BECMG 1111/1114 24010KT",
       "metarHtml": "METAR LFMN 101130Z 36006KT 310V050 <span class=\"hl-vis\">CAVOK</span> 15/M08 Q1004 NOSIG",
       "tafHtml": "TAF LFMN 100800Z 1009/1115 33013KT <span class=\"hl-vis\">CAVOK</span> \n  PROB40 \n  TEMPO 1009/1018 30015G25KT \n  BECMG 1111/1114 24010KT"
-    },
-    {
-      "icao": "LFPO",
-      "iata": "ORY",
-      "name": "Paris-Orly Airport",
-      "updatedAt": "101130Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": 2600,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR LFPO 101130Z 32017KT 280V360 9999 BKN026 BKN040 04/M01 Q1013 NOSIG",
-      "tafRaw": "TAF LFPO 100500Z 1006/1112 30010KT 9999 BKN025 \n  TEMPO 1006/1016 30015G25KT \n  BECMG 1022/1024 22005KT \n  BECMG 1106/1108 16010KT",
-      "metarHtml": "METAR LFPO 101130Z 32017KT 280V360 9999 BKN026 BKN040 04/M01 Q1013 NOSIG",
-      "tafHtml": "TAF LFPO 100500Z 1006/1112 30010KT 9999 BKN025 \n  TEMPO 1006/1016 30015G25KT \n  BECMG 1022/1024 22005KT \n  BECMG 1106/1108 16010KT"
     },
     {
       "icao": "LICC",
