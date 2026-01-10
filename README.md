@@ -10,6 +10,15 @@ The design goal is OCC-style **triage**:
 
 ---
 
+
+## Patch additions (starting from UX v32)
+
+This patch adds:
+- **WIND tile**: counts aerodromes with **gust ≥25 kt** detected in METAR or TAF and lists their **IATA** codes.
+- **SNOW tile**: counts aerodromes with **SN/SHSN** present (METAR or TAF) and lists their **IATA** codes.
+- **GUST ≥25 kt**: new condition filter plus dedicated highlight bucket (25/30/40 kt), and `GUST≥25KT` trigger tag (with source M/T).
+
+
 ## How it works (Architecture)
 
 Because GitHub Pages is static and direct browser-to-AviationWeather requests often fail due to **CORS**,
@@ -72,6 +81,8 @@ Top row tiles are **clickable filters**:
 - **CRIT** (severityScore ≥ 70)
 - **VIS ≤175** (worst of METAR/TAF)
 - **TS** (thunderstorm signal present)
+- **WIND** (gust ≥25KT in METAR or TAF)
+- **SNOW** (SN/SHSN present in METAR or TAF)
 
 All tiles also render the affected **IATA codes** as readable chips (not only counts).
 - **Reset** clears filters
@@ -124,6 +135,7 @@ Each bucket has a dedicated color.
 
 ### Wind gusts (GUST)
 Wind groups like `27015G30KT` are parsed for gust speed.
+- Gusts ≥25KT are highlighted (light cyan) and flagged as `GUST≥25KT`
 - Gusts ≥30KT are highlighted (cyan) and flagged as `GUST≥30KT`
 - Gusts ≥40KT are highlighted more strongly (red) and flagged as `GUST≥40KT`
 

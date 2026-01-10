@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Wizz Air METAR/TAF Monitor</title>
-<link href="assets/styles.css?v=32" rel="stylesheet"/>
+<link href="assets/styles.css?v=34" rel="stylesheet"/>
 </head>
 <body>
 <header class="top">
@@ -40,6 +40,18 @@
 <div class="tile__v" id="tileTsCount">0</div>
 <div class="tile__s">thunderstorm present</div>
 <div class="tile__iata" id="tileTsIata"></div>
+</button>
+<button class="tile tile--wind" data-filter="wind" id="tileWind">
+<div class="tile__k">WIND</div>
+<div class="tile__v" id="tileWindCount">0</div>
+<div class="tile__s">gust ≥25 kt (METAR/TAF)</div>
+<div class="tile__iata" id="tileWindIata"></div>
+</button>
+<button class="tile tile--snow" data-filter="snow" id="tileSnow">
+<div class="tile__k">SNOW</div>
+<div class="tile__v" id="tileSnowCount">0</div>
+<div class="tile__s">SN / SHSN present</div>
+<div class="tile__iata" id="tileSnowIata"></div>
 </button>
 <button class="tile tile--ghost" id="tileReset">
 <div class="tile__k">Reset</div>
@@ -80,6 +92,7 @@
 <option value="ts">TS</option>
 <option value="gust40">GUST ≥40KT</option>
 <option value="gust30">GUST ≥30KT</option>
+<option value="gust25">GUST ≥25KT</option>
 <option value="cig500">CIG&lt;500</option>
 </optgroup>
 </select>
@@ -112,8 +125,8 @@
 <span class="legend__txt">operational stop-flag when VIS ≤150 m and FZFG occur together.</span>
 </div>
 <div class="legend__row">
-  <span class="tag tag--gust">GUST≥30KT</span>
-  <span class="legend__txt">strong wind gusts detected in wind group (e.g. 27015G30KT). Shown with a dedicated highlight in METAR/TAF raw.</span>
+  <span class="tag tag--gust">GUST≥25KT</span>
+  <span class="legend__txt">wind gusts detected in wind group (e.g. 27015G30KT). Thresholds: ≥25/≥30/≥40 kt with increasing emphasis and dedicated highlights in METAR/TAF raw.</span>
 </div>
 <div class="legend__row">
 <span class="tag tag--vis">VIS≤…</span>
@@ -183,6 +196,6 @@
 </div>
 </aside>
 <div class="scrim" hidden="" id="scrim"></div>
-<script src="assets/app.js?v=32"></script>
+<script src="assets/app.js?v=34"></script>
 </body>
 </html>
