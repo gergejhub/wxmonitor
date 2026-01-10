@@ -243,6 +243,7 @@ function computeScores(raw){
   if (gustMax !== null){
     if (gustMax >= 40) score += 10;
     else if (gustMax >= 30) score += 6;
+    else if (gustMax >= 25) score += 3;
   }
 
   // cap-ish
@@ -338,13 +339,16 @@ function deriveStation(st){
         (ceilingFt(st.tafRaw || "") !== null && ceilingFt(st.tafRaw || "") < 500));
 
 // Wind gusts
+const mg25 = (met.gustMax !== null && met.gustMax >= 25);
+const tg25 = (taf.gustMax !== null && taf.gustMax >= 25);
 const mg30 = (met.gustMax !== null && met.gustMax >= 30);
 const tg30 = (taf.gustMax !== null && taf.gustMax >= 30);
 const mg40 = (met.gustMax !== null && met.gustMax >= 40);
 const tg40 = (taf.gustMax !== null && taf.gustMax >= 40);
-// Show higher threshold if met/taf gusts are very strong
+// Show higher threshold if met/taf gusts are very strong; keep only the tightest bucket
 addBy("GUST≥40KT", "tag--gust", mg40, tg40);
 addBy("GUST≥30KT", "tag--gust", mg30 && !mg40, tg30 && !tg40);
+addBy("GUST≥25KT", "tag--gust", mg25 && !mg30, tg25 && !tg30);
   // Wx
   const mhz = met.hz, thz = taf.hz;
   addBy("TS", "tag--wx", mhz.ts, thz.ts);
@@ -434,6 +438,7 @@ s = s.replace(/\b(?:\d{3}|VRB)\d{2,3}G(\d{2,3})KT\b/g, (m, g) => {
   let cls = null;
   if (gv >= 40) cls = "hl-gust-40";
   else if (gv >= 30) cls = "hl-gust-30";
+  else if (gv >= 25) cls = "hl-gust-25";
   if (!cls) return m;
   return `<span class="hl ${cls}" data-cat="wind">${m}</span>`;
 });
@@ -743,6 +748,9 @@ case "gust40":
 case "gust30":
   if (!((st.met.gustMax !== null && st.met.gustMax >= 30) || (st.taf.gustMax !== null && st.taf.gustMax >= 30))) return false;
   break;
+case "gust25":
+  if (!((st.met.gustMax !== null && st.met.gustMax >= 25) || (st.taf.gustMax !== null && st.taf.gustMax >= 25))) return false;
+  break;
       case "cig500":
         if (!(st.cigAll !== null && st.cigAll < 500)) return false;
         break;
@@ -776,11 +784,16 @@ function updateTiles(currentList){
   const crit = currentList.filter(s=>s.alert==="CRIT");
   const vis175 = currentList.filter(s=>s.worstVis !== null && s.worstVis <= 175);
   const ts = currentList.filter(s=>s.met.hz.ts || s.taf.hz.ts);
+  const wind = currentList.filter(s=> (s.met.gustMax !== null && s.met.gustMax >= 25) || (s.taf.gustMax !== null && s.taf.gustMax >= 25));
+  const snow = currentList.filter(s=> s.met.hz.sn || s.taf.hz.sn);
 
   $("tileEngCount").textContent = String(eng.length);
   $("tileCritCount").textContent = String(crit.length);
   $("tileVis175Count").textContent = String(vis175.length);
   $("tileTsCount").textContent = String(ts.length);
+
+  const tw = $("tileWindCount"); if (tw) tw.textContent = String(wind.length);
+  const tsn = $("tileSnowCount"); if (tsn) tsn.textContent = String(snow.length);
 
   function uniqIata(list){
     const out = [];
@@ -811,6 +824,8 @@ function updateTiles(currentList){
   renderIata("tileCritIata", crit);
   renderIata("tileVis175Iata", vis175);
   renderIata("tileTsIata", ts);
+  renderIata("tileWindIata", wind);
+  renderIata("tileSnowIata", snow);
 }
 
 function render(){
@@ -1044,7 +1059,7 @@ function bind(){
     const f = btn.getAttribute("data-filter");
     if (!f) return;
     // toggle: clicking same filter again resets to all
-    const map = {eng:"eng", crit:"crit", vis175:"vis175", ts:"ts"};
+    const map = {eng:"eng", crit:"crit", vis175:"vis175", ts:"ts", wind:"gust25", snow:"snow"};
     const target = map[f] || "all";
     view.cond = (view.cond === target ? "all" : target);
     $("cond").value = view.cond;

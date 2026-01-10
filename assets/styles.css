@@ -211,6 +211,14 @@ body{
   border-color:rgba(255,75,92,.45);
   box-shadow:0 0 18px rgba(255,75,92,.12);
 }
+.tile--wind{
+  border-color:rgba(46,244,255,.40);
+  box-shadow:0 0 18px rgba(46,244,255,.10);
+}
+.tile--snow{
+  border-color:rgba(120,170,255,.40);
+  box-shadow:0 0 18px rgba(120,170,255,.10);
+}
 .tile--ghost{
   opacity:.90;
 }
@@ -509,6 +517,7 @@ tbody tr:hover{ background:rgba(255,255,255,.02); }
 
 /* wind gusts */
 .hl[data-cat="wind"]{ border-color:rgba(46,244,255,.30); }
+.hl-gust-25{ background:rgba(46,244,255,.08); }
 .hl-gust-30{ background:rgba(46,244,255,.12); }
 .hl-gust-40{ background:rgba(255,75,92,.18); }
 
