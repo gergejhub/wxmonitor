@@ -1,113 +1,202 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wizz AWC Monitor – UX v32.2 (TV Tiles + Stat Trends Patch)</title>
-  <link rel="stylesheet" href="assets/styles.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script defer src="assets/app.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Wizz Air METAR/TAF Monitor</title>
+<link href="assets/styles.css?v=321" rel="stylesheet"/>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand__title">Wizz AWC Monitor</div>
-      <div class="brand__subtitle">UX v32.2 – TV Tiles + Stat Trends (PATCH)</div>
+<header class="top">
+<div class="brand"><div class="brand__row"><div class="brand__title" id="brandTitle" title="Double-click to toggle TV view">Status table</div><button class="viewpill" id="viewBtn" title="Toggle TV view (Shift+T)" type="button">
+<span class="viewpill__k">VIEW</span>
+<span class="viewpill__v" id="viewBtnLabel">AUTO</span>
+</button></div>
+<div class="brand__sub">METAR + TAF monitor (aviationweather.gov via GitHub Actions)</div>
+<div class="brand__sub brand__sub--links"><a class="statsLink" href="stat/index.html" title="Monitoring & statistics">Stats</a></div>
+</div>
+<div class="tiles" id="tiles">
+<button class="tile tile--eng" data-filter="eng" id="tileEng">
+<div class="tile__k">ENG ICE OPS</div>
+<div class="tile__v" id="tileEngCount">0</div>
+<div class="tile__s">VIS ≤150 m &amp; FZFG</div>
+<div class="tile__iata" id="tileEngIata"></div>
+</button>
+<button class="tile" data-filter="crit" id="tileCrit">
+<div class="tile__k">CRIT</div>
+<div class="tile__v" id="tileCritCount">0</div>
+<div class="tile__s">severityScore ≥ 70</div>
+<div class="tile__iata" id="tileCritIata"></div>
+</button>
+<button class="tile" data-filter="vis175" id="tileVis175">
+<div class="tile__k">VIS ≤175</div>
+<div class="tile__v" id="tileVis175Count">0</div>
+<div class="tile__s">rapid operational impact</div>
+<div class="tile__iata" id="tileVis175Iata"></div>
+</button>
+<button class="tile" data-filter="ts" id="tileTs">
+<div class="tile__k">TS</div>
+<div class="tile__v" id="tileTsCount">0</div>
+<div class="tile__s">thunderstorm present</div>
+<div class="tile__iata" id="tileTsIata"></div>
+</button>
+<button class="tile tile--wind" data-filter="gust25" id="tileWind" title="Wind gust alerts (METAR/TAF)">
+<div class="tile__k">WIND</div>
+<div class="tile__v" id="tileWindCount">0</div>
+<div class="tile__s">GUST ≥25KT</div>
+<div class="tile__iata" id="tileWindIata"></div>
+</button>
+<button class="tile tile--snow" data-filter="snow" id="tileSnow" title="Snow present (METAR/TAF)">
+<div class="tile__k">SNOW</div>
+<div class="tile__v" id="tileSnowCount">0</div>
+<div class="tile__s">SN / SHSN</div>
+<div class="tile__iata" id="tileSnowIata"></div>
+</button>
+
+<button class="tile tile--ghost" id="tileReset">
+<div class="tile__k">Reset</div>
+<div class="tile__v" id="tileResetCount">↺</div>
+<div class="tile__s">clear filters</div>
+</button>
+</div>
+</header>
+<section class="toolbar">
+<input autocomplete="off" class="search" id="q" placeholder="Filter (ICAO/IATA/name)..."/>
+<select class="select" id="cond">
+<option value="all">All conditions</option>
+<optgroup label="Alert">
+<option value="eng">ENG ICE OPS</option>
+<option value="crit">CRIT (≥70)</option>
+<option value="high">HIGH (45–69)</option>
+<option value="med">MED (20–44)</option>
+</optgroup>
+<optgroup label="Visibility (METAR/TAF worst)">
+<option value="vis800">VIS ≤800</option>
+<option value="vis550">VIS ≤550</option>
+<option value="vis500">VIS ≤500</option>
+<option value="vis300">VIS ≤300</option>
+<option value="vis250">VIS ≤250</option>
+<option value="vis175">VIS ≤175</option>
+<option value="vis150">VIS ≤150</option>
+</optgroup>
+<optgroup label="RVR (min)">
+<option value="rvr500">RVR ≤500</option>
+<option value="rvr300">RVR ≤300</option>
+<option value="rvr200">RVR ≤200</option>
+<option value="rvr75">RVR ≤75</option>
+</optgroup>
+<optgroup label="Wx">
+<option value="fog">FG / BR / FZFG</option>
+<option value="snow">SN</option>
+<option value="rain">RA / DZ</option>
+<option value="ts">TS</option>
+<option value="gust40">GUST ≥40KT</option>
+<option value="gust30">GUST ≥30KT</option>
+<option value="gust25">GUST ≥25KT</option>
+<option value="cig500">CIG&lt;500</option>
+</optgroup>
+</select>
+<select class="select" id="alert">
+<option value="all">Alert: All</option>
+<option value="OK">Alert: OK</option>
+<option value="MED">Alert: MED</option>
+<option value="HIGH">Alert: HIGH</option>
+<option value="CRIT">Alert: CRIT</option>
+</select>
+<label class="toggle">
+<input checked="" id="sortPri" type="checkbox"/>
+<span>Sort by priority</span>
+</label>
+</section>
+<section class="legend">
+<div class="legend__tip">
+      Tip: click any row (or a trigger tag) to open Quick View on the right. Press Esc to close.
     </div>
-
-    <div class="controls">
-      <button id="tvToggle" class="btn">TV View: OFF</button>
-
-      <label class="ctrl">
-        <span>Search (IATA/ICAO)</span>
-        <input id="airportSearch" type="text" placeholder="e.g., BUD or LHBP" autocomplete="off" />
-      </label>
-
-      <label class="ctrl">
-        <span>Dataset</span>
-        <select id="datasetSelect">
-          <option value="data/sample_alerts.json">Sample (offline)</option>
-        </select>
-      </label>
-
-      <button id="reloadBtn" class="btn btn--primary">Reload</button>
-    </div>
-  </header>
-
-  <main class="layout">
-    <section class="panel">
-      <div class="panel__header">
-        <h2>Alert Tiles</h2>
-        <div class="panel__meta" id="lastUpdated">Last updated: —</div>
-      </div>
-
-      <div class="tiles" id="tiles"></div>
-
-      <div class="hint">
-        TV View makes tiles readable from distance and forces the affected-airport list to show all IATA codes (wrap/no truncation).
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel__header">
-        <h2>Airport Change History</h2>
-        <div class="panel__meta">
-          Visual trend per airport (line chart) + top movers list.
-        </div>
-      </div>
-
-      <div class="statsGrid">
-        <div class="statCard">
-          <div class="statCard__header">
-            <div class="statCard__title">Selected airport trend</div>
-            <div class="statCard__actions">
-              <label class="ctrl ctrl--inline">
-                <span>Airport</span>
-                <select id="airportSelect"></select>
-              </label>
-            </div>
-          </div>
-          <div class="chartWrap">
-            <canvas id="trendChart" height="180"></canvas>
-          </div>
-          <div class="statCard__footer">
-            The sample data stores events (alert changes) with timestamps. Integrate your real change log by writing to the same schema.
-          </div>
-        </div>
-
-        <div class="statCard">
-          <div class="statCard__header">
-            <div class="statCard__title">Top airports by changes (last 24h)</div>
-            <div class="statCard__actions">
-              <button id="simulateBtn" class="btn">Simulate +1 event</button>
-              <button id="resetHistoryBtn" class="btn">Reset history</button>
-            </div>
-          </div>
-
-          <div class="tableWrap">
-            <table class="table" id="topMoversTable">
-              <thead>
-                <tr>
-                  <th>Airport</th>
-                  <th>Events (24h)</th>
-                  <th>Last event</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="statCard__footer">
-            This table is rendered from localStorage-backed history to emulate your “airport change history”. Hook it to your actual alert-diff pipeline.
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div>Patch package name: <code>wizz-awc-monitor-uxv32_2-tvtiles-stat-trends_PATCH.zip</code></div>
-    <div class="footer__small">Designed for GitHub Pages / static hosting (no build step).</div>
-  </footer>
+<div class="legend__row">
+<span class="pill pill--ok">OK</span> <span class="legend__txt">severityScore &lt; 20</span>
+<span class="pill pill--med">MED</span> <span class="legend__txt">severityScore 20–44</span>
+<span class="pill pill--high">HIGH</span> <span class="legend__txt">severityScore 45–69</span>
+<span class="pill pill--crit">CRIT</span> <span class="legend__txt">severityScore ≥ 70</span>
+</div>
+<div class="legend__row">
+<span class="tag tag--cig">CIG&lt;500</span>
+<span class="legend__txt">ceiling below 500 ft AGL (lowest BKN/OVC layer or VV in METAR/TAF; derived as ceiling_ft &lt; 500).</span>
+<span class="tag tag--eng">ENG ICE OPS</span>
+<span class="legend__txt">operational stop-flag when VIS ≤150 m and FZFG occur together.</span>
+</div>
+<div class="legend__row">
+  <span class="tag tag--gust">GUST≥30KT</span>
+  <span class="legend__txt">strong wind gusts detected in wind group (e.g. 27015G30KT). Shown with a dedicated highlight in METAR/TAF raw.</span>
+</div>
+<div class="legend__row">
+<span class="tag tag--vis">VIS≤…</span>
+<span class="legend__txt">low visibility thresholds (≤800/550/500/300/250/175/150 m) — each has a dedicated color.</span>
+<span class="tag tag--rvr">RVR≤…</span>
+<span class="legend__txt">runway visual range thresholds (≤500/300/200/75).</span>
+<span class="tag tag--src">M</span>/<span class="tag tag--src">T</span>
+<span class="legend__txt">trigger source: METAR (M) vs TAF (T).</span>
+</div>
+</section>
+<section class="statusline" id="statusline">
+<span class="statusline__item" id="statCounts">Loading…</span>
+<span class="statusline__item" id="statUpdated"></span>
+</section>
+<main class="tablewrap">
+<table class="tbl">
+<thead>
+<tr>
+<th class="col-airport">ICAO</th>
+<th class="col-alert">Alert</th>
+<th class="col-vis">Vis (m)</th>
+<th class="col-lowvis">Low VIS</th>
+<th class="col-trig">Triggers</th>
+<th class="col-age">METAR age</th>
+<th class="col-age">TAF age</th>
+<th class="col-raw">METAR (raw)</th>
+<th class="col-raw">TAF (raw)</th>
+</tr>
+</thead>
+<tbody id="rows">
+<tr><td class="muted" colspan="9">Loading…</td></tr>
+</tbody>
+</table>
+</main>
+<aside aria-hidden="true" class="drawer" id="drawer">
+<button class="drawer__close" id="drawerClose" title="Close (Esc)">×</button>
+<div class="drawer__head">
+<div class="drawer__airport" id="dAirport">—</div>
+<div class="drawer__sub" id="dSub">—</div>
+</div>
+<div class="cards">
+<div class="card"><div class="card__k">Alert</div><div class="card__v" id="dAlert">—</div></div>
+<div class="card"><div class="card__k">Severity</div><div class="card__v" id="dSev">—</div></div>
+<div class="card"><div class="card__k">Visibility</div><div class="card__v" id="dVis">—</div></div>
+<div class="card"><div class="card__k">Worst VIS (METAR/TAF)</div><div class="card__v" id="dWorstVis">—</div></div>
+<div class="card"><div class="card__k">RVR (min)</div><div class="card__v" id="dRvr">—</div></div>
+<div class="card"><div class="card__k">Ceiling</div><div class="card__v" id="dCig">—</div></div>
+<div class="card"><div class="card__k">METAR age</div><div class="card__v" id="dMetAge">—</div></div>
+<div class="card"><div class="card__k">TAF age</div><div class="card__v" id="dTafAge">—</div></div>
+</div>
+<div class="drawer__section">
+<div class="drawer__k">Triggers</div>
+<div class="triggers triggers--drawer" id="dTriggers"></div>
+</div>
+<button class="btn" id="copyBrief">Copy briefing line</button>
+<div class="drawer__section">
+<div class="drawer__k">METAR</div>
+<pre class="raw" id="dMetRaw"></pre>
+<div class="drawer__k muted" style="margin-top:8px;">Decoded</div>
+<div class="decoded" id="dMetDec"></div>
+</div>
+<div class="drawer__section">
+<div class="drawer__k">TAF</div>
+<pre class="raw" id="dTafRaw"></pre>
+<div class="drawer__k muted" style="margin-top:8px;">Decoded</div>
+<div class="decoded" id="dTafDec"></div>
+</div>
+</aside>
+<div class="scrim" hidden="" id="scrim"></div>
+<script src="assets/app.js?v=321"></script>
 </body>
 </html>
