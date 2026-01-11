@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-11T11:38:36.788Z",
+  "generatedAt": "2026-01-11T11:45:35.409Z",
   "stations": [
     {
       "icao": "EDDH",
@@ -1142,9 +1142,9 @@
       ],
       "severityScore": 18,
       "metarRaw": "METAR EFTU 111120Z AUTO 03008KT 350V060 8000 -SN FEW015 OVC046 M07/M09 Q1014",
-      "tafRaw": "TAF EFTU 110823Z 1109/1209 02010KT 9999 -SN FEW016 \n  TEMPO 1109/1114 4000 \n  TEMPO 1114/1122 6000",
+      "tafRaw": "TAF EFTU 111124Z 1112/1212 03008KT 8000 -SN FEW015 \n  TEMPO 1112/1114 4000 \n  TEMPO 1114/1122 6000",
       "metarHtml": "METAR EFTU 111120Z AUTO 03008KT 350V060 8000 -<span class=\"hl\">SN</span> FEW015 OVC046 M07/M09 Q1014",
-      "tafHtml": "TAF EFTU 110823Z 1109/1209 02010KT 9999 -<span class=\"hl\">SN</span> FEW016 \n  TEMPO 1109/1114 4000 \n  TEMPO 1114/1122 6000"
+      "tafHtml": "TAF EFTU 111124Z 1112/1212 03008KT 8000 -<span class=\"hl\">SN</span> FEW015 \n  TEMPO 1112/1114 4000 \n  TEMPO 1114/1122 6000"
     },
     {
       "icao": "LBWN",
@@ -1289,6 +1289,24 @@
       "tafHtml": null
     },
     {
+      "icao": "LIBG",
+      "iata": "TAR",
+      "name": "Taranto-Grottaglie Marcello Arlotta Airport",
+      "updatedAt": "111135Z",
+      "visibility_m": 9000,
+      "taf_visibility_m": 10000,
+      "worst_visibility_m": 9000,
+      "ceiling_ft": null,
+      "hazards": [
+        "SHRA"
+      ],
+      "severityScore": 14,
+      "metarRaw": "SPECI LIBG 111135Z 30011KT 260V320 9000 SHRA FEW020CB SCT025 11/05 Q1011",
+      "tafRaw": "TAF LIBG 111100Z 1112/1121 32012KT 9999 SCT040 \n  PROB30 \n  TEMPO 1112/1115 32015G25KT",
+      "metarHtml": "SPECI LIBG 111135Z 30011KT 260V320 9000 <span class=\"hl\">SHRA</span> FEW020CB SCT025 11/05 Q1011",
+      "tafHtml": "TAF LIBG 111100Z 1112/1121 32012KT 9999 SCT040 \n  PROB30 \n  TEMPO 1112/1115 32015G25KT"
+    },
+    {
       "icao": "LICC",
       "iata": "CTA",
       "name": "Catania-Fontanarossa Airport",
@@ -1346,7 +1364,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "111115Z",
+      "updatedAt": "111145Z",
       "visibility_m": 10000,
       "taf_visibility_m": 8000,
       "worst_visibility_m": 8000,
@@ -1355,9 +1373,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 111115Z 28025G37KT 9999 FEW030TCU 14/05 Q1015 NOSIG",
+      "metarRaw": "METAR LMML 111145Z 29018G30KT 9999 FEW030TCU 12/07 Q1015 NOSIG",
       "tafRaw": "TAF LMML 111100Z 1112/1212 30021G32KT 9999 FEW020 \n  PROB30 \n  TEMPO 1112/1118 8000 SHRA BKN020TCU \n  BECMG 1118/1121 34020KT \n  BECMG 1209/1212 34010KT",
-      "metarHtml": "METAR LMML 111115Z 28025G37KT 9999 FEW030TCU 14/05 Q1015 NOSIG",
+      "metarHtml": "METAR LMML 111145Z 29018G30KT 9999 FEW030TCU 12/07 Q1015 NOSIG",
       "tafHtml": "TAF LMML 111100Z 1112/1212 30021G32KT 9999 FEW020 \n  PROB30 \n  TEMPO 1112/1118 8000 <span class=\"hl\">SHRA</span> BKN020TCU \n  BECMG 1118/1121 34020KT \n  BECMG 1209/1212 34010KT"
     },
     {
@@ -1602,38 +1620,6 @@
       "metarRaw": "METAR LECH 111130Z AUTO 24004KT 190V290 CAVOK 12/M00 Q1025",
       "tafRaw": null,
       "metarHtml": "METAR LECH 111130Z AUTO 24004KT 190V290 <span class=\"hl-vis\">CAVOK</span> 12/M00 Q1025",
-      "tafHtml": null
-    },
-    {
-      "icao": "LWOH",
-      "iata": "OHD",
-      "name": "Ohrid St. Paul the Apostle Airport",
-      "updatedAt": "111120Z",
-      "visibility_m": 9000,
-      "taf_visibility_m": null,
-      "worst_visibility_m": 9000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 5,
-      "metarRaw": "METAR LWOH 111120Z 33009KT 9000 FEW011 SCT050 02/M01 Q1007",
-      "tafRaw": null,
-      "metarHtml": "METAR LWOH 111120Z 33009KT 9000 FEW011 SCT050 02/M01 Q1007",
-      "tafHtml": null
-    },
-    {
-      "icao": "LWSK",
-      "iata": "SKP",
-      "name": "Skopje International Airport",
-      "updatedAt": "111120Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": null,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": 4300,
-      "hazards": [],
-      "severityScore": 5,
-      "metarRaw": "METAR LWSK 111120Z 35021KT 9999 SCT025 BKN043 BKN075 00/M06 Q1013 NOSIG",
-      "tafRaw": null,
-      "metarHtml": "METAR LWSK 111120Z 35021KT 9999 SCT025 BKN043 BKN075 00/M06 Q1013 NOSIG",
       "tafHtml": null
     },
     {
@@ -2096,9 +2082,9 @@
       "hazards": [],
       "severityScore": 0,
       "metarRaw": "METAR LFLL 111130Z 34005KT 9999 SCT019 04/M01 Q1024 NOSIG",
-      "tafRaw": "TAF LFLL 110500Z 1106/1212 34005KT 9999 BKN028 \n  PROB40 \n  TEMPO 1106/1110 BKN008 \n  TEMPO 1110/1114 BKN012 \n  FM120300 15005KT 9999 BKN052 OVC110",
+      "tafRaw": "TAF LFLL 111100Z 1112/1218 35008KT 9999 SCT020 \n  BECMG 1114/1116 VRB02KT \n  BECMG 1202/1204 18008KT BKN030 \n  BECMG 1210/1212 CAVOK \n  PROB30 \n  TEMPO 1212/1218 18015G25KT",
       "metarHtml": "METAR LFLL 111130Z 34005KT 9999 SCT019 04/M01 Q1024 NOSIG",
-      "tafHtml": "TAF LFLL 110500Z 1106/1212 34005KT 9999 BKN028 \n  PROB40 \n  TEMPO 1106/1110 BKN008 \n  TEMPO 1110/1114 BKN012 \n  FM120300 15005KT 9999 BKN052 OVC110"
+      "tafHtml": "TAF LFLL 111100Z 1112/1218 35008KT 9999 SCT020 \n  BECMG 1114/1116 VRB02KT \n  BECMG 1202/1204 18008KT BKN030 \n  BECMG 1210/1212 <span class=\"hl-vis\">CAVOK</span> \n  PROB30 \n  TEMPO 1212/1218 18015G25KT"
     },
     {
       "icao": "LFMN",
@@ -2163,22 +2149,6 @@
       "tafRaw": "TAF LIBD 111100Z 1112/1212 34018G28KT 9999 FEW040 \n  BECMG 1207/1209 34018KT",
       "metarHtml": "METAR LIBD 111120Z 33013G23KT 300V020 9999 FEW015 10/01 Q1012",
       "tafHtml": "TAF LIBD 111100Z 1112/1212 34018G28KT 9999 FEW040 \n  BECMG 1207/1209 34018KT"
-    },
-    {
-      "icao": "LIBG",
-      "iata": "TAR",
-      "name": "Taranto-Grottaglie Marcello Arlotta Airport",
-      "updatedAt": "111050Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR LIBG 111050Z 32013KT 290V350 9999 FEW030 10/06 Q1011",
-      "tafRaw": "TAF LIBG 111100Z 1112/1121 32012KT 9999 SCT040 \n  PROB30 \n  TEMPO 1112/1115 32015G25KT",
-      "metarHtml": "METAR LIBG 111050Z 32013KT 290V350 9999 FEW030 10/06 Q1011",
-      "tafHtml": "TAF LIBG 111100Z 1112/1121 32012KT 9999 SCT040 \n  PROB30 \n  TEMPO 1112/1115 32015G25KT"
     },
     {
       "icao": "LIBR",
@@ -2613,6 +2583,38 @@
       "tafHtml": "TAF LUKK 111116Z 1112/1212 28009KT <span class=\"hl-vis\">CAVOK</span>"
     },
     {
+      "icao": "LWOH",
+      "iata": "OHD",
+      "name": "Ohrid St. Paul the Apostle Airport",
+      "updatedAt": "111120Z",
+      "visibility_m": 9000,
+      "taf_visibility_m": 10000,
+      "worst_visibility_m": 9000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 0,
+      "metarRaw": "METAR LWOH 111120Z 33009KT 9000 FEW011 SCT050 02/M01 Q1007",
+      "tafRaw": "TAF LWOH 111140Z 1112/1212 36010KT 9999 SCT050 \n  TEMPO 1112/18 36016KT SCT010 BKN050",
+      "metarHtml": "METAR LWOH 111120Z 33009KT 9000 FEW011 SCT050 02/M01 Q1007",
+      "tafHtml": "TAF LWOH 111140Z 1112/1212 36010KT 9999 SCT050 \n  TEMPO 1112/18 36016KT SCT010 BKN050"
+    },
+    {
+      "icao": "LWSK",
+      "iata": "SKP",
+      "name": "Skopje International Airport",
+      "updatedAt": "111120Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": 10000,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": 4300,
+      "hazards": [],
+      "severityScore": 0,
+      "metarRaw": "METAR LWSK 111120Z 35021KT 9999 SCT025 BKN043 BKN075 00/M06 Q1013 NOSIG",
+      "tafRaw": "TAF LWSK 111140Z 1112/1212 35015KT 9999 SCT025 OVC040 \n  TEMPO 1112/1118 01020G30KT SCT030 BKN060",
+      "metarHtml": "METAR LWSK 111120Z 35021KT 9999 SCT025 BKN043 BKN075 00/M06 Q1013 NOSIG",
+      "tafHtml": "TAF LWSK 111140Z 1112/1212 35015KT 9999 SCT025 OVC040 \n  TEMPO 1112/1118 01020G30KT SCT030 BKN060"
+    },
+    {
       "icao": "LYBE",
       "iata": "BEG",
       "name": "Belgrade Nikola Tesla Airport",
@@ -2776,10 +2778,10 @@
   "stats": {
     "icaoCount": 159,
     "metarReturned": 158,
-    "tafReturned": 150,
+    "tafReturned": 152,
     "stationsWritten": 159,
     "missingMetar": 1,
-    "missingTaf": 9
+    "missingTaf": 7
   },
   "errors": []
 }
