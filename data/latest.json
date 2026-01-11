@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-11T10:37:49.009Z",
+  "generatedAt": "2026-01-11T10:49:59.673Z",
   "stations": [
     {
       "icao": "EDDH",
@@ -1230,7 +1230,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "111015Z",
+      "updatedAt": "111045Z",
       "visibility_m": 10000,
       "taf_visibility_m": 4000,
       "worst_visibility_m": 4000,
@@ -1239,9 +1239,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 111015Z 29024G36KT 9999 FEW032TCU 13/05 Q1015 NOSIG",
+      "metarRaw": "METAR LMML 111045Z 29022G32KT 9999 FEW030TCU 13/06 Q1015 NOSIG",
       "tafRaw": "TAF LMML 110500Z 1106/1206 30028G38KT 9999 FEW015 SCT045 \n  TEMPO 1106/1203 7000 SHRA SHGS BKN015TCU \n  PROB30 \n  TEMPO 1106/1121 4000 TSRAGS BKN015CB \n  BECMG 1118/1121 32020KT",
-      "metarHtml": "METAR LMML 111015Z 29024G36KT 9999 FEW032TCU 13/05 Q1015 NOSIG",
+      "metarHtml": "METAR LMML 111045Z 29022G32KT 9999 FEW030TCU 13/06 Q1015 NOSIG",
       "tafHtml": "TAF LMML 110500Z 1106/1206 30028G38KT 9999 FEW015 SCT045 \n  TEMPO 1106/1203 7000 <span class=\"hl\">SHRA</span> SHGS BKN015TCU \n  PROB30 \n  TEMPO 1106/1121 4000 TSRAGS BKN015CB \n  BECMG 1118/1121 32020KT"
     },
     {
@@ -1493,24 +1493,6 @@
       "tafHtml": "TAF ESSA 110830Z 1109/1209 33014KT <span class=\"hl-vis\">CAVOK</span> \n  PROB40 1113/1123 3500 -<span class=\"hl\">SHSN</span> SCT020TCU \n  PROB40 1123/1206 BKN012 \n  BECMG 1200/1202 34003KT"
     },
     {
-      "icao": "HESX",
-      "iata": "SPX",
-      "name": "Sphinx International Airport",
-      "updatedAt": "111000Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 3000,
-      "worst_visibility_m": 3000,
-      "ceiling_ft": null,
-      "hazards": [
-        "BR"
-      ],
-      "severityScore": 10,
-      "metarRaw": "METAR HESX 111000Z 25004KT CAVOK 18/06 Q1018 NOSIG",
-      "tafRaw": "TAF HESX 110500Z 1106/1212 23009KT CAVOK \n  TEMPO 1106/1108 VRB03KT 3000 BR NSC \n  TEMPO 1110/1116 24010G20KT 4000 SA",
-      "metarHtml": "METAR HESX 111000Z 25004KT <span class=\"hl-vis\">CAVOK</span> 18/06 Q1018 NOSIG",
-      "tafHtml": "TAF HESX 110500Z 1106/1212 23009KT <span class=\"hl-vis\">CAVOK</span> \n  TEMPO 1106/1108 VRB03KT 3000 <span class=\"hl\">BR</span> NSC \n  TEMPO 1110/1116 24010G20KT 4000 SA"
-    },
-    {
       "icao": "LEZL",
       "iata": "SVQ",
       "name": "Sevilla Airport",
@@ -1703,6 +1685,70 @@
       "tafHtml": null
     },
     {
+      "icao": "HEGN",
+      "iata": "HRG",
+      "name": "Hurghada International Airport",
+      "updatedAt": "111000Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR HEGN 111000Z 35003KT CAVOK 22/06 Q1017 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR HEGN 111000Z 35003KT <span class=\"hl-vis\">CAVOK</span> 22/06 Q1017 NOSIG",
+      "tafHtml": null
+    },
+    {
+      "icao": "HEMA",
+      "iata": "RMF",
+      "name": "Marsa Alam International Airport",
+      "updatedAt": "111000Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR HEMA 111000Z 34011KT CAVOK 22/14 Q1018 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR HEMA 111000Z 34011KT <span class=\"hl-vis\">CAVOK</span> 22/14 Q1018 NOSIG",
+      "tafHtml": null
+    },
+    {
+      "icao": "HESH",
+      "iata": "SSH",
+      "name": "Sharm El Sheikh International Airport",
+      "updatedAt": "111000Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR HESH 111000Z 34006KT CAVOK 23/07 Q1018 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR HESH 111000Z 34006KT <span class=\"hl-vis\">CAVOK</span> 23/07 Q1018 NOSIG",
+      "tafHtml": null
+    },
+    {
+      "icao": "HESX",
+      "iata": "SPX",
+      "name": "Sphinx International Airport",
+      "updatedAt": "111000Z",
+      "visibility_m": 10000,
+      "taf_visibility_m": null,
+      "worst_visibility_m": 10000,
+      "ceiling_ft": null,
+      "hazards": [],
+      "severityScore": 5,
+      "metarRaw": "METAR HESX 111000Z 25004KT CAVOK 18/06 Q1018 NOSIG",
+      "tafRaw": null,
+      "metarHtml": "METAR HESX 111000Z 25004KT <span class=\"hl-vis\">CAVOK</span> 18/06 Q1018 NOSIG",
+      "tafHtml": null
+    },
+    {
       "icao": "LCLK",
       "iata": "LCA",
       "name": "Larnaca International Airport",
@@ -1802,32 +1848,32 @@
       "icao": "LWOH",
       "iata": "OHD",
       "name": "Ohrid St. Paul the Apostle Airport",
-      "updatedAt": "111020Z",
+      "updatedAt": "111050Z",
       "visibility_m": 9000,
       "taf_visibility_m": null,
       "worst_visibility_m": 9000,
       "ceiling_ft": 5000,
       "hazards": [],
       "severityScore": 5,
-      "metarRaw": "METAR LWOH 111020Z 34006KT 310V010 9000 FEW011 BKN050 01/M01 Q1007",
+      "metarRaw": "METAR LWOH 111050Z 35008KT 310V030 9000 FEW011 BKN050 01/M02 Q1007",
       "tafRaw": null,
-      "metarHtml": "METAR LWOH 111020Z 34006KT 310V010 9000 FEW011 BKN050 01/M01 Q1007",
+      "metarHtml": "METAR LWOH 111050Z 35008KT 310V030 9000 FEW011 BKN050 01/M02 Q1007",
       "tafHtml": null
     },
     {
       "icao": "LWSK",
       "iata": "SKP",
       "name": "Skopje International Airport",
-      "updatedAt": "111020Z",
+      "updatedAt": "111050Z",
       "visibility_m": 10000,
       "taf_visibility_m": null,
       "worst_visibility_m": 10000,
       "ceiling_ft": 4300,
       "hazards": [],
       "severityScore": 5,
-      "metarRaw": "METAR LWSK 111020Z 01021KT 9999 SCT025 OVC043 01/M04 Q1012 NOSIG",
+      "metarRaw": "METAR LWSK 111050Z 36018KT 9999 SCT025 BKN043 BKN075 01/M04 Q1013 NOSIG",
       "tafRaw": null,
-      "metarHtml": "METAR LWSK 111020Z 01021KT 9999 SCT025 OVC043 01/M04 Q1012 NOSIG",
+      "metarHtml": "METAR LWSK 111050Z 36018KT 9999 SCT025 BKN043 BKN075 01/M04 Q1013 NOSIG",
       "tafHtml": null
     },
     {
@@ -2055,67 +2101,19 @@
       "tafHtml": "TAF ESMS 110827Z 1109/1209 32008KT <span class=\"hl-vis\">CAVOK</span>"
     },
     {
-      "icao": "HEGN",
-      "iata": "HRG",
-      "name": "Hurghada International Airport",
-      "updatedAt": "111000Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR HEGN 111000Z 35003KT CAVOK 22/06 Q1017 NOSIG",
-      "tafRaw": "TAF HEGN 110500Z 1106/1212 32015KT CAVOK",
-      "metarHtml": "METAR HEGN 111000Z 35003KT <span class=\"hl-vis\">CAVOK</span> 22/06 Q1017 NOSIG",
-      "tafHtml": "TAF HEGN 110500Z 1106/1212 32015KT <span class=\"hl-vis\">CAVOK</span>"
-    },
-    {
-      "icao": "HEMA",
-      "iata": "RMF",
-      "name": "Marsa Alam International Airport",
-      "updatedAt": "111000Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR HEMA 111000Z 34011KT CAVOK 22/14 Q1018 NOSIG",
-      "tafRaw": "TAF HEMA 110500Z 1106/1212 33016KT CAVOK",
-      "metarHtml": "METAR HEMA 111000Z 34011KT <span class=\"hl-vis\">CAVOK</span> 22/14 Q1018 NOSIG",
-      "tafHtml": "TAF HEMA 110500Z 1106/1212 33016KT <span class=\"hl-vis\">CAVOK</span>"
-    },
-    {
-      "icao": "HESH",
-      "iata": "SSH",
-      "name": "Sharm El Sheikh International Airport",
-      "updatedAt": "111000Z",
-      "visibility_m": 10000,
-      "taf_visibility_m": 10000,
-      "worst_visibility_m": 10000,
-      "ceiling_ft": null,
-      "hazards": [],
-      "severityScore": 0,
-      "metarRaw": "METAR HESH 111000Z 34006KT CAVOK 23/07 Q1018 NOSIG",
-      "tafRaw": "TAF HESH 110500Z 1106/1212 34014KT CAVOK",
-      "metarHtml": "METAR HESH 111000Z 34006KT <span class=\"hl-vis\">CAVOK</span> 23/07 Q1018 NOSIG",
-      "tafHtml": "TAF HESH 110500Z 1106/1212 34014KT <span class=\"hl-vis\">CAVOK</span>"
-    },
-    {
       "icao": "LATI",
       "iata": "TIA",
       "name": "Tirana International Airport Mother Teresa",
-      "updatedAt": "111020Z",
+      "updatedAt": "111050Z",
       "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR LATI 111020Z VRB02KT CAVOK 10/M03 Q1009 NOSIG",
+      "metarRaw": "METAR LATI 111050Z VRB02KT CAVOK 10/M02 Q1009 NOSIG",
       "tafRaw": "TAF LATI 110500Z 1106/1206 VRB04KT CAVOK TX08/1112Z TNM04/1205Z \n  TEMPO 1111/1117 35012KT",
-      "metarHtml": "METAR LATI 111020Z VRB02KT <span class=\"hl-vis\">CAVOK</span> 10/M03 Q1009 NOSIG",
+      "metarHtml": "METAR LATI 111050Z VRB02KT <span class=\"hl-vis\">CAVOK</span> 10/M02 Q1009 NOSIG",
       "tafHtml": "TAF LATI 110500Z 1106/1206 VRB04KT <span class=\"hl-vis\">CAVOK</span> TX08/1112Z TNM04/1205Z \n  TEMPO 1111/1117 35012KT"
     },
     {
@@ -2762,10 +2760,10 @@
   "stats": {
     "icaoCount": 159,
     "metarReturned": 157,
-    "tafReturned": 136,
+    "tafReturned": 132,
     "stationsWritten": 159,
     "missingMetar": 2,
-    "missingTaf": 23
+    "missingTaf": 27
   },
   "errors": []
 }
