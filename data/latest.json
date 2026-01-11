@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-11T13:37:18.024Z",
+  "generatedAt": "2026-01-11T13:49:52.965Z",
   "stations": [
     {
       "icao": "EDDH",
@@ -1304,7 +1304,7 @@
       "icao": "LMML",
       "iata": "MLA",
       "name": "Malta International Airport",
-      "updatedAt": "111315Z",
+      "updatedAt": "111345Z",
       "visibility_m": 10000,
       "taf_visibility_m": 8000,
       "worst_visibility_m": 8000,
@@ -1313,9 +1313,9 @@
         "SHRA"
       ],
       "severityScore": 14,
-      "metarRaw": "METAR LMML 111315Z 28024KT 9999 SCT021 13/07 Q1014 NOSIG",
+      "metarRaw": "METAR LMML 111345Z 31018KT 9999 -SHRA SCT025 13/06 Q1015 NOSIG",
       "tafRaw": "TAF LMML 111100Z 1112/1212 30021G32KT 9999 FEW020 \n  PROB30 \n  TEMPO 1112/1118 8000 SHRA BKN020TCU \n  BECMG 1118/1121 34020KT \n  BECMG 1209/1212 34010KT",
-      "metarHtml": "METAR LMML 111315Z 28024KT 9999 SCT021 13/07 Q1014 NOSIG",
+      "metarHtml": "METAR LMML 111345Z 31018KT 9999 -<span class=\"hl\">SHRA</span> SCT025 13/06 Q1015 NOSIG",
       "tafHtml": "TAF LMML 111100Z 1112/1212 30021G32KT 9999 FEW020 \n  PROB30 \n  TEMPO 1112/1118 8000 <span class=\"hl\">SHRA</span> BKN020TCU \n  BECMG 1118/1121 34020KT \n  BECMG 1209/1212 34010KT"
     },
     {
@@ -1608,9 +1608,9 @@
       "hazards": [],
       "severityScore": 0,
       "metarRaw": "METAR BIKF 111330Z 01013KT 9999 FEW035 SCT110 BKN220 M02/M07 Q0995",
-      "tafRaw": "TAF BIKF 111055Z 1112/1212 36013KT 9999 FEW030 TX00/1203Z TNM02/1212Z \n  BECMG 1120/1122 02025G35KT",
+      "tafRaw": "TAF BIKF 111342Z 1115/1215 36013KT 9999 FEW030 TX00/1203Z TNM02/1215Z \n  BECMG 1120/1122 02025G35KT",
       "metarHtml": "METAR BIKF 111330Z 01013KT 9999 FEW035 SCT110 BKN220 M02/M07 Q0995",
-      "tafHtml": "TAF BIKF 111055Z 1112/1212 36013KT 9999 FEW030 TX00/1203Z TNM02/1212Z \n  BECMG 1120/1122 02025G35KT"
+      "tafHtml": "TAF BIKF 111342Z 1115/1215 36013KT 9999 FEW030 TX00/1203Z TNM02/1215Z \n  BECMG 1120/1122 02025G35KT"
     },
     {
       "icao": "BKPR",
@@ -1936,16 +1936,16 @@
       "icao": "LATI",
       "iata": "TIA",
       "name": "Tirana International Airport Mother Teresa",
-      "updatedAt": "111320Z",
-      "visibility_m": 10000,
+      "updatedAt": null,
+      "visibility_m": null,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
       "ceiling_ft": null,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR LATI 111320Z 31013KT 9999 FEW040 09/M01 Q1009 NOSIG",
+      "metarRaw": null,
       "tafRaw": "TAF LATI 111100Z 1112/1212 34012KT CAVOK TX12/1112Z TNM04/1205Z \n  BECMG 1117/1119 VRB05KT",
-      "metarHtml": "METAR LATI 111320Z 31013KT 9999 FEW040 09/M01 Q1009 NOSIG",
+      "metarHtml": null,
       "tafHtml": "TAF LATI 111100Z 1112/1212 34012KT <span class=\"hl-vis\">CAVOK</span> TX12/1112Z TNM04/1205Z \n  BECMG 1117/1119 VRB05KT"
     },
     {
@@ -2516,12 +2516,12 @@
       "visibility_m": 10000,
       "taf_visibility_m": 10000,
       "worst_visibility_m": 10000,
-      "ceiling_ft": null,
+      "ceiling_ft": 5800,
       "hazards": [],
       "severityScore": 0,
-      "metarRaw": "METAR LRCL 111330Z AUTO 07004KT 9999 FEW038/// OVC057/// M04/M09 Q1012",
+      "metarRaw": "METAR LRCL 111330Z COR 07005KT 040V100 9999 FEW038 OVC058 M04/M09 Q1012",
       "tafRaw": "TAF LRCL 111100Z 1112/1121 30008KT CAVOK",
-      "metarHtml": "METAR LRCL 111330Z AUTO 07004KT 9999 FEW038/// OVC057/// M04/M09 Q1012",
+      "metarHtml": "METAR LRCL 111330Z COR 07005KT 040V100 9999 FEW038 OVC058 M04/M09 Q1012",
       "tafHtml": "TAF LRCL 111100Z 1112/1121 30008KT <span class=\"hl-vis\">CAVOK</span>"
     },
     {
@@ -2767,10 +2767,10 @@
   ],
   "stats": {
     "icaoCount": 159,
-    "metarReturned": 158,
+    "metarReturned": 157,
     "tafReturned": 146,
     "stationsWritten": 159,
-    "missingMetar": 1,
+    "missingMetar": 2,
     "missingTaf": 13
   },
   "errors": []
